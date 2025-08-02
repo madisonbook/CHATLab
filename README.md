@@ -8,7 +8,7 @@
 
 3. run the following commands in the terminal (can copy/paste if wanted):
 
-`git clone https://github.ncsu.edu/mtbook_ncstate/CHATLab.git`
+`git clone https://github.com/madisonbook/CHATLab.git`
 
 `cd CHATLab`
 
