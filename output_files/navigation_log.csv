@@ -1,0 +1,8 @@
+participant_id,block,trial,time,uav1_moving,uav1_idle,uav1_fuel,uav1_path,uav2_moving,uav2_idle,uav2_fuel,uav2_path,uav3_moving,uav3_idle,uav3_fuel,uav3_path,uav4_moving,uav4_idle,uav4_fuel,uav4_path,auto,auto_type
+ca866245,1,2,10:11:03,False,False,800,NA,False,False,900,NA,False,False,1000,NA,False,True,1000,NA,False,None
+ca866245,1,2,10:11:03,False,False,800,NA,False,False,900,NA,False,True,1000,NA,False,True,1000,NA,False,None
+ca866245,1,2,10:11:03,False,False,800,NA,False,True,900,NA,False,True,1000,NA,False,True,1000,NA,False,None
+ca866245,1,2,10:11:03,False,True,800,NA,False,True,900,NA,False,True,1000,NA,False,True,1000,NA,False,None
+ca866245,1,2,10:11:04,False,True,800,NA,False,True,900,NA,True,False,1000,A,False,True,1000,NA,False,None
+ca866245,1,2,10:11:09,True,False,800,HB,False,True,900,NA,True,False,869.19,A,False,True,1000,NA,False,None
+ca866245,1,2,10:11:24,False,False,1017.23,NA,False,True,900,NA,False,True,740.99,NA,False,True,1000,NA,False,None
