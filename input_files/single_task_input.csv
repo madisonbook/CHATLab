@@ -8,6 +8,6 @@ nav_uav_y,500,200,100,500
 nav_goal_x,700,100,350,300
 nav_goal_y,300,300,200,400
 nav_uav_fuel,800,900,1000,1000
-nav_uav_speed,6,10,8,12
+nav_uav_speed,3,4,1,2
 nav_path_angle,120,150,120,140
 nav_duration,100,,,

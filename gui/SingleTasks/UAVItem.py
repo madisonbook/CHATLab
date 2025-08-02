@@ -26,6 +26,7 @@ class UAVItem():
 
         self.curr_pos = QPointF(x_pos, y_pos)
         #self.is_moving = False
+        self.speed = speed
         self.timer = None
         self.color_hex = color_hex
         self.idx = idx
@@ -116,69 +117,43 @@ class UAVItem():
 
     def MoveToHomeBase(self):
         start_pos = self.uav_item.pos()
-        mid_pos = QPointF(730, 30)
-        goal_rect = self.goal_item.rect()
-        goal_pos = self.goal_item.pos() + QPointF(goal_rect.width() / 2, goal_rect.height() / 2)
+        goal_pos = QPointF(730, 30)
+        #goal_rect = self.goal_item.rect()
+        #goal_pos = self.goal_item.pos() + QPointF(goal_rect.width() / 2, goal_rect.height() / 2)
 
-        self.animation_steps = 100
-        self.current_step = 0
+        total_dx = goal_pos.x() - start_pos.x()
+        total_dy = goal_pos.y() - start_pos.y()
+        total_distance = math.hypot(total_dx, total_dy)
 
-        dx1 = (mid_pos.x() - start_pos.x()) / self.animation_steps
-        dy1 = (mid_pos.y() - start_pos.y()) / self.animation_steps
+        unit_dx = total_dx / total_distance
+        unit_dy = total_dy / total_distance
 
-        dx2 = (start_pos.x() - mid_pos.x()) / self.animation_steps
-        dy2 = (start_pos.y() - mid_pos.y()) / self.animation_steps
+        dx = unit_dx * self.speed
+        dy = unit_dy * self.speed
 
-        self.uav_item.setRotation(self.GetAngle(start_pos.x(), start_pos.y(), mid_pos.x(), mid_pos.y()))
+        self.uav_item.setRotation(self.GetAngle(start_pos.x(), start_pos.y(), goal_pos.x(), goal_pos.y()))
 
-        def AnimateP1():
-            if self.current_step >= self.animation_steps:
-                self.timer.stop()
-                self.timer.timeout.disconnect()
-                self.current_step = 0
-                self.fuel = 1500
-
-                def delayed_start():
-                    self.uav_item.setRotation(self.GetAngle(mid_pos.x(), mid_pos.y(), start_pos.x(), start_pos.y()))
-                    self.timer.timeout.connect(AnimateP2)
-                    self.timer.start(self.speed * 5)
-
-                QTimer.singleShot(2000, delayed_start)
-                return
-            
+        def Animate(): 
             if self.fuel > 0:
-                new_x = start_pos.x() + dx1 * self.current_step
-                new_y = start_pos.y() + dy1 * self.current_step
+                new_x = self.curr_pos.x() + dx
+                new_y = self.curr_pos.y() + dy
+                new_pos = QPointF(new_x, new_y)
 
-                self.uav_item.setPos(QPointF(new_x, new_y))
-                self.curr_pos = QPointF(new_x, new_y)
+                if math.hypot(goal_pos.x() - new_x, goal_pos.y() - new_y) <= self.speed:
+                    self.timer.stop()
+                    self.timer.timeout.disconnect()
+                    self.uav_item.is_moving = False
+                    self.on_path = "NA"
+                    self.fuel = 1500
+                    self.uav_item.setRotation(self.GetAngle(goal_pos.x(), goal_pos.y(), start_pos.x(), start_pos.y()))
+                    self.GetNewPath()
+                    return
 
-                if self.current_step > 0 and self.fuel > 0:
-                    self.fuel -= math.hypot(dx1, dy1)
-                    if self.fuel < 0:
-                        self.fuel = 0
-                
-                self.current_step += 1
-
-        def AnimateP2():
-            if self.current_step >= self.animation_steps:
-                self.timer.stop()
-                self.uav_item.setRotation(self.GetAngle(start_pos.x(), start_pos.y(), goal_pos.x(), goal_pos.y()))
-                self.uav_item.setPos(start_pos.x(), start_pos.y())
-                self.curr_pos = start_pos
-                self.on_path = "NA"
-                self.uav_item.is_moving = False
-                return
-            
-            new_x = mid_pos.x() + dx2 * self.current_step
-            new_y = mid_pos.y() + dy2 * self.current_step
-            self.uav_item.setPos(QPointF(new_x, new_y))
-            self.curr_pos = QPointF(new_x, new_y)
-
-            if self.current_step > 0:
-                self.fuel -= math.hypot(dx2, dy2)
-                
-            self.current_step += 1
+                self.uav_item.setPos(new_pos)
+                self.curr_pos = new_pos
+                self.fuel -= math.hypot(dx, dy)
+                if self.fuel < 0:
+                    self.fuel = 0
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -186,44 +161,47 @@ class UAVItem():
         self.is_idle = False
         self.idle_time = 0
         self.LogAction()
-        self.timer.timeout.connect(AnimateP1)
-        self.timer.start(self.speed*5)  
+        self.timer.timeout.connect(Animate)
+        self.timer.start(32)  
 
     def MoveToGoalA(self):
         start_pos = self.uav_item.pos()
         goal_rect = self.goal_item.rect()
         goal_pos = self.goal_item.pos() + QPointF(goal_rect.width() / 2, goal_rect.height() / 2)
 
-        self.animation_steps = 100
         self.current_step = 0
 
-        dx = (goal_pos.x() - start_pos.x()) / self.animation_steps
-        dy = (goal_pos.y() - start_pos.y()) / self.animation_steps
+        total_dx = goal_pos.x() - start_pos.x()
+        total_dy = goal_pos.y() - start_pos.y()
+        total_distance = math.hypot(total_dx, total_dy)
 
-        def Animate():
-            if self.current_step >= self.animation_steps:
-                self.timer.stop()
-                self.uav_item.setPos(goal_pos)
-                self.curr_pos = goal_pos
-                self.uav_item.is_moving = False
-                self.on_path = "NA"
-                self.GetNewGoal()
-                self.GetNewPath()
-                return
-            
+        unit_dx = total_dx / total_distance
+        unit_dy = total_dy / total_distance
+
+        dx = unit_dx * self.speed
+        dy = unit_dy * self.speed
+
+        def Animate(): 
             if self.fuel > 0:
-                new_x = start_pos.x() + dx * self.current_step
-                new_y = start_pos.y() + dy * self.current_step
+                new_x = self.curr_pos.x() + dx
+                new_y = self.curr_pos.y() + dy
+                new_pos = QPointF(new_x, new_y)
 
-                self.uav_item.setPos(QPointF(new_x, new_y))
-                self.curr_pos = QPointF(new_x, new_y)
+                if math.hypot(goal_pos.x() - new_x, goal_pos.y() - new_y) <= self.speed:
+                    self.timer.stop()
+                    self.uav_item.setPos(goal_pos)
+                    self.curr_pos = goal_pos
+                    self.uav_item.is_moving = False
+                    self.on_path = "NA"
+                    self.GetNewGoal()
+                    self.GetNewPath()
+                    return
 
-                if self.current_step > 0:
-                    self.fuel -= math.hypot(dx, dy)
-                    if self.fuel < 0:
-                        self.fuel = 0
-
-                self.current_step += 1
+                self.uav_item.setPos(new_pos)
+                self.curr_pos = new_pos
+                self.fuel -= math.hypot(dx, dy)
+                if self.fuel < 0:
+                    self.fuel = 0
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -232,73 +210,76 @@ class UAVItem():
         self.on_path = "A"
         self.LogAction()
         self.timer.timeout.connect(Animate)
-        self.timer.start(self.speed*10)
+        self.timer.start(32)
 
     def MoveToGoalB(self):
-        self.animation_steps = 100
         self.current_step = 0
 
-        self.start = self.uav_item.pos()
-        self.end = self.goal_item.pos() + QPointF(
-            self.goal_item.rect().width() / 2,
-            self.goal_item.rect().height() / 2
-        )
-
+        start_pos = self.uav_item.pos()
+        goal_rect = self.goal_item.rect()
+        goal_pos = self.goal_item.pos() + QPointF(goal_rect.width() / 2, goal_rect.height() / 2)
         mid_pos = QPointF(self.ra_midpoint)
-        
-        self.uav_item.setRotation(self.GetAngle(self.start.x(), self.start.y(), mid_pos.x(), mid_pos.y()))
 
-        dx1 = (mid_pos.x() - self.start.x()) / self.animation_steps
-        dy1 = (mid_pos.y() - self.start.y()) / self.animation_steps
+        self.uav_item.setRotation(self.GetAngle(start_pos.x(), start_pos.y(), mid_pos.x(), mid_pos.y()))
 
-        dx2 = (self.end.x() - mid_pos.x()) / self.animation_steps
-        dy2 = (self.end.y() - mid_pos.y()) / self.animation_steps
+        total_dx1 = mid_pos.x() - start_pos.x()
+        total_dy1 = mid_pos.y() - start_pos.y()
+        total_distance1 = math.hypot(total_dx1, total_dy1)
 
-        def AnimateP1():
-            if self.current_step >= self.animation_steps:
-                self.timer.timeout.disconnect()
-                self.current_step = 0
-                self.uav_item.setRotation(self.GetAngle(mid_pos.x(), mid_pos.y(), self.end.x(), self.end.y()))
-                self.timer.timeout.connect(AnimateP2)
-                return
-            
+        unit_dx1 = total_dx1 / total_distance1
+        unit_dy1 = total_dy1 / total_distance1
+
+        dx1 = unit_dx1 * self.speed
+        dy1 = unit_dy1 * self.speed
+
+        total_dx2 = goal_pos.x() - mid_pos.x()
+        total_dy2 = goal_pos.y() - mid_pos.y()
+        total_distance2 = math.hypot(total_dx2, total_dy2)
+
+        unit_dx2 = total_dx2 / total_distance2
+        unit_dy2 = total_dy2 / total_distance2
+
+        dx2 = unit_dx2 * self.speed
+        dy2 = unit_dy2 * self.speed
+
+        def AnimateP1(): 
             if self.fuel > 0:
-                new_x = self.start.x() + dx1 * self.current_step
-                new_y = self.start.y() + dy1 * self.current_step
+                new_x = self.curr_pos.x() + dx1
+                new_y = self.curr_pos.y() + dy1
+                new_pos = QPointF(new_x, new_y)
 
-                self.uav_item.setPos(QPointF(new_x, new_y))
-                self.curr_pos = QPointF(new_x, new_y)
+                if math.hypot(mid_pos.x() - new_x, mid_pos.y() - new_y) <= self.speed:
+                    self.timer.timeout.disconnect()
+                    self.current_step = 0
+                    self.uav_item.setRotation(self.GetAngle(mid_pos.x(), mid_pos.y(), goal_pos.x(), goal_pos.y()))
+                    self.timer.timeout.connect(AnimateP2)
+                    return
 
-                if self.current_step > 0:
-                    self.fuel -= math.hypot(dx1, dy1)
-                    if self.fuel < 0:
-                        self.fuel = 0
-                    
-                self.current_step += 1
+                self.uav_item.setPos(new_pos)
+                self.curr_pos = new_pos
+                self.fuel -= math.hypot(dx1, dy1)
+                if self.fuel < 0:
+                    self.fuel = 0      
 
-        def AnimateP2():
-            if self.current_step >= self.animation_steps:
-                self.timer.stop()
-                self.uav_item.is_moving = False
-                self.on_path = "NA"
-                self.GetNewGoal()
-                self.GetNewPath()
-                return
-            
+        def AnimateP2(): 
             if self.fuel > 0:
+                new_x = self.curr_pos.x() + dx2
+                new_y = self.curr_pos.y() + dy2
+                new_pos = QPointF(new_x, new_y)
 
-                new_x = mid_pos.x() + dx2 * self.current_step
-                new_y = mid_pos.y() + dy2 * self.current_step
+                if math.hypot(goal_pos.x() - new_x, goal_pos.y() - new_y) <= (self.speed * 2):
+                    self.timer.stop()
+                    self.uav_item.is_moving = False
+                    self.on_path = "NA"
+                    self.GetNewGoal()
+                    self.GetNewPath()
+                    return
 
-                self.uav_item.setPos(QPointF(new_x, new_y))
-                self.curr_pos = QPointF(new_x, new_y)
-
-                if self.current_step > 0:
-                    self.fuel -= math.hypot(dx2, dy2)
-                    if self.fuel < 0:
-                        self.fuel = 0                  
-                    
-                self.current_step += 1
+                self.uav_item.setPos(new_pos)
+                self.curr_pos = new_pos
+                self.fuel -= math.hypot(dx2, dy2)
+                if self.fuel < 0:
+                    self.fuel = 0   
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -307,7 +288,7 @@ class UAVItem():
         self.is_idle = False
         self.LogAction()
         self.timer.timeout.connect(AnimateP1)
-        self.timer.start(self.speed*5)
+        self.timer.start(32)
 
     def CheckIdle(self):
         if not self.is_idle or self.fuel == 0:
