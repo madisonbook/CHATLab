@@ -124,3 +124,18 @@ class PathItem():
         text_item.setPos(x, y)
 
         return label
+    
+class StormItem(QGraphicsPixmapItem):
+    def __init__(self, idx, x, y, image_path="images/cloud.png"):
+        super().__init__()
+
+        pixmap = QPixmap(image_path)
+        scaled_pixmap = pixmap.scaled(70, 70, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        self.setPixmap(scaled_pixmap)
+
+        self.setPos(x, y)
+        self.setZValue(4)
+        
+        self.idx = idx
+        self.pos_x = x
+        self.pos_y = y

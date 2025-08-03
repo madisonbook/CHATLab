@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRe
 import math
 from SingleTaskSummaries.SumUAV import SumUAV
 from .UAVItem import UAVItem
-from .PathGoals import GoalItem
+from .NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 import singleTaskInput
 from DataLogging.LogNavigation import LogNavigation
@@ -58,10 +58,18 @@ class UAVNavigation(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
+        storm_items = [StormItem(1, singleTaskInput.nav_storm_x[0], singleTaskInput.nav_storm_y[0]),
+                      StormItem(2, singleTaskInput.nav_storm_x[1], singleTaskInput.nav_storm_y[1]),
+                      StormItem(3, singleTaskInput.nav_storm_x[2], singleTaskInput.nav_storm_y[2]),
+                      StormItem(4, singleTaskInput.nav_storm_x[3], singleTaskInput.nav_storm_y[3])]
+
+        for item in storm_items:
+            left_nav.addItem(item)
+
         goal_items = [GoalItem(1, singleTaskInput.nav_goal_x[0], singleTaskInput.nav_goal_y[0]),
                       GoalItem(2, singleTaskInput.nav_goal_x[1], singleTaskInput.nav_goal_y[1]),
                       GoalItem(3, singleTaskInput.nav_goal_x[2], singleTaskInput.nav_goal_y[2]),
-                      GoalItem(4, singleTaskInput.nav_goal_x[3], singleTaskInput.nav_goal_y[3]),]
+                      GoalItem(4, singleTaskInput.nav_goal_x[3], singleTaskInput.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
         uav_blue = UAVItem(1, "#90D5FF", "BLUE", singleTaskInput.nav_uav_x[0], singleTaskInput.nav_uav_y[0],
@@ -447,7 +455,7 @@ class UAVNavigation(QMainWindow):
 
         fuel_useb = round((uav.ra_length / uav.fuel) * 100)
         self.card_b.fuel.setText(f"Fuel Usage: {fuel_useb}%")
-        
+
         self.card_b.warnings.setText("Warnings: None")
 
     def TimerUpdateCards(self):
