@@ -25,15 +25,14 @@ class UAVItem():
         self.uav_item.setRotation(self.GetAngle(x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y))
 
         self.curr_pos = QPointF(x_pos, y_pos)
-        #self.is_moving = False
+        self.idx = idx
+        self.at_goal = False
         self.speed = speed
         self.timer = None
         self.color_hex = color_hex
-        self.idx = idx
         self.color_text = color_text
         self.angle = angle
         self.fuel = fuel
-        self.speed = speed
         self.goal_item = curr_goal
         self.goal_items = goal_items
         path = PathItem(color_hex, x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y, angle)
@@ -62,11 +61,39 @@ class UAVItem():
         return math.degrees(math.atan2(dy, dx)) + 90
     
     def GetNewGoal(self):
-        new_goals = [goal for goal in self.goal_items if goal != self.goal_item]
-        new_goal = random.choice(new_goals)
-        self.goal_item = new_goal
-        self.uav_item.setRotation(self.GetAngle(self.curr_pos.x(), self.curr_pos.y(), new_goal.pos_x, new_goal.pos_y))
-        pass
+        fuel_buffer = 100
+        hb_x, hb_y = 730, 30
+        dist_to_HB = math.hypot(self.curr_pos.x() - hb_x, self.curr_pos.y() - hb_y)
+        self.at_goal = False
+
+        if self.fuel < (dist_to_HB + fuel_buffer):
+            self.goal_item = GoalItem("HB", hb_x, hb_y)
+            self.uav_item.setRotation(
+                self.GetAngle(self.curr_pos.x(), self.curr_pos.y(), self.goal_item.pos_x, self.goal_item.pos_y)
+            )
+            return
+
+        reachable_goals = []
+        for goal in self.goal_items:
+            if goal == self.goal_item:
+                continue
+            dist_to_goal = math.hypot(self.curr_pos.x() - goal.pos_x, self.curr_pos.y() - goal.pos_y)
+            dist_goal_to_HB = math.hypot(goal.pos_x - hb_x, goal.pos_y - hb_y)
+
+            if self.fuel >= (dist_to_goal + dist_goal_to_HB + fuel_buffer):
+                reachable_goals.append(goal)
+
+        if reachable_goals:
+            new_goal = random.choice(reachable_goals)
+            self.goal_item = new_goal
+            self.uav_item.setRotation(
+                self.GetAngle(self.curr_pos.x(), self.curr_pos.y(), new_goal.pos_x, new_goal.pos_y)
+            )
+        else:
+            self.goal_item = GoalItem("HB", hb_x, hb_y)
+            self.uav_item.setRotation(
+                self.GetAngle(self.curr_pos.x(), self.curr_pos.y(), self.goal_item.pos_x, self.goal_item.pos_y)
+            )
 
     def GetNewPath(self):
         angle = random.randint(100, 165)
@@ -144,7 +171,7 @@ class UAVItem():
                     self.timer.timeout.disconnect()
                     self.uav_item.is_moving = False
                     self.on_path = "NA"
-                    self.fuel = 1500
+                    self.fuel = 2000
                     self.uav_item.setRotation(self.GetAngle(goal_pos.x(), goal_pos.y(), start_pos.x(), start_pos.y()))
                     self.GetNewPath()
                     return
@@ -193,6 +220,10 @@ class UAVItem():
                     self.curr_pos = goal_pos
                     self.uav_item.is_moving = False
                     self.on_path = "NA"
+                    if self.goal_item.idx == "HB":
+                        self.fuel = 2000
+                    self.at_goal = True
+                    self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
                     return
@@ -271,6 +302,11 @@ class UAVItem():
                     self.timer.stop()
                     self.uav_item.is_moving = False
                     self.on_path = "NA"
+                    if self.goal_item.idx == "HB":
+                        self.fuel = 2000
+
+                    self.at_goal = True
+                    self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
                     return

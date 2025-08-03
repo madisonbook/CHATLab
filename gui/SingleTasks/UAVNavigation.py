@@ -261,13 +261,13 @@ class UAVNavigation(QMainWindow):
         """)
         a_button.setVisible(True)
         b_button.setVisible(True)
-        home_button.setVisible(True)
+        #home_button.setVisible(True)
         cancel_button.setVisible(True)
 
         buttons.addStretch()
         buttons.addWidget(a_button)
         buttons.addWidget(b_button)
-        buttons.addWidget(home_button)
+        #buttons.addWidget(home_button)
         buttons.addWidget(cancel_button)
         buttons.addStretch()
 
@@ -373,9 +373,10 @@ class UAVNavigation(QMainWindow):
         font = QFont("Times New Roman", 12)
 
         distance = QLabel("Distance to target: ---")
-        warnings = QLabel("Warnings: ---")
+        fuel = QLabel("Fuel Usage: ---")
+        warnings = QLabel("Hazard Probability: ---")
 
-        for label in (distance, warnings):
+        for label in (distance, fuel, warnings):
             label.setFont(font)
             layout.addWidget(label)
 
@@ -397,6 +398,7 @@ class UAVNavigation(QMainWindow):
         """)
 
         group.distance = distance
+        group.fuel = fuel
         group.warnings = warnings
         return group
     
@@ -435,9 +437,17 @@ class UAVNavigation(QMainWindow):
         """)
 
         self.card_a.distance.setText(f"Distance to target: {uav.hyp_length} km")
+
+        fuel_usea = round((uav.hyp_length / uav.fuel) * 100)
+        self.card_a.fuel.setText(f"Fuel Usage: {fuel_usea}%")
+
         self.card_a.warnings.setText("Warnings: None")
 
         self.card_b.distance.setText(f"Distance to target: {uav.ra_length} km")
+
+        fuel_useb = round((uav.ra_length / uav.fuel) * 100)
+        self.card_b.fuel.setText(f"Fuel Usage: {fuel_useb}%")
+        
         self.card_b.warnings.setText("Warnings: None")
 
     def TimerUpdateCards(self):
@@ -493,6 +503,9 @@ class UAVNavigation(QMainWindow):
         text_rect = text.boundingRect()
         text.setPos(800 - width - 10 + (width - text_rect.width()) / 2,
                     10 + (height - text_rect.height()) / 2)
+        
+        rect.setZValue(2)
+        text.setZValue(2)
         
         return rect, text
     
