@@ -135,7 +135,7 @@ class StormItem(QGraphicsPixmapItem):
 
         self.setPos(x, y)
         self.setZValue(4)
-        
+
         self.idx = idx
-        self.pos_x = x
-        self.pos_y = y
+        self.pos_x = x + 35
+        self.pos_y = y + 35

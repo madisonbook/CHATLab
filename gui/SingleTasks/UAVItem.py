@@ -138,22 +138,7 @@ class UAVItem():
 
         pass
 
-    def GetStormHitChance(self):
-        def point_to_segment_distance(p1, p2):
-            #ap = QPointF(p.x() - a.x(), p.y() - a.y())
-            #ab = QPointF(b.x() - a.x(), b.y() - a.y())
-
-            #ab_length_squared = ab.x() ** 2 + ab.y() ** 2
-            #if ab_length_squared == 0:
-                #return math.hypot(ap.x(), ap.y())
-
-            #t = max(0, min(1, (ap.x() * ab.x() + ap.y() * ab.y()) / ab_length_squared))
-            #closest = QPointF(a.x() + ab.x() * t, a.y() + ab.y() * t)
-            #return math.hypot(p.x() - closest.x(), p.y() - closest.y())
-        
-            return QVector2D(p2 - p1).length()
-
-        
+    def GetStormHitChance(self):     
         def linear_hit_chance(dist, max_dist, min_dist):
             if dist <= min_dist:
                 return 95
@@ -161,7 +146,7 @@ class UAVItem():
                 return 0
             else:
                 t = (dist - min_dist) / (max_dist - min_dist)
-                scaled = (1 - t) ** 4
+                scaled = (1 - t) ** 5
                 #scaled = 1 - (dist - min_dist) / (max_dist - min_dist)
                 return round(scaled * 100)
 
@@ -177,11 +162,11 @@ class UAVItem():
         for storm in self.storm_items:
             storm_pos = QPointF(storm.pos_x, storm.pos_y)
 
-            d1 = point_to_segment_distance(storm_pos, mid_hyp)
+            d1 = QVector2D(storm_pos - mid_hyp).length()
             if d1 < min_d1:
                 min_d1 = d1
 
-            d2 = point_to_segment_distance(storm_pos, mid_ra)
+            d2 = QVector2D(storm_pos - mid_ra).length()
             if d2 < min_d2:
                 min_d2 = d2
 
@@ -207,8 +192,6 @@ class UAVItem():
     def MoveToHomeBase(self):
         start_pos = self.uav_item.pos()
         goal_pos = QPointF(730, 30)
-        #goal_rect = self.goal_item.rect()
-        #goal_pos = self.goal_item.pos() + QPointF(goal_rect.width() / 2, goal_rect.height() / 2)
 
         total_dx = goal_pos.x() - start_pos.x()
         total_dy = goal_pos.y() - start_pos.y()
