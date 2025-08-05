@@ -64,7 +64,7 @@ class UAVNavigation(QMainWindow):
                       StormItem(4, singleTaskInput.nav_storm_x[3], singleTaskInput.nav_storm_y[3])]
 
         for item in storm_items:
-            left_nav.addItem(item)
+            left_nav.addItem(item.pixmap_item)
 
         goal_items = [GoalItem(1, singleTaskInput.nav_goal_x[0], singleTaskInput.nav_goal_y[0]),
                       GoalItem(2, singleTaskInput.nav_goal_x[1], singleTaskInput.nav_goal_y[1]),

@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QGraphicsScene, QGraphicsView, QGraphicsPixmapItem, QGraphicsEllipseItem,
     QGraphicsTextItem, QGroupBox
 )
-from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
+from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF, QPropertyAnimation, QEasingCurve, QObject, pyqtProperty
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
@@ -40,7 +40,7 @@ class PathItem():
         self.start = QPointF(x_pos, y_pos)
         self.end = QPointF(x_goal + 15, y_goal + 15)
 
-        self.hyp, self.hyp_label, self.hyp_length = self.CreateHyp()
+        self.hyp, self.hyp_label, self.hyp_midpoint, self.hyp_length = self.CreateHyp()
         self.ra, self.ra_label, self.ra_midpoint, self.ra_length = self.CreateRA(angle)
 
     def CreateHyp(self):
@@ -61,7 +61,7 @@ class PathItem():
         y_mid = (self.start.y() + self.end.y()) / 2
         mid_point = QPointF(x_mid, y_mid)
         path_label = self.GenLabel("A", mid_point)
-        return path_item, path_label, path_length
+        return path_item, path_label, mid_point, path_length
     
     def CreateRA(self, angle):
         path = QPainterPath()
@@ -125,17 +125,34 @@ class PathItem():
 
         return label
     
-class StormItem(QGraphicsPixmapItem):
-    def __init__(self, idx, x, y, image_path="images/cloud.png"):
-        super().__init__()
+class StormItem(QObject):
+    def __init__(self, idx, x, y, image_path="images/cloud.png", parent=None):
+        super().__init__(parent)
+        self.idx = idx
 
+        self.pixmap_item = QGraphicsPixmapItem()
         pixmap = QPixmap(image_path)
         scaled_pixmap = pixmap.scaled(70, 70, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        self.setPixmap(scaled_pixmap)
-
-        self.setPos(x, y)
-        self.setZValue(4)
-
+        self.pixmap_item.setPixmap(scaled_pixmap)
+        self.pixmap_item.setOffset(-35, -35)  # center it
+        self.pixmap_item.setPos(x, y)
+        self.pixmap_item.setZValue(4)
+        self.pos_x = x
+        self.pos_y = y
         self.idx = idx
-        self.pos_x = x + 35
-        self.pos_y = y + 35
+
+    def getPos(self):
+        return self.pixmap_item.pos()
+
+    def setPos_(self, value: QPointF):
+        self.pixmap_item.setPos(value)
+
+    pos_anim = pyqtProperty(QPointF, fget=getPos, fset=setPos_)
+
+    def AnimateToMidpoint(self, midpoint: QPointF, duration=1500):
+        self.animation = QPropertyAnimation(self, b"pos_anim")
+        self.animation.setDuration(duration)
+        self.animation.setStartValue(self.pixmap_item.pos())
+        self.animation.setEndValue(midpoint)
+        self.animation.setEasingCurve(QEasingCurve.Type.Linear)
+        self.animation.start()

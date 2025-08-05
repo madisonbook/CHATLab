@@ -39,6 +39,7 @@ class UAVItem():
         path = PathItem(color_hex, x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y, angle)
         self.hyp_path = path.hyp
         self.hyp_label = path.hyp_label
+        self.hyp_midpoint = path.hyp_midpoint
         self.hyp_length = path.hyp_length
         self.ra_path = path.ra
         self.ra_label = path.ra_label
@@ -113,6 +114,7 @@ class UAVItem():
         path = PathItem(self.color_hex, self.curr_pos.x(), self.curr_pos.y(), self.goal_item.pos_x, self.goal_item.pos_y, angle)
         self.hyp_path = path.hyp
         self.hyp_label = path.hyp_label
+        self.hyp_midpoint = path.hyp_midpoint
         self.hyp_length = path.hyp_length
         self.ra_path = path.ra
         self.ra_label = path.ra_label
@@ -150,25 +152,21 @@ class UAVItem():
                 #scaled = 1 - (dist - min_dist) / (max_dist - min_dist)
                 return round(scaled * 100)
 
-        start = self.curr_pos
-        goal = QPointF(self.goal_item.pos_x, self.goal_item.pos_y)
-
-        mid_hyp = QPointF((start.x() + goal.x()) / 2, (start.y() + goal.y()) / 2)
-        mid_ra = self.ra_midpoint
-
         min_d1 = float('inf')
         min_d2 = float('inf')
 
         for storm in self.storm_items:
             storm_pos = QPointF(storm.pos_x, storm.pos_y)
 
-            d1 = QVector2D(storm_pos - mid_hyp).length()
+            d1 = QVector2D(storm_pos - self.hyp_midpoint).length()
             if d1 < min_d1:
                 min_d1 = d1
+                self.storm_a = storm.idx
 
-            d2 = QVector2D(storm_pos - mid_ra).length()
+            d2 = QVector2D(storm_pos - self.ra_midpoint).length()
             if d2 < min_d2:
                 min_d2 = d2
+                self.storm_b = storm.idx
 
         max_dist = 300
         min_dist = 50
@@ -253,6 +251,8 @@ class UAVItem():
         dx = unit_dx * self.speed
         dy = unit_dy * self.speed
 
+        closest_storm = self.storm_items[self.storm_a - 1]
+
         def Animate(): 
             if self.fuel > 0:
                 new_x = self.curr_pos.x() + dx
@@ -287,6 +287,7 @@ class UAVItem():
         self.LogAction()
         self.timer.timeout.connect(Animate)
         self.timer.start(32)
+        closest_storm.AnimateToMidpoint(self.hyp_midpoint)
 
     def MoveToGoalB(self):
         self.current_step = 0
