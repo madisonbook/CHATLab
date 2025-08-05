@@ -287,7 +287,9 @@ class UAVItem():
         self.LogAction()
         self.timer.timeout.connect(Animate)
         self.timer.start(32)
-        closest_storm.AnimateToMidpoint(self.hyp_midpoint)
+
+        if random.randint(0, 100) < self.hit_chancea:
+            closest_storm.AnimateToMidpoint(self.hyp_midpoint)
 
     def MoveToGoalB(self):
         self.current_step = 0

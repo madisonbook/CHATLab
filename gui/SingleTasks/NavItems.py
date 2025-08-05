@@ -155,3 +155,5 @@ class StormItem(QObject):
         self.animation.setEndValue(midpoint)
         self.animation.setEasingCurve(QEasingCurve.Type.Linear)
         self.animation.start()
+        self.pos_x = midpoint.x()
+        self.pos_y = midpoint.y()
