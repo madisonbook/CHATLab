@@ -73,7 +73,7 @@ class UAVNavigation(QMainWindow):
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
         uav_blue = UAVItem(1, "#90D5FF", "BLUE", singleTaskInput.nav_uav_x[0], singleTaskInput.nav_uav_y[0],
-                           goal_items[0], goal_items, singleTaskInput.nav_uav_fuel[0], 
+                           goal_items[0], goal_items, storm_items, singleTaskInput.nav_uav_fuel[0], 
                            singleTaskInput.nav_uav_speed[0], singleTaskInput.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
@@ -96,7 +96,7 @@ class UAVNavigation(QMainWindow):
         uav_blue.ra_label.setVisible(False)
    
         uav_red = UAVItem(2, "#FF7F7F", "RED", singleTaskInput.nav_uav_x[1], singleTaskInput.nav_uav_y[1],
-                          goal_items[1], goal_items, singleTaskInput.nav_uav_fuel[1], 
+                          goal_items[1], goal_items, storm_items, singleTaskInput.nav_uav_fuel[1], 
                            singleTaskInput.nav_uav_speed[1], singleTaskInput.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
@@ -119,7 +119,7 @@ class UAVNavigation(QMainWindow):
         uav_red.ra_label.setVisible(False)
 
         uav_green = UAVItem(3, "#88E788", "GREEN", singleTaskInput.nav_uav_x[2], singleTaskInput.nav_uav_y[2],
-                           goal_items[2], goal_items, singleTaskInput.nav_uav_fuel[2], 
+                           goal_items[2], goal_items, storm_items, singleTaskInput.nav_uav_fuel[2], 
                            singleTaskInput.nav_uav_speed[2], singleTaskInput.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
@@ -142,7 +142,7 @@ class UAVNavigation(QMainWindow):
         uav_green.ra_label.setVisible(False)
 
         uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", singleTaskInput.nav_uav_x[3], singleTaskInput.nav_uav_y[3], 
-                           goal_items[3], goal_items, singleTaskInput.nav_uav_fuel[3], 
+                           goal_items[3], goal_items, storm_items, singleTaskInput.nav_uav_fuel[3], 
                            singleTaskInput.nav_uav_speed[3], singleTaskInput.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
@@ -449,14 +449,14 @@ class UAVNavigation(QMainWindow):
         fuel_usea = round((uav.hyp_length / uav.fuel) * 100)
         self.card_a.fuel.setText(f"Fuel Usage: {fuel_usea}%")
 
-        self.card_a.warnings.setText("Warnings: None")
+        self.card_a.warnings.setText(f"Warnings: {uav.hit_chancea}%")
 
         self.card_b.distance.setText(f"Distance to target: {uav.ra_length} km")
 
         fuel_useb = round((uav.ra_length / uav.fuel) * 100)
         self.card_b.fuel.setText(f"Fuel Usage: {fuel_useb}%")
 
-        self.card_b.warnings.setText("Warnings: None")
+        self.card_b.warnings.setText(f"Warnings: {uav.hit_chanceb}%")
 
     def TimerUpdateCards(self):
         if self.curr_uav:

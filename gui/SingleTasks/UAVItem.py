@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
     QGraphicsScene, QGraphicsView, QGraphicsPixmapItem, QGraphicsEllipseItem,
     QGraphicsTextItem, QGroupBox
 )
-from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
-from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
+from PyQt6.QtCore import Qt, QTimer, QPointF
+from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QVector2D
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
 from .NavItems import GoalItem, PathItem
@@ -13,7 +13,7 @@ import random
 import singleTaskInput
 
 class UAVItem():
-    def __init__(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal: GoalItem, goal_items, fuel, speed,
+    def __init__(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal: GoalItem, goal_items, storm_items, fuel, speed,
                  angle, on_click_callback, scene):
         
         pts = [QPointF(0, -25), QPointF(-25, 25), QPointF(25, 25)]
@@ -35,6 +35,7 @@ class UAVItem():
         self.fuel = fuel
         self.goal_item = curr_goal
         self.goal_items = goal_items
+        self.storm_items = storm_items
         path = PathItem(color_hex, x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y, angle)
         self.hyp_path = path.hyp
         self.hyp_label = path.hyp_label
@@ -43,6 +44,8 @@ class UAVItem():
         self.ra_label = path.ra_label
         self.ra_midpoint = path.ra_midpoint
         self.ra_length = path.ra_length
+
+        self.GetStormHitChance()
 
         self.idle_timer = QTimer()
         self.idle_timer.setInterval(1000) 
@@ -130,8 +133,67 @@ class UAVItem():
         self.hyp_label.setVisible(False)
         self.ra_path.setVisible(False)
         self.ra_label.setVisible(False)
+
+        self.GetStormHitChance()
+
         pass
-    
+
+    def GetStormHitChance(self):
+        def point_to_segment_distance(p1, p2):
+            #ap = QPointF(p.x() - a.x(), p.y() - a.y())
+            #ab = QPointF(b.x() - a.x(), b.y() - a.y())
+
+            #ab_length_squared = ab.x() ** 2 + ab.y() ** 2
+            #if ab_length_squared == 0:
+                #return math.hypot(ap.x(), ap.y())
+
+            #t = max(0, min(1, (ap.x() * ab.x() + ap.y() * ab.y()) / ab_length_squared))
+            #closest = QPointF(a.x() + ab.x() * t, a.y() + ab.y() * t)
+            #return math.hypot(p.x() - closest.x(), p.y() - closest.y())
+        
+            return QVector2D(p2 - p1).length()
+
+        
+        def linear_hit_chance(dist, max_dist, min_dist):
+            if dist <= min_dist:
+                return 95
+            elif dist >= max_dist:
+                return 0
+            else:
+                t = (dist - min_dist) / (max_dist - min_dist)
+                scaled = (1 - t) ** 4
+                #scaled = 1 - (dist - min_dist) / (max_dist - min_dist)
+                return round(scaled * 100)
+
+        start = self.curr_pos
+        goal = QPointF(self.goal_item.pos_x, self.goal_item.pos_y)
+
+        mid_hyp = QPointF((start.x() + goal.x()) / 2, (start.y() + goal.y()) / 2)
+        mid_ra = self.ra_midpoint
+
+        min_d1 = float('inf')
+        min_d2 = float('inf')
+
+        for storm in self.storm_items:
+            storm_pos = QPointF(storm.pos_x, storm.pos_y)
+
+            d1 = point_to_segment_distance(storm_pos, mid_hyp)
+            if d1 < min_d1:
+                min_d1 = d1
+
+            d2 = point_to_segment_distance(storm_pos, mid_ra)
+            if d2 < min_d2:
+                min_d2 = d2
+
+        max_dist = 300
+        min_dist = 50
+
+        self.hit_chancea = linear_hit_chance(min_d1, max_dist, min_dist)
+        self.hit_chanceb = linear_hit_chance(min_d2, max_dist, min_dist)
+
+        print(f"Min Distance to Path A: {min_d1}, Hit Chance A: {self.hit_chancea}%")
+        print(f"Min Distance to Path B: {min_d2}, Hit Chance B: {self.hit_chanceb}%")
+
     def OnClick(self):
         self.hyp_path.setVisible(True)
         self.hyp_label.setVisible(True)
