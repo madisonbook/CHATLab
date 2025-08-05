@@ -128,13 +128,12 @@ class PathItem():
 class StormItem(QObject):
     def __init__(self, idx, x, y, image_path="images/cloud.png", parent=None):
         super().__init__(parent)
-        self.idx = idx
 
         self.pixmap_item = QGraphicsPixmapItem()
         pixmap = QPixmap(image_path)
         scaled_pixmap = pixmap.scaled(70, 70, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.pixmap_item.setPixmap(scaled_pixmap)
-        self.pixmap_item.setOffset(-35, -35)  # center it
+        self.pixmap_item.setOffset(-35, -35)
         self.pixmap_item.setPos(x, y)
         self.pixmap_item.setZValue(4)
         self.pos_x = x
