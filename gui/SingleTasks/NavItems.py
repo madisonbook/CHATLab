@@ -148,7 +148,7 @@ class StormItem(QObject):
 
     pos_anim = pyqtProperty(QPointF, fget=getPos, fset=setPos_)
 
-    def AnimateToMidpoint(self, midpoint: QPointF, duration=1500):
+    def AnimateToPoint(self, midpoint: QPointF, duration=1200):
         self.animation = QPropertyAnimation(self, b"pos_anim")
         self.animation.setDuration(duration)
         self.animation.setStartValue(self.pixmap_item.pos())

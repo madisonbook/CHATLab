@@ -446,14 +446,16 @@ class UAVNavigation(QMainWindow):
 
         self.card_a.distance.setText(f"Distance to target: {uav.hyp_length} km")
 
-        fuel_usea = round((uav.hyp_length / uav.fuel) * 100)
+        fuel_usea = round((uav.hyp_length / uav.starting_fuel) * 100)
         self.card_a.fuel.setText(f"Fuel Usage: {fuel_usea}%")
+
+        uav.GetStormHitChance()
 
         self.card_a.warnings.setText(f"Warnings: {uav.hit_chancea}%")
 
         self.card_b.distance.setText(f"Distance to target: {uav.ra_length} km")
 
-        fuel_useb = round((uav.ra_length / uav.fuel) * 100)
+        fuel_useb = round((uav.ra_length / uav.starting_fuel) * 100)
         self.card_b.fuel.setText(f"Fuel Usage: {fuel_useb}%")
 
         self.card_b.warnings.setText(f"Warnings: {uav.hit_chanceb}%")

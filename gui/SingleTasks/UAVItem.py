@@ -33,9 +33,11 @@ class UAVItem():
         self.color_text = color_text
         self.angle = angle
         self.fuel = fuel
+        self.starting_fuel = fuel
         self.goal_item = curr_goal
         self.goal_items = goal_items
         self.storm_items = storm_items
+        self.storm_hit = False
         path = PathItem(color_hex, x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y, angle)
         self.hyp_path = path.hyp
         self.hyp_label = path.hyp_label
@@ -65,7 +67,9 @@ class UAVItem():
         return math.degrees(math.atan2(dy, dx)) + 90
     
     def GetNewGoal(self):
-        fuel_buffer = 100
+        self.starting_fuel = self.fuel
+
+        fuel_buffer = 150
         hb_x, hb_y = 730, 30
         dist_to_HB = math.hypot(self.curr_pos.x() - hb_x, self.curr_pos.y() - hb_y)
         self.at_goal = False
@@ -174,8 +178,8 @@ class UAVItem():
         self.hit_chancea = linear_hit_chance(min_d1, max_dist, min_dist)
         self.hit_chanceb = linear_hit_chance(min_d2, max_dist, min_dist)
 
-        print(f"Min Distance to Path A: {min_d1}, Hit Chance A: {self.hit_chancea}%")
-        print(f"Min Distance to Path B: {min_d2}, Hit Chance B: {self.hit_chanceb}%")
+        #print(f"Min Distance to Path A: {min_d1}, Hit Chance A: {self.hit_chancea}%")
+        #print(f"Min Distance to Path B: {min_d2}, Hit Chance B: {self.hit_chanceb}%")
 
     def OnClick(self):
         self.hyp_path.setVisible(True)
@@ -268,6 +272,7 @@ class UAVItem():
                     if self.goal_item.idx == "HB":
                         self.fuel = 2000
                     self.at_goal = True
+                    self.storm_hit = False
                     self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
@@ -289,7 +294,8 @@ class UAVItem():
         self.timer.start(32)
 
         if random.randint(0, 100) < self.hit_chancea:
-            closest_storm.AnimateToMidpoint(self.hyp_midpoint)
+            closest_storm.AnimateToPoint(self.hyp_midpoint)
+            self.storm_hit = True
 
     def MoveToGoalB(self):
         self.current_step = 0
