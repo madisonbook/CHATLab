@@ -36,6 +36,7 @@ class UAVItem():
         self.starting_fuel = fuel
         self.goal_item = curr_goal
         self.goal_items = goal_items
+        self.total_goal_reached = 0
         self.storm_items = storm_items
         self.storm_hit = False
         path = PathItem(color_hex, x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y, angle)
@@ -189,54 +190,7 @@ class UAVItem():
 
         if self.on_click_callback:
             self.on_click_callback(self.color_text, self.idx)
-        pass
-
-    def MoveToHomeBase(self):
-        start_pos = self.uav_item.pos()
-        goal_pos = QPointF(730, 30)
-
-        total_dx = goal_pos.x() - start_pos.x()
-        total_dy = goal_pos.y() - start_pos.y()
-        total_distance = math.hypot(total_dx, total_dy)
-
-        unit_dx = total_dx / total_distance
-        unit_dy = total_dy / total_distance
-
-        dx = unit_dx * self.speed
-        dy = unit_dy * self.speed
-
-        self.uav_item.setRotation(self.GetAngle(start_pos.x(), start_pos.y(), goal_pos.x(), goal_pos.y()))
-
-        def Animate(): 
-            if self.fuel > 0:
-                new_x = self.curr_pos.x() + dx
-                new_y = self.curr_pos.y() + dy
-                new_pos = QPointF(new_x, new_y)
-
-                if math.hypot(goal_pos.x() - new_x, goal_pos.y() - new_y) <= self.speed:
-                    self.timer.stop()
-                    self.timer.timeout.disconnect()
-                    self.uav_item.is_moving = False
-                    self.on_path = "NA"
-                    self.fuel = 2000
-                    self.uav_item.setRotation(self.GetAngle(goal_pos.x(), goal_pos.y(), start_pos.x(), start_pos.y()))
-                    self.GetNewPath()
-                    return
-
-                self.uav_item.setPos(new_pos)
-                self.curr_pos = new_pos
-                self.fuel -= math.hypot(dx, dy)
-                if self.fuel < 0:
-                    self.fuel = 0
-
-        self.timer = QTimer()
-        self.uav_item.is_moving = True
-        self.on_path = "HB"
-        self.is_idle = False
-        self.idle_time = 0
-        self.LogAction()
-        self.timer.timeout.connect(Animate)
-        self.timer.start(32)  
+        pass 
 
     def MoveToGoalA(self):
         start_pos = self.uav_item.pos()
@@ -271,8 +225,10 @@ class UAVItem():
                     self.on_path = "NA"
                     if self.goal_item.idx == "HB":
                         self.fuel = 2000
+                        
                     self.at_goal = True
                     self.storm_hit = False
+                    self.total_goal_reached += 1
                     self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
@@ -360,6 +316,7 @@ class UAVItem():
                         self.fuel = 2000
 
                     self.at_goal = True
+                    self.total_goal_reached += 1
                     self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()

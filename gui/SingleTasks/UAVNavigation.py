@@ -329,7 +329,7 @@ class UAVNavigation(QMainWindow):
         group.setFixedHeight(60)
         layout = QHBoxLayout()
 
-        font = QFont("Times New Roman", 16, QFont.Weight.DemiBold)
+        font = QFont("Times New Roman", 18, QFont.Weight.DemiBold)
         uav_name = QLabel("UAV: ---")
         fuel = QLabel("Fuel: ---")
         target = QLabel("Target: ---")
@@ -378,7 +378,7 @@ class UAVNavigation(QMainWindow):
         title_font.setBold(True)
         group.setFont(title_font)
 
-        font = QFont("Times New Roman", 12)
+        font = QFont("Times New Roman", 14)
 
         distance = QLabel("Distance to target: ---")
         fuel = QLabel("Fuel Usage: ---")
@@ -464,6 +464,58 @@ class UAVNavigation(QMainWindow):
         if self.curr_uav:
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
+
+    def ClearUAVCards(self):
+        self.card_uav.setStyleSheet("""
+            QGroupBox {
+                border: 2px solid gray;
+                border-radius: 5px;
+                margin-top: 10px;
+            }
+        """)
+        self.card_uav.uav_name.setText("UAV: ---")
+        self.card_uav.fuel.setText("Fuel: ---")
+        self.card_uav.target.setText("Target: ---")
+
+        self.card_a.setStyleSheet(f"""
+            QGroupBox {{
+                border: 2px solid gray;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+            }}
+        """)
+        self.card_a.distance.setText("Distance to target: ---")
+        self.card_a.fuel.setText("Fuel Usage: ---")
+        self.card_a.warnings.setText("Hazard Probability: ---")
+
+        self.card_b.setStyleSheet(f"""
+            QGroupBox {{
+                border: 2px solid gray;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+            }}
+        """)
+        self.card_b.distance.setText("Distance to target: ---")
+        self.card_b.fuel.setText("Fuel Usage: ---")
+        self.card_b.warnings.setText("Hazard Probability: ---")
+
+        self.curr_uav = None
     
     def ClickCancel(self):
         self.path_stack.setCurrentIndex(0)
@@ -473,29 +525,24 @@ class UAVNavigation(QMainWindow):
             uav.hyp_label.setVisible(False)
             uav.ra_path.setVisible(False)
             uav.ra_label.setVisible(False)
-        pass
 
-    def ClickHomeBase(self):
-        if not hasattr(self, "curr_uav") or self.curr_uav is None:
-            return
-        
-        self.ClickCancel()
-        self.curr_uav.MoveToHomeBase()
+        self.ClearUAVCards()
+        pass
 
     def ClickPathA(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
         
-        self.ClickCancel()
         self.curr_uav.MoveToGoalA()
+        self.ClickCancel()
+        
 
     def ClickPathB(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
         
-        self.ClickCancel()
         self.curr_uav.MoveToGoalB()
-
+        self.ClickCancel()
         pass
 
     def CreateHomeBase(self):
