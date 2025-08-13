@@ -8,6 +8,7 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF, QPropertyAnimation, QEasin
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
+import random
 
 class GoalItem(QGraphicsEllipseItem):
     def __init__(self, idx, x_goal, y_goal):
@@ -88,6 +89,10 @@ class PathItem():
             bx = mx + h * ux
             by = my + h * uy
             bend = QPointF(bx, by)
+
+        if bend.x() < 10 or bend.x() > 790 or bend.y() < 10 or bend.y() > 790:
+            #print("making new angle")
+            return self.CreateRA(165)
 
         path.lineTo(bend)
         path.lineTo(self.end)
