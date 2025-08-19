@@ -526,7 +526,7 @@ class UAVNavigation(QMainWindow):
             uav.ra_path.setVisible(False)
             uav.ra_label.setVisible(False)
 
-        self.ClearUAVCards()
+        #self.ClearUAVCards()
         pass
 
     def ClickPathA(self):

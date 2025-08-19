@@ -34,6 +34,7 @@ class UAVItem():
         self.angle = angle
         self.fuel = fuel
         self.starting_fuel = fuel
+        self.score = 0
         self.goal_item = curr_goal
         self.goal_items = goal_items
         self.total_goal_reached = 0
@@ -69,6 +70,7 @@ class UAVItem():
     
     def GetNewGoal(self):
         self.starting_fuel = self.fuel
+        self.storm_hit = False
 
         fuel_buffer = 150
         hb_x, hb_y = 730, 30
@@ -182,6 +184,20 @@ class UAVItem():
         #print(f"Min Distance to Path A: {min_d1}, Hit Chance A: {self.hit_chancea}%")
         #print(f"Min Distance to Path B: {min_d2}, Hit Chance B: {self.hit_chanceb}%")
 
+    def PauseForStorm(self):
+        if self.timer and self.timer.isActive():
+            self.timer.stop()
+            self.uav_item.is_moving = False
+            #self.LogAction()
+            QTimer.singleShot(2000, self.ResumeAfterStorm)
+
+    def ResumeAfterStorm(self):
+        if self.timer:
+            self.timer.start(32)
+            self.uav_item.is_moving = True
+            #self.storm_hit = False
+            self.fuel = self.fuel - 50
+
     def OnClick(self):
         self.hyp_path.setVisible(True)
         self.hyp_label.setVisible(True)
@@ -217,6 +233,9 @@ class UAVItem():
                 new_y = self.curr_pos.y() + dy
                 new_pos = QPointF(new_x, new_y)
 
+                if self.storm_hit and math.hypot(self.hyp_midpoint.x() - new_x, self.hyp_midpoint.y() - new_y) <= self.speed:
+                    self.PauseForStorm()
+
                 if math.hypot(goal_pos.x() - new_x, goal_pos.y() - new_y) <= self.speed:
                     self.timer.stop()
                     self.uav_item.setPos(goal_pos)
@@ -229,9 +248,11 @@ class UAVItem():
                     self.at_goal = True
                     self.storm_hit = False
                     self.total_goal_reached += 1
+                    self.score = 10 if not self.storm_hit else 5
                     self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
+                    self.score = 0
                     return
 
                 self.uav_item.setPos(new_pos)
@@ -245,13 +266,15 @@ class UAVItem():
         self.is_idle = False
         self.idle_time = 0
         self.on_path = "A"
+        if random.randint(1, 101) < self.hit_chancea:
+            closest_storm.AnimateToPoint(self.hyp_midpoint)
+            self.storm_hit = True
+
         self.LogAction()
         self.timer.timeout.connect(Animate)
         self.timer.start(32)
 
-        if random.randint(0, 100) < self.hit_chancea:
-            closest_storm.AnimateToPoint(self.hyp_midpoint)
-            self.storm_hit = True
+        
 
     def MoveToGoalB(self):
         self.current_step = 0
@@ -283,6 +306,8 @@ class UAVItem():
         dx2 = unit_dx2 * self.speed
         dy2 = unit_dy2 * self.speed
 
+        closest_storm = self.storm_items[self.storm_b - 1]
+
         def AnimateP1(): 
             if self.fuel > 0:
                 new_x = self.curr_pos.x() + dx1
@@ -293,6 +318,10 @@ class UAVItem():
                     self.timer.timeout.disconnect()
                     self.current_step = 0
                     self.uav_item.setRotation(self.GetAngle(mid_pos.x(), mid_pos.y(), goal_pos.x(), goal_pos.y()))
+                    
+                    if self.storm_hit:
+                        self.PauseForStorm()
+
                     self.timer.timeout.connect(AnimateP2)
                     return
 
@@ -317,9 +346,11 @@ class UAVItem():
 
                     self.at_goal = True
                     self.total_goal_reached += 1
+                    self.score = 8 if not self.storm_hit else 5
                     self.LogAction()
                     self.GetNewGoal()
                     self.GetNewPath()
+                    self.score = 0
                     return
 
                 self.uav_item.setPos(new_pos)
@@ -333,9 +364,14 @@ class UAVItem():
         self.idle_time = 0
         self.on_path = "B"
         self.is_idle = False
+        if random.randint(1, 101) < self.hit_chancea:
+            closest_storm.AnimateToPoint(self.ra_midpoint)
+            self.storm_hit = True
+            
         self.LogAction()
         self.timer.timeout.connect(AnimateP1)
         self.timer.start(32)
+
 
     def CheckIdle(self):
         if not self.is_idle or self.fuel == 0:
