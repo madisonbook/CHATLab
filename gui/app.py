@@ -5,6 +5,7 @@ import sys
 from ConsentWindow import ConsentWindow
 from SingleTasks.UAVNavigation import UAVNavigation
 from SingleTasks.MonitorLevels import MonitorLevels
+from SingleTasks.ChatBox import ChatBox
 from singleTaskInput import read_vals
 
 try:
@@ -14,6 +15,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = UAVNavigation()
+window = ChatBox()
 window.show()
 app.exec()

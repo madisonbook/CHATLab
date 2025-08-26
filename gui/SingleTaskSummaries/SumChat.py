@@ -4,9 +4,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrChat import InstrChat
 
-class SumUAV(QMainWindow):
+class SumChat(QMainWindow):
     def __init__(self, stats: list[int]):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -18,11 +17,11 @@ class SumUAV(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("UAV Navigation Task Complete")
+        title = Title("Chat Box Task Complete")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed the UAV Navigation task.")
+        participate = Subtitle("Congratulations! You have successfully completed the Chat Box task.")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
@@ -58,7 +57,4 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartChat(self):
-    self.instrChat = InstrChat()
-    self.instrChat.show()
-    self.close()
     pass

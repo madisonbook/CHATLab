@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrChat import InstrChat
+from SingleTasks.MonitorLevels import MonitorLevels
 
-class SumUAV(QMainWindow):
-    def __init__(self, stats: list[int]):
+class InstrMonitor(QMainWindow):
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
 
@@ -18,18 +18,18 @@ class SumUAV(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("UAV Navigation Task Complete")
+        title = Title("")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed the UAV Navigation task.")
+        participate = Subtitle("Instructions will be added once i make the thing do the thing")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
 
-        continue_button = QPushButton("Click Here to Continue")
+        continue_button = QPushButton("Click Here to Start")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartChat(self))
+        continue_button.clicked.connect(lambda: StartMonitor(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -57,8 +57,7 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def StartChat(self):
-    self.instrChat = InstrChat()
-    self.instrChat.show()
+def StartMonitor(self):
+    self.monitor = MonitorLevels()
+    self.monitor.show()
     self.close()
-    pass

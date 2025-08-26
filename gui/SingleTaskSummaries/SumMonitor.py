@@ -18,21 +18,18 @@ class SumMonitor(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Summary: Monitor Levels")
+        title = Title("Monitor Levels Task Complete")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        total = stats[1]
-        correct = stats[0]
-
-        participate = Subtitle(f"You correctly handled {correct} out of {total} instances")
+        participate = Subtitle("Congratulations! You have successfully completed the Monitor Levels task.")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
 
         continue_button = QPushButton("Click Here to Continue")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartMonitor(self))
+        continue_button.clicked.connect(lambda: StartUAV(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -60,7 +57,7 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def StartMonitor(self):
+def StartUAV(self):
     self.instrUAV = InstrUAV()
     self.instrUAV.show()
     self.close()
