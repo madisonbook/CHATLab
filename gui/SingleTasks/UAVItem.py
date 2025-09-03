@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRe
 import math
 from .NavItems import GoalItem, PathItem
 import random
-import singleTaskInput
 
 class UAVItem():
     def __init__(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal: GoalItem, goal_items, storm_items, fuel, speed,
@@ -367,7 +366,7 @@ class UAVItem():
         if random.randint(1, 101) < self.hit_chancea:
             closest_storm.AnimateToPoint(self.ra_midpoint)
             self.storm_hit = True
-            
+
         self.LogAction()
         self.timer.timeout.connect(AnimateP1)
         self.timer.start(32)

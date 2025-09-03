@@ -1,0 +1,1 @@
+In the next trial, you will be montoring guages from an external system. The four gauges will be marked with upper and lower acceptable limits on the left sides. If the colored fill of the gauge goes outside of those bounds, you will need to click "Reset" as quickly as possible. When you are ready, click the button to begin.

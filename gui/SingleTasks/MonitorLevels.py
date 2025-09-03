@@ -8,7 +8,7 @@ from PyQt6.QtGui import QFont, QBrush, QPen, QColor
 #from .GenerateLevel import GenerateLevel
 from SingleTaskSummaries.SumMonitor import SumMonitor
 from participant import PARTICIPANT_ID
-import singleTaskInput
+from ReadInput import singleTaskInput
 import random
 import datetime
 from DataLogging.LogMonitor import LogMonitor, MonitorCSV
@@ -209,6 +209,8 @@ class GenerateLevel(QWidget):
             self.monitor_level = self.animation_end_height
             self.animation_timer.stop()
  
+        
+
 def Title(str: str):
     title_label = QLabel(str)
     title_label.setFont(QFont("Times New Roman", 24, QFont.Weight.Bold))

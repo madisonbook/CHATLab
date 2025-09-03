@@ -1,10 +1,11 @@
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QRadioButton, QGroupBox,
-    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QPlainTextEdit
+    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow,  QSizePolicy
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QGuiApplication
 from SingleTasks.MonitorLevels import MonitorLevels
+from ReadInput import breakBlockInput
 
 class InstrMonitor(QMainWindow):
     def __init__(self):
@@ -22,8 +23,8 @@ class InstrMonitor(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Instructions will be added once i make the thing do the thing")
-        main_layout.addWidget(participate)
+        participate = Subtitle(breakBlockInput.break1)
+        main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
 
         main_layout.addSpacing(10)
 
@@ -54,7 +55,14 @@ def Title(str: str):
 def Subtitle(str: str):
     subtitle_label = QLabel(str)
     subtitle_label.setFont(QFont("Times New Roman", 16, QFont.Weight.DemiBold))
-    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+    subtitle_label.setWordWrap(True)
+
+    screen = QGuiApplication.primaryScreen().geometry()
+    screen_width = screen.width()
+    subtitle_label.setMaximumWidth(int(screen_width * 0.75))
+    subtitle_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+
     return subtitle_label
 
 def StartMonitor(self):

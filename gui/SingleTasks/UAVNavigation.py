@@ -12,7 +12,7 @@ from SingleTaskSummaries.SumUAV import SumUAV
 from .UAVItem import UAVItem
 from .NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-import singleTaskInput
+from ReadInput import singleTaskInput
 from DataLogging.LogNavigation import LogNavigation
 
 summary = []
@@ -178,6 +178,7 @@ class UAVNavigation(QMainWindow):
         self.uav_info_widget = self.CreateUAVInfoWidget()
         self.uav_info_stack.addWidget(self.uav_info_widget)
         self.uav_info_stack.setCurrentWidget(self.uav_info_widget)
+
 
         right_content = QVBoxLayout()
         right_content.addWidget(self.uav_info_stack)
