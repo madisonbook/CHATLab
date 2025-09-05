@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from ConsentWindow import ConsentWindow
+from Instructions.InstrUAV import InstrUAV
 from SingleTasks.UAVNavigation import UAVNavigation
 from SingleTasks.MonitorLevels import MonitorLevels
 from SingleTasks.ChatBox import ChatBox

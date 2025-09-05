@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QGuiApplication
-from SingleTasks.MonitorLevels import MonitorLevels
+from PracticeTrials.PracMonitor import PracMonitorLevels
 from ReadInput import breakBlockInput
 
-class InstrMonitor(QMainWindow):
+class InstrPracMonitor(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -19,11 +19,11 @@ class InstrMonitor(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Instructions: Monitor Levels")
+        title = Title("Instructions: Practice Monitor Levels")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle(breakBlockInput.break2)
+        participate = Subtitle(breakBlockInput.break1)
         main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
 
         main_layout.addSpacing(10)
@@ -66,6 +66,6 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartMonitor(self):
-    self.monitor = MonitorLevels()
+    self.monitor = PracMonitorLevels()
     self.monitor.show()
     self.close()

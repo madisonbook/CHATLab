@@ -5,12 +5,12 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor
-from SingleTaskSummaries.SumMonitor import SumMonitor
+from Instructions.InstrMonitor import InstrMonitor
+#from SingleTaskSummaries.SumMonitor import SumMonitor
 from participant import PARTICIPANT_ID
 from ReadInput import singleTaskInput
 import random
 import datetime
-from DataLogging.LogMonitor import LogMonitor, MonitorCSV
 
 base_width = 125
 base_height = 300
@@ -21,7 +21,7 @@ gauges = []
 total_oob = 0
 total_reset = 0
 
-class MonitorLevels(QMainWindow):
+class PracMonitorLevels(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -31,7 +31,7 @@ class MonitorLevels(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Monitor Levels")
+        title = Title("Task: Practice Monitor Levels")
         main_layout.addWidget(title)
         main_layout.addSpacing(50)
 
@@ -55,12 +55,10 @@ class MonitorLevels(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(singleTaskInput.gauge_duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(30*1000, lambda: self.StartSummary())
 
     def StartSummary(self):
-        summary = [total_reset, total_oob]
-        self.showSum = SumMonitor(summary)
-        MonitorCSV()
+        self.showSum = InstrMonitor()
         self.showSum.show()
         self.close()    
 
@@ -149,7 +147,7 @@ class GenerateLevel(QWidget):
             global total_reset 
             total_reset = total_reset + 1
             self.oob = False
-            LogGauges()
+            #LogGauges()
 
         self.oob_time = None
         self.TimerDelay()
@@ -173,7 +171,7 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
-            LogGauges()
+            #LogGauges()
 
         self.TimerDelay()
 
@@ -206,9 +204,7 @@ class GenerateLevel(QWidget):
 
         if progress >= 1.0:
             self.monitor_level = self.animation_end_height
-            self.animation_timer.stop()
- 
-        
+            self.animation_timer.stop()        
 
 def Title(str: str):
     title_label = QLabel(str)
@@ -221,13 +217,3 @@ def Subtitle(str: str):
     subtitle_label.setFont(QFont("Times New Roman", 16, QFont.Weight.DemiBold))
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
-
-def LogGauges():
-    # block, trial, gauges, auto, auto_type, total_oob, total_reset
-    block = 1
-    trial = 1
-    auto = str(False)
-    auto_type = "None"
-
-    LogMonitor(block, trial, gauges, auto, auto_type, total_oob, total_reset)
-    pass

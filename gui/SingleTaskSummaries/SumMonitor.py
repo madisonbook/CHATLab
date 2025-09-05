@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrUAV import InstrUAV
+from Instructions.InstrPracUAV import InstrPracUAV
 
 class SumMonitor(QMainWindow):
     def __init__(self, stats: list[int]):
@@ -58,6 +58,6 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartUAV(self):
-    self.instrUAV = InstrUAV()
+    self.instrUAV = InstrPracUAV()
     self.instrUAV.show()
     self.close()

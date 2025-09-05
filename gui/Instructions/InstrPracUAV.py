@@ -1,12 +1,13 @@
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QRadioButton, QGroupBox,
-    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QPlainTextEdit
+    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QSizePolicy
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
-from SingleTasks.MonitorLevels import MonitorLevels
+from PyQt6.QtGui import QFont, QGuiApplication
+from PracticeTrials.PracUAVNavigation import UAVNavigation
+from ReadInput import breakBlockInput
 
-class InstrMonitor(QMainWindow):
+class InstrPracUAV(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -18,18 +19,17 @@ class InstrMonitor(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("")
+        title = Title("Instructions: Practice UAV Navigation")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Instructions will be added once i make the thing do the thing")
-        main_layout.addWidget(participate)
-
+        participate = Subtitle(breakBlockInput.break3)
+        main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
         main_layout.addSpacing(10)
 
         continue_button = QPushButton("Click Here to Start")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartMonitor(self))
+        continue_button.clicked.connect(lambda: StartUAV(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -53,11 +53,18 @@ def Title(str: str):
 
 def Subtitle(str: str):
     subtitle_label = QLabel(str)
-    subtitle_label.setFont(QFont("Times New Roman", 16, QFont.Weight.DemiBold))
-    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    subtitle_label.setFont(QFont("Times New Roman", 18, QFont.Weight.Medium))
+    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+    subtitle_label.setWordWrap(True)
+
+    screen = QGuiApplication.primaryScreen().geometry()
+    screen_width = screen.width()
+    subtitle_label.setMaximumWidth(int(screen_width * 0.75))
+    subtitle_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+
     return subtitle_label
 
-def StartMonitor(self):
-    self.monitor = MonitorLevels()
+def StartUAV(self):
+    self.monitor = UAVNavigation()
     self.monitor.show()
     self.close()

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from IneligibleWindow import IneligibleWindow
-from Instructions.InstrMonitor import InstrMonitor
+from Instructions.InstrPracMonitor import InstrPracMonitor
 
 class ConsentWindow(QMainWindow):
     def __init__(self):
@@ -207,7 +207,7 @@ def SubmitConsent(self, radio1, radio2):
 
 def HandleSubmitConsent(self, radio1, radio2):
     if radio1.isChecked():
-        self.instructions = InstrMonitor()
+        self.instructions = InstrPracMonitor()
         self.instructions.show()
         self.close()
     elif radio2.isChecked():

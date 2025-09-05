@@ -12,7 +12,6 @@ def read_break():
             global break1, break2, break3
             if len(rows) > 0:
                 break1 = rows[0]
-                print(f"{break1}")
             if len(rows) > 1:
                 break2 = rows[1]
             if len(rows) > 2:
