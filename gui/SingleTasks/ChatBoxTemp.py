@@ -179,13 +179,24 @@ class ChatBox(QMainWindow):
 
         game_form.addWidget(view)
 
+        # Create right content with fixed sizes
+        right_content = QVBoxLayout()
+        
+        # Fixed-size UAV info section
         self.uav_info_stack = QStackedWidget()
-
         self.uav_info_widget = self.CreateUAVInfoWidget()
         self.uav_info_stack.addWidget(self.uav_info_widget)
         self.uav_info_stack.setCurrentWidget(self.uav_info_widget)
         self.uav_info_stack.setFixedHeight(200)
-
+        self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        
+        # Fixed-size chat box
+        items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
+        self.chat_box = ChatWidget(context_items=items_on_screen)
+        self.chat_box.setFixedHeight(140)
+        self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        
+        # Fixed-size gauges section
         gauges = []
         monitor_levels = QHBoxLayout()
         monitor_levels.addStretch()
@@ -200,15 +211,19 @@ class ChatBox(QMainWindow):
             monitor_levels.addSpacing(5)
 
         monitor_levels.addStretch()
+        
+        # Create a widget for gauges with fixed height
+        gauges_widget = QWidget()
+        gauges_widget.setLayout(monitor_levels)
+        gauges_widget.setFixedHeight(360)  # Slightly larger than gauge height + button
+        gauges_widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
-        items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-
-        self.chat_box = ChatWidget(context_items=items_on_screen)
-
-        right_content = QVBoxLayout()
+        # Add all components with fixed sizes
         right_content.addWidget(self.uav_info_stack)
         right_content.addWidget(self.chat_box)
-        right_content.addLayout(monitor_levels)
+        right_content.addWidget(gauges_widget)
+        right_content.addStretch()
+        right_content.addStretch()
     
         game_form.addLayout(right_content)
 
@@ -335,8 +350,8 @@ class ChatBox(QMainWindow):
     def CreateUAVInfoWidget(self):
         widget = QWidget()
         widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        widget.setFixedHeight(200)  # Set fixed height
         layout = QVBoxLayout()
-        #layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
         self.card_uav = self.CreateUAVCard()
         self.card_a = self.CreateInfoCard("Path A")
@@ -357,16 +372,24 @@ class ChatBox(QMainWindow):
     def CreateUAVCard(self):
         group = QGroupBox()
         group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        group.setFixedHeight(60)  # Set fixed height for UAV card
         layout = QHBoxLayout()
 
         font = QFont("Times New Roman", 18, QFont.Weight.DemiBold)
-        uav_name = QLabel("UAV: ---")
-        fuel = QLabel("Fuel: ---")
-        target = QLabel("Target: ---")
-        #layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        # Use fixed-width text to prevent layout shifts
+        uav_name = QLabel("UAV: -------")  # Longer placeholder
+        fuel = QLabel("Fuel: ----- km")    # Include units in placeholder
+        target = QLabel("Target: -")        # Single digit placeholder
+        
         uav_name.setFont(font)
         fuel.setFont(font)
         target.setFont(font)
+        
+        # Set minimum widths to prevent layout shifts
+        uav_name.setMinimumWidth(150)
+        fuel.setMinimumWidth(130)
+        target.setMinimumWidth(80)
+        
         layout.addWidget(uav_name)
         layout.addSpacing(15)
         layout.addWidget(fuel)
@@ -390,7 +413,7 @@ class ChatBox(QMainWindow):
             }}
         """
 
-        group.setStyleSheet(group.setStyleSheet(group._base_stylesheet.format(color="gray")))
+        group.setStyleSheet(group._base_stylesheet.format(color="gray"))
         
         group.uav_name = uav_name
         group.fuel = fuel
@@ -412,6 +435,7 @@ class ChatBox(QMainWindow):
 
         group = QGroupBox(title)
         group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        group.setFixedHeight(120)  # Set fixed height for info cards
     
         title_font = QFont("Times New Roman", 14)
         title_font.setBold(True)
@@ -419,12 +443,14 @@ class ChatBox(QMainWindow):
 
         font = QFont("Times New Roman", 14)
 
-        distance = QLabel("Distance to target: ---")
-        fuel = QLabel("Fuel Usage: ---")
-        warnings = QLabel("Hazard Probability: ---")
+        # Use longer placeholders with consistent formatting
+        distance = QLabel("Distance to target: ----- km")
+        fuel = QLabel("Fuel Usage: ---%")
+        warnings = QLabel("Hazard Probability: ---%")
 
         for label in (distance, fuel, warnings):
             label.setFont(font)
+            label.setMinimumWidth(200)  # Set minimum width
             layout.addWidget(label)
 
         group.setLayout(layout)
@@ -455,7 +481,6 @@ class ChatBox(QMainWindow):
     def UpdateInfoCards(self, uav: UAVItem):
         color = uav.color_hex
 
-        
         self.card_a.setStyleSheet(self.card_a._base_stylesheet.format(color=color))
         self.card_b.setStyleSheet(self.card_b._base_stylesheet.format(color=color))
 
@@ -481,20 +506,20 @@ class ChatBox(QMainWindow):
             self.UpdateUAVCard(self.curr_uav)
 
     def ClearUAVCards(self):
-        self.card_uav.setStyleSheet(self.card_a._base_stylesheet.format(color="gray"))
-        self.card_uav.uav_name.setText("UAV: ---")
-        self.card_uav.fuel.setText("Fuel: ---")
-        self.card_uav.target.setText("Target: ---")
+        self.card_uav.setStyleSheet(self.card_uav._base_stylesheet.format(color="gray"))
+        self.card_uav.uav_name.setText("UAV: -------")
+        self.card_uav.fuel.setText("Fuel: ----- km")
+        self.card_uav.target.setText("Target: -")
 
         self.card_a.setStyleSheet(self.card_a._base_stylesheet.format(color="gray"))
-        self.card_a.distance.setText("Distance to target: ---")
-        self.card_a.fuel.setText("Fuel Usage: ---")
-        self.card_a.warnings.setText("Hazard Probability: ---")
+        self.card_a.distance.setText("Distance to target: ----- km")
+        self.card_a.fuel.setText("Fuel Usage: ---%")
+        self.card_a.warnings.setText("Hazard Probability: ---%")
         
         self.card_b.setStyleSheet(self.card_b._base_stylesheet.format(color="gray"))
-        self.card_b.distance.setText("Distance to target: ---")
-        self.card_b.fuel.setText("Fuel Usage: ---")
-        self.card_b.warnings.setText("Hazard Probability: ---")
+        self.card_b.distance.setText("Distance to target: ----- km")
+        self.card_b.fuel.setText("Fuel Usage: ---%")
+        self.card_b.warnings.setText("Hazard Probability: ---%")
 
         self.curr_uav = None
     
@@ -719,14 +744,18 @@ class GenerateLevel(QWidget):
 class ChatWidget(QWidget):
     def __init__(self, context_items):
         super().__init__()
+        
+        # Set fixed size for the chat widget
+        self.setFixedHeight(130)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         main_layout = QHBoxLayout(self)
         self.context_items = context_items
-        #main_layout.setAlignment(Qt.AlignmentFlag.AlignBottom)
         self.setLayout(main_layout)
 
         left_group = QGroupBox("Chat Box")
-        left_group.setFixedHeight(200)
+        left_group.setFixedHeight(130)
+        left_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         left_layout = QVBoxLayout(left_group)
 
@@ -734,11 +763,13 @@ class ChatWidget(QWidget):
         self.latest_message.setWordWrap(True)
         self.latest_message.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.latest_message.setFont(QFont("Times New Roman", 14))
+        self.latest_message.setFixedHeight(90)  # Fixed height for message area
         left_layout.addWidget(self.latest_message)
 
         self.input_box = QLineEdit()
         self.input_box.setPlaceholderText("Type a message...")
         self.input_box.setFont(QFont("Times New Roman", 14))
+        self.input_box.setFixedHeight(30)  # Fixed height for input box
         left_layout.addWidget(self.input_box)
 
         left_group.setLayout(left_layout)
@@ -764,10 +795,13 @@ class ChatWidget(QWidget):
         left_group.setFont(title_font)
 
         right_group = QGroupBox("Message History")
-        right_group.setFixedHeight(200)
+        right_group.setFixedHeight(130)
+        right_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         right_layout = QVBoxLayout(right_group)
+        
         self.history_scroll = QScrollArea()
         self.history_scroll.setWidgetResizable(True)
+        self.history_scroll.setFixedHeight(100)  # Fixed height for scroll area
 
         self.history_widget = QWidget()
         self.history_layout = QVBoxLayout(self.history_widget)
@@ -800,7 +834,6 @@ class ChatWidget(QWidget):
         main_layout.addWidget(left_group, 2)
         main_layout.addWidget(right_group, 3)
         
-
         self.input_box.returnPressed.connect(self.handle_user_message)
 
         self.message_templates = [
@@ -829,6 +862,7 @@ class ChatWidget(QWidget):
 
     def add_message_card(self, item: str):
         card = QGroupBox("")
+        card.setFixedHeight(40)  # Fixed height for message cards
         layout = QVBoxLayout()
 
         label = QLabel(item)

@@ -17,6 +17,7 @@ nav_uav_fuel = []
 nav_uav_speed = []
 nav_path_angle = []
 nav_duration = None
+chat_duration = None
 
 def read_vals():
     try:
@@ -43,9 +44,10 @@ def read_vals():
             nav_uav_fuel = [int(item) for item in rows[11][1:5]]
             nav_uav_speed = [int(item) for item in rows[12][1:5]]
 
-            global nav_path_angle, nav_duration
+            global nav_path_angle, nav_duration, chat_duration
             nav_path_angle = [int(item) for item in rows[13][1:5]]
             nav_duration = int(rows[14][1])
+            chat_duration = int(rows[15][1])
 
     except FileNotFoundError:
         print("file not found.")

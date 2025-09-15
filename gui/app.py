@@ -6,7 +6,7 @@ from ConsentWindow import ConsentWindow
 from Instructions.InstrUAV import InstrUAV
 from SingleTasks.UAVNavigation import UAVNavigation
 from SingleTasks.MonitorLevels import MonitorLevels
-from SingleTasks.ChatBox import ChatBox
+from SingleTasks.ChatBoxTemp import ChatBox
 from ReadInput.singleTaskInput import read_vals
 from ReadInput.breakBlockInput import read_break
 
@@ -18,6 +18,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = ConsentWindow()
+window = ChatBox()
 window.show()
 app.exec()
