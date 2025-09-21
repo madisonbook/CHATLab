@@ -605,7 +605,9 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        self.monitor_level = random.randint(singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx], singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx])
+        height = max(10, min(240, int(random.normalvariate(singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_sd[idx]))))
+        #self.monitor_level = random.randint(singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_sd[idx], singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_sd[idx])
+        self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
 
@@ -849,7 +851,8 @@ class ChatWidget(QWidget):
         self.uav_templates = [
             "What is the fuel level of {item}?",
             "What is the current goal of {item}?",
-            "What "
+            "What is the length of Path A for {item}?",
+            "What is the length of Path B for {item}?"
         ]
 
         self.timer = QTimer(self)
@@ -888,7 +891,7 @@ class ChatWidget(QWidget):
         msg_time = datetime.datetime.now()
 
         LogChat()
-        
+
         delay = random.randint(singleTaskInput.chat_timer[0]*1000,
                            singleTaskInput.chat_timer[1]*1000)
         self.timer.start(delay)

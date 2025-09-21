@@ -1,8 +1,7 @@
 participant_id,block,trial,time,message,response,rxn_time
-28288cd5,1,3,06:44:52,Is GAUGE GREEN within the bounds?,N/A
-28288cd5,1,3,06:44:55,Is GAUGE GREEN within the bounds?,Yes,2.702612
-28288cd5,1,3,06:45:01,What ,N/A
-28288cd5,1,3,06:45:04,What ,oops,2.857739
-28288cd5,1,3,06:45:07,What is the fuel level of UAV GREEN?,N/A
-28288cd5,1,3,06:45:15,What is the fuel level of UAV GREEN?,1000,8.094298
-28288cd5,1,3,06:45:20,Is GAUGE BLUE above the bounds?,N/A
+9a55b694,1,3,06:51:00,What is the current goal of UAV BLUE?,N/A
+9a55b694,1,3,06:51:04,What is the current goal of UAV BLUE?,1,3.963397
+9a55b694,1,3,06:51:12,Is GAUGE BLUE below the bounds?,N/A
+9a55b694,1,3,06:51:14,Is GAUGE BLUE below the bounds?,No,2.860649
+9a55b694,1,3,06:51:21,Is GAUGE YELLOW above the bounds?,N/A
+9a55b694,1,3,06:51:23,Is GAUGE YELLOW above the bounds?,No,2.138924
