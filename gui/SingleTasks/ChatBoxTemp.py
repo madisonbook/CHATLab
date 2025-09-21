@@ -12,7 +12,7 @@ from .UAVItem import UAVItem
 from .NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import singleTaskInput
-from DataLogging.LogChat import LogChat
+from DataLogging.LogChatBox import LogChatBox, ChatBoxCSV
 from SingleTaskSummaries.SumChat import SumChat
 import random
 import datetime
@@ -27,6 +27,9 @@ total_path = 0
 total_correct = 0
 
 img_size = 800
+
+chat_box = ["N/A", "N/A"]
+msg_time = None
 
 class ChatBox(QMainWindow):
     def __init__(self):
@@ -219,9 +222,9 @@ class ChatBox(QMainWindow):
         gauges_widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         # Add all components with fixed sizes
+        right_content.addWidget(gauges_widget)
         right_content.addWidget(self.uav_info_stack)
         right_content.addWidget(self.chat_box)
-        right_content.addWidget(gauges_widget)
         right_content.addStretch()
         right_content.addStretch()
     
@@ -592,7 +595,7 @@ class ChatBox(QMainWindow):
 
         summary = [total_correct, total_path]
         self.showSum = SumChat(summary)
-        NavigationCSV()
+        ChatBoxCSV()
         self.showSum.show()
         self.close()   
 
@@ -763,13 +766,13 @@ class ChatWidget(QWidget):
         self.latest_message.setWordWrap(True)
         self.latest_message.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.latest_message.setFont(QFont("Times New Roman", 14))
-        self.latest_message.setFixedHeight(90)  # Fixed height for message area
+        self.latest_message.setFixedHeight(90) 
         left_layout.addWidget(self.latest_message)
 
         self.input_box = QLineEdit()
         self.input_box.setPlaceholderText("Type a message...")
         self.input_box.setFont(QFont("Times New Roman", 14))
-        self.input_box.setFixedHeight(30)  # Fixed height for input box
+        self.input_box.setFixedHeight(30) 
         left_layout.addWidget(self.input_box)
 
         left_group.setLayout(left_layout)
@@ -801,7 +804,7 @@ class ChatWidget(QWidget):
         
         self.history_scroll = QScrollArea()
         self.history_scroll.setWidgetResizable(True)
-        self.history_scroll.setFixedHeight(100)  # Fixed height for scroll area
+        self.history_scroll.setFixedHeight(100)
 
         self.history_widget = QWidget()
         self.history_layout = QVBoxLayout(self.history_widget)
@@ -836,33 +839,63 @@ class ChatWidget(QWidget):
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 
-        self.message_templates = [
-            "Commander: What is the status of item?",
-            "HQ: Is item within safe limits?"
+
+        self.gauge_templates = [
+            "Is {item} within the bounds?",
+            "Is {item} above the bounds?",
+            "Is {item} below the bounds?"
         ]
 
-        # Timer for random messages
+        self.uav_templates = [
+            "What is the fuel level of {item}?",
+            "What is the current goal of {item}?",
+            "What "
+        ]
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
-        self.timer.start(5000)
+
+        delay = random.randint(singleTaskInput.chat_timer[0]*1000, singleTaskInput.chat_timer[1]*1000)
+        self.timer.start(2000)
 
     def handle_user_message(self):
         text = self.input_box.text().strip()
         if text:
-            print(f"User: {text}")  # could also log to file
+            chat_box[1] = text
+            LogChat()
+            print(f"User: {text}")
             self.input_box.clear()
+            self.latest_message.setText("Waiting...")
 
     def add_random_message(self):
-        template = random.choice(self.message_templates)
+        
         item = random.choice(self.context_items)
+
+        if "GAUGE" in item:
+            template = random.choice(self.gauge_templates)
+
+        if "UAV" in item:
+            template = random.choice(self.uav_templates)
+
         msg = template.format(item=item)
 
         self.latest_message.setText(f"{msg}")
+        chat_box[0] = msg
+        chat_box[1] = "N/A"
         self.add_message_card(item)
+
+        global msg_time
+        msg_time = datetime.datetime.now()
+
+        LogChat()
+        
+        delay = random.randint(singleTaskInput.chat_timer[0]*1000,
+                           singleTaskInput.chat_timer[1]*1000)
+        self.timer.start(delay)
 
     def add_message_card(self, item: str):
         card = QGroupBox("")
-        card.setFixedHeight(40)  # Fixed height for message cards
+        card.setFixedHeight(40)
         layout = QVBoxLayout()
 
         label = QLabel(item)
@@ -902,11 +935,10 @@ def Subtitle(str: str):
     return subtitle_label
 
 def LogChat():
-    # block, trial, UAVs, auto, auto_type,
     block = 1
-    trial = 2
+    trial = 3
     auto = str(False)
     auto_type = "None"
 
-    LogChat(block, trial, UAVs, auto, auto_type)
+    LogChatBox(block, trial, chat_box, msg_time, auto, auto_type)
     pass

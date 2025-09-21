@@ -12,7 +12,7 @@ from .UAVItem import UAVItem
 from .NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import singleTaskInput
-from DataLogging.LogChat import LogChat
+from DataLogging.LogChatBox import LogChatBox
 from SingleTaskSummaries.SumChat import SumChat
 import random
 import datetime
@@ -490,7 +490,7 @@ class ChatBox(QMainWindow):
         self.card_a.distance.setText("Distance to target: ---")
         self.card_a.fuel.setText("Fuel Usage: ---")
         self.card_a.warnings.setText("Hazard Probability: ---")
-        
+
         self.card_b.setStyleSheet(self.card_b._base_stylesheet.format(color="gray"))
         self.card_b.distance.setText("Distance to target: ---")
         self.card_b.fuel.setText("Fuel Usage: ---")
