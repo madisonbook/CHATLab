@@ -1,7 +1,8 @@
 participant_id,block,trial,time,message,response,rxn_time
-9a55b694,1,3,06:51:00,What is the current goal of UAV BLUE?,N/A
-9a55b694,1,3,06:51:04,What is the current goal of UAV BLUE?,1,3.963397
-9a55b694,1,3,06:51:12,Is GAUGE BLUE below the bounds?,N/A
-9a55b694,1,3,06:51:14,Is GAUGE BLUE below the bounds?,No,2.860649
-9a55b694,1,3,06:51:21,Is GAUGE YELLOW above the bounds?,N/A
-9a55b694,1,3,06:51:23,Is GAUGE YELLOW above the bounds?,No,2.138924
+f50ce2d5,1,3,09:05:12,What is the length of Path A for UAV BLUE?,N/A
+f50ce2d5,1,3,09:05:18,What is the length of Path A for UAV BLUE?,217,5.458317
+f50ce2d5,1,3,09:05:23,Is GAUGE BLUE above the bounds?,N/A
+f50ce2d5,1,3,09:05:26,Is GAUGE BLUE above the bounds?,No,3.606577
+f50ce2d5,1,3,09:05:34,What is the current goal of UAV RED?,N/A
+f50ce2d5,1,3,09:05:37,What is the current goal of UAV RED?,2,3.569478
+f50ce2d5,1,3,09:05:39,What is the current goal of UAV RED?,N/A

@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from SingleTasks.ChatBox import ChatBox
+from SingleTasks.ChatBoxTemp import ChatBox
 
 class InstrChat(QMainWindow):
     def __init__(self):
