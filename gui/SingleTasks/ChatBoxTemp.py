@@ -22,6 +22,7 @@ base_height = 250
 border_thickness = 4
 
 summary = []
+gauges = []
 UAVs = []
 total_path = 0
 total_correct = 0
@@ -30,6 +31,7 @@ img_size = 800
 
 chat_box = ["N/A", "N/A"]
 msg_time = None
+answer = None
 
 class ChatBox(QMainWindow):
     def __init__(self):
@@ -200,16 +202,19 @@ class ChatBox(QMainWindow):
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
         # Fixed-size gauges section
-        gauges = []
         monitor_levels = QHBoxLayout()
         monitor_levels.addStretch()
 
         colors = ["#FF7F7F", "#FFEE8c", "#88E788", "#90D5FF"]
+        color_text = ["RED", "YELLOW", "GREEN", "BLUE"]
         idx = 0
         for color in colors:
-            gauge = GenerateLevel(color, idx)
+            gauge = GenerateLevel(color, idx, color_text[idx])
             idx = idx + 1
+
+            global gauges
             gauges.append(gauge)
+
             monitor_levels.addLayout(gauge.form)
             monitor_levels.addSpacing(5)
 
@@ -600,7 +605,7 @@ class ChatBox(QMainWindow):
         self.close()   
 
 class GenerateLevel(QWidget):
-    def __init__(self, color_hex: str, idx: int):
+    def __init__(self, color_hex: str, idx: int, color_text: str):
         super().__init__()
 
         self.oob = False
@@ -610,6 +615,7 @@ class GenerateLevel(QWidget):
         self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
+        self.color_text = color_text
 
         #self.animation_timer = QTimer(self)
         #self.animation_timer.timeout.connect(lambda: self.Animate())
@@ -841,7 +847,6 @@ class ChatWidget(QWidget):
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 
-
         self.gauge_templates = [
             "Is {item} within the bounds?",
             "Is {item} above the bounds?",
@@ -858,37 +863,95 @@ class ChatWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
 
-        delay = random.randint(singleTaskInput.chat_timer[0]*1000, singleTaskInput.chat_timer[1]*1000)
+        #delay = random.randint(singleTaskInput.chat_timer[0]*1000, singleTaskInput.chat_timer[1]*1000)
         self.timer.start(2000)
 
     def handle_user_message(self):
         text = self.input_box.text().strip()
         if text:
             chat_box[1] = text
+
+            global answer 
+            answer = self.compute_answer()
             LogChat()
-            print(f"User: {text}")
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
+    def compute_answer(self):
+
+        if len(chat_box) < 1 or chat_box[0] == "N/A":
+            return None
+
+        question = chat_box[0]
+        correct_answer = None
+
+        if "BLUE" in question:
+            color = "BLUE"
+        elif "RED" in question:
+            color = "RED"
+        elif "YELLOW" in question:
+            color = "YELLOW"
+        elif "GREEN" in question:
+            color = "GREEN"
+
+        # --- Gauge questions ---
+        if "GAUGE" in question:
+            gauge = next((g for g in gauges if getattr(g, "color_text", "") == color), None)
+            idx = {"RED": 0, "YELLOW": 1, "GREEN": 2, "BLUE": 3}.get(color)
+            if gauge:
+                mean, dist = singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_dist[idx]
+                low, high = mean - dist, mean + dist
+                curr_level = getattr(gauge, "monitor_level", 0)
+                q = question.lower()
+                if "within" in q:
+                    correct_answer = "Yes" if low <= curr_level <= high else "No"
+                elif "above" in q:
+                    correct_answer = "Yes" if curr_level > high else "No"
+                elif "below" in q:
+                    correct_answer = "Yes" if curr_level < low else "No"
+
+
+        # --- UAV questions ---
+        elif "UAV" in question:
+            uav = next((u for u in UAVs if getattr(u, "color_text", "").upper() == color), None)
+            if uav:
+                q = question.lower()
+                if "fuel" in q:
+                    val = round(getattr(uav, "fuel", getattr(uav, "starting_fuel", 0)))
+                    correct_answer = f"{val} km"
+                elif "goal" in q:
+                    goal = getattr(uav.goal_item, "idx", None)
+                    correct_answer = f"TARGET {goal}" if goal is not None else "Unknown"
+                elif "path a" in q:
+                    val = round(getattr(uav, "hyp_length", 0))
+                    correct_answer = f"{val} km"
+                elif "path b" in q:
+                    val = round(getattr(uav, "ra_length", 0))
+                    correct_answer = f"{val} km"
+
+        return correct_answer
+
     def add_random_message(self):
         
-        item = random.choice(self.context_items)
+        self.item = random.choice(self.context_items)
 
-        if "GAUGE" in item:
+        if "GAUGE" in self.item:
             template = random.choice(self.gauge_templates)
 
-        if "UAV" in item:
+        if "UAV" in self.item:
             template = random.choice(self.uav_templates)
 
-        msg = template.format(item=item)
+        msg = template.format(item=self.item)
 
         self.latest_message.setText(f"{msg}")
         chat_box[0] = msg
         chat_box[1] = "N/A"
-        self.add_message_card(item)
 
-        global msg_time
+        self.add_message_card(self.item)
+
+        global msg_time, answer
         msg_time = datetime.datetime.now()
+        answer = None
 
         LogChat()
 
@@ -943,5 +1006,5 @@ def LogChat():
     auto = str(False)
     auto_type = "None"
 
-    LogChatBox(block, trial, chat_box, msg_time, auto, auto_type)
+    LogChatBox(block, trial, chat_box, answer, msg_time, auto, auto_type)
     pass

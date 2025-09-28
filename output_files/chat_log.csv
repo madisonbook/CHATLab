@@ -1,8 +1,7 @@
-participant_id,block,trial,time,message,response,rxn_time
-f50ce2d5,1,3,09:05:12,What is the length of Path A for UAV BLUE?,N/A
-f50ce2d5,1,3,09:05:18,What is the length of Path A for UAV BLUE?,217,5.458317
-f50ce2d5,1,3,09:05:23,Is GAUGE BLUE above the bounds?,N/A
-f50ce2d5,1,3,09:05:26,Is GAUGE BLUE above the bounds?,No,3.606577
-f50ce2d5,1,3,09:05:34,What is the current goal of UAV RED?,N/A
-f50ce2d5,1,3,09:05:37,What is the current goal of UAV RED?,2,3.569478
-f50ce2d5,1,3,09:05:39,What is the current goal of UAV RED?,N/A
+participant_id,block,trial,time,message,response,correct_answer,rxn_time
+fb409faa,1,3,10:28:34,Is GAUGE RED below the bounds?,N/A,
+fb409faa,1,3,10:28:36,Is GAUGE RED below the bounds?,No,No,1.89266
+fb409faa,1,3,10:28:44,What is the length of Path A for UAV GREEN?,N/A,
+fb409faa,1,3,10:28:51,What is the length of Path A for UAV GREEN?,261,261 km,6.911958
+fb409faa,1,3,10:28:58,Is GAUGE BLUE within the bounds?,N/A,
+fb409faa,1,3,10:29:00,Is GAUGE BLUE within the bounds?,Yes,Yes,2.600724

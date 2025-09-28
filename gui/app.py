@@ -18,6 +18,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = UAVNavigation()
+window = ChatBox()
 window.show()
 app.exec()

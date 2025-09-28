@@ -4,7 +4,7 @@ from participant import PARTICIPANT_ID
 
 chat_log = []
 
-def LogChatBox(block, trial, chat_box, msg_time, auto, auto_type):
+def LogChatBox(block, trial, chat_box, answer, msg_time, auto, auto_type):
     curr_format = datetime.datetime.now().strftime("%H:%M:%S")
     curr_time = datetime.datetime.now()
 
@@ -14,7 +14,8 @@ def LogChatBox(block, trial, chat_box, msg_time, auto, auto_type):
         trial, 
         curr_format,
         chat_box[0],
-        chat_box[1]
+        chat_box[1],
+        answer
         ]
     
     if chat_box[1] != "N/A":
@@ -29,7 +30,7 @@ def LogChatBox(block, trial, chat_box, msg_time, auto, auto_type):
 def ChatBoxCSV(filename="output_files/chat_log.csv"):
 
     file_header = [
-        "participant_id", "block", "trial", "time", "message", "response", "rxn_time"
+        "participant_id", "block", "trial", "time", "message", "response", "correct_answer", "rxn_time"
     ]
 
     with open(filename, "w", newline="") as file:
