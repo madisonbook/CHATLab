@@ -1,7 +1,6 @@
 participant_id,block,trial,time,message,response,correct_answer,rxn_time
-fb409faa,1,3,10:28:34,Is GAUGE RED below the bounds?,N/A,
-fb409faa,1,3,10:28:36,Is GAUGE RED below the bounds?,No,No,1.89266
-fb409faa,1,3,10:28:44,What is the length of Path A for UAV GREEN?,N/A,
-fb409faa,1,3,10:28:51,What is the length of Path A for UAV GREEN?,261,261 km,6.911958
-fb409faa,1,3,10:28:58,Is GAUGE BLUE within the bounds?,N/A,
-fb409faa,1,3,10:29:00,Is GAUGE BLUE within the bounds?,Yes,Yes,2.600724
+9ca49765,1,3,20:11:05,Is GAUGE RED above the bounds?,N/A,
+9ca49765,1,3,20:11:10,Is GAUGE RED above the bounds?,No,No,4.218919
+9ca49765,1,3,20:11:17,What is the length of Path A for UAV GREEN?,N/A,
+9ca49765,1,3,20:11:24,What is the length of Path A for UAV GREEN?,261 KM,261 km,7.27666
+9ca49765,1,3,20:11:29,What is the fuel level of UAV GREEN?,N/A,

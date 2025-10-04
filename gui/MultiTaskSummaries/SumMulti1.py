@@ -4,9 +4,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrMulti1 import InstrMulti1
 
-class SumChat(QMainWindow):
+class SumMulti1(QMainWindow):
     def __init__(self, stats: list[int]):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -29,7 +28,7 @@ class SumChat(QMainWindow):
 
         continue_button = QPushButton("Click Here to Continue")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartMulti(self))
+        continue_button.clicked.connect(lambda: StartChat(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -57,8 +56,5 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def StartMulti(self):
-    self.instrMulti = InstrMulti1()
-    self.instrMulti.show()
-    self.close()
+def StartChat(self):
     pass

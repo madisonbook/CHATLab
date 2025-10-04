@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrMulti1 import InstrMulti1
+from MultiTasks.multi1 import MultiTask1
 
-class SumChat(QMainWindow):
-    def __init__(self, stats: list[int]):
+class InstrMulti1(QMainWindow):
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
 
@@ -18,16 +18,16 @@ class SumChat(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Chat Box Task Complete")
+        title = Title("Instructions: Multitasking")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed the Chat Box task.")
+        participate = Subtitle("Multitasking time yippeeeee")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
 
-        continue_button = QPushButton("Click Here to Continue")
+        continue_button = QPushButton("Click Here to Start")
         continue_button.setFont(QFont("Times New Roman", 16))
         continue_button.clicked.connect(lambda: StartMulti(self))
         continue_button.setStyleSheet("""
@@ -58,7 +58,6 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartMulti(self):
-    self.instrMulti = InstrMulti1()
-    self.instrMulti.show()
+    self.multi = MultiTask1()
+    self.multi.show()
     self.close()
-    pass
