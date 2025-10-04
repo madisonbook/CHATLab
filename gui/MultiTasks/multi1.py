@@ -8,11 +8,11 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from SingleTasks.UAVItem import UAVItem
+from MultiTasks.UAVItem import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import multi1Input
-from DataLogging.LogChatBox import LogChatBox, ChatBoxCSV
+from DataLogging.LogMulti import LogMulti, MultiCSV
 from MultiTaskSummaries.SumMulti1 import SumMulti1
 import random
 import datetime
@@ -594,11 +594,11 @@ class MultiTask1(QMainWindow):
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
     def StartSummary(self):
-        from DataLogging.LogNavigation import NavigationCSV
+        #from DataLogging.LogNavigation import NavigationCSV
 
         summary = [total_correct, total_path]
         self.showSum = SumMulti1(summary)
-        ChatBoxCSV()
+        MultiCSV("output_files/multi1_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -691,7 +691,7 @@ class GenerateLevel(QWidget):
             global total_reset 
             total_reset = total_reset + 1
             self.oob = False
-            #LogGauges()
+            LogMultiTask("Monitor Reset")
 
         self.oob_time = None
         self.TimerDelay()
@@ -715,7 +715,7 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
-            #LogGauges()
+            LogMultiTask("Monitor OOB")
 
         self.TimerDelay()
 
@@ -871,7 +871,7 @@ class ChatWidget(QWidget):
 
             global answer 
             answer = self.compute_answer()
-            LogChat()
+            LogMultiTask("Chat Reply")
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
@@ -951,7 +951,7 @@ class ChatWidget(QWidget):
         msg_time = datetime.datetime.now()
         answer = None
 
-        LogChat()
+        LogMultiTask("Chat Msg")
 
         delay = random.randint(multi1Input.chat_timer[0]*1000,
                            multi1Input.chat_timer[1]*1000)
@@ -998,11 +998,12 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def LogChat():
-    block = 1
-    trial = 3
+# (block, trial, auto, auto_type, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time, output_file):
+def LogMultiTask(log_type):
+    block = 2
+    trial = 1
     auto = str(False)
     auto_type = "None"
 
-    LogChatBox(block, trial, chat_box, answer, msg_time, auto, auto_type)
+    LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass

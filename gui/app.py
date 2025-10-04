@@ -21,6 +21,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = ChatBox()
+window = MultiTask1()
 window.show()
 app.exec()
