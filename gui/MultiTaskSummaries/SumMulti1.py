@@ -17,11 +17,11 @@ class SumMulti1(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Chat Box Task Complete")
+        title = Title("Multitasking 1 Complete")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed the Chat Box task.")
+        participate = Subtitle("Congratulations! You have successfully completed Multitasking 1.")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)

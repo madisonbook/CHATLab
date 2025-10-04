@@ -12,7 +12,9 @@ def LogMonitor(block, trial, gauges, auto, auto_type, total_oob, total_reset):
         PARTICIPANT_ID, 
         block,
         trial, 
-        curr_format
+        curr_format,
+        str(auto),
+        auto_type
         ]
     
     oob_time = []
@@ -37,8 +39,6 @@ def LogMonitor(block, trial, gauges, auto, auto_type, total_oob, total_reset):
             break
 
     data_row.extend([
-        str(auto),
-        auto_type,
         total_oob,
         total_reset,
         str(rxn_time)
@@ -49,12 +49,12 @@ def LogMonitor(block, trial, gauges, auto, auto_type, total_oob, total_reset):
 def MonitorCSV(filename="output_files/monitor_log.csv"):
 
     file_header = [
-        "participant_id", "block", "trial", "time",
+        "participant_id", "block", "trial", "time", "auto", "auto_type"
         "gauge1_level", "gauge1_oob", "gauge1_reset",
         "gauge2_level", "gauge2_oob", "gauge2_reset",
         "gauge3_level", "gauge3_oob", "gauge3_reset",
         "gauge4_level", "gauge4_oob", "gauge4_reset",
-        "auto_on", "auto_type", "total_oob", "total_reset", "rxn_time"
+        "total_oob", "total_reset", "rxn_time"
     ]
 
     with open(filename, "w", newline="") as file:
