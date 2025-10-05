@@ -16,7 +16,8 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
     oob_time = []
     reset = []
     oob = []
-    rxn_time = "NA"
+    mtr_rxn_time = "N/A"
+    chat_rxn_time = "N/A"
  
     data_row = [
         PARTICIPANT_ID, 
@@ -86,11 +87,6 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
 
         data_row.extend([
             str(chat_rxn_time),
-        ])
-
-    else: 
-        data_row.extend([
-            "N/A",
         ])
     
     multi_log.append(data_row)

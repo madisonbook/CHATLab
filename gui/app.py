@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from ConsentWindow import ConsentWindow
-from Instructions.InstrUAV import InstrUAV
-from SingleTasks.UAVNavigation import UAVNavigation
-from SingleTasks.MonitorLevels import MonitorLevels
+from Instructions.InstrPracChat import InstrPracChat
 from SingleTasks.ChatBoxTemp import ChatBox
 from MultiTasks.multi1 import MultiTask1
 from ReadInput.singleTaskInput import read_vals
@@ -21,6 +19,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = MultiTask1()
+window = InstrPracChat()
 window.show()
 app.exec()

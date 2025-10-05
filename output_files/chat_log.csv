@@ -1,19 +1,8 @@
-participant_id,block,trial,time,message,response,correct_answer,rxn_time,auto,auto_type
-20b4f32c,1,3,14:18:47,Is GAUGE YELLOW below the bounds?,N/A,
-20b4f32c,1,3,14:18:54,Is GAUGE RED above the bounds?,N/A,
-20b4f32c,1,3,14:19:03,Is GAUGE YELLOW above the bounds?,N/A,
-20b4f32c,1,3,14:19:14,Is GAUGE RED below the bounds?,N/A,
-20b4f32c,1,3,14:19:28,Is GAUGE RED below the bounds?,N/A,
-20b4f32c,1,3,14:19:42,Is GAUGE RED within the bounds?,N/A,
-20b4f32c,1,3,14:19:50,Is GAUGE YELLOW above the bounds?,N/A,
-20b4f32c,1,3,14:19:58,Is GAUGE BLUE within the bounds?,N/A,
-20b4f32c,1,3,14:20:07,What is the length of Path B for UAV GREEN?,N/A,
-20b4f32c,1,3,14:20:19,Is GAUGE RED below the bounds?,N/A,
-20b4f32c,1,3,14:20:26,What is the length of Path A for UAV YELLOW?,N/A,
-20b4f32c,1,3,14:20:31,What is the length of Path A for UAV RED?,N/A,
-20b4f32c,1,3,14:20:32,What is the length of Path A for UAV YELLOW?,203,203 km,6.246334,False,None
-20b4f32c,1,3,14:20:37,Is GAUGE GREEN above the bounds?,N/A,
-20b4f32c,1,3,14:20:37,Is GAUGE YELLOW below the bounds?,N/A,
-20b4f32c,1,3,14:20:39,Is GAUGE GREEN above the bounds?,No,No,1.858917,False,None
-20b4f32c,1,3,14:20:51,Is GAUGE YELLOW within the bounds?,N/A,
-20b4f32c,1,3,14:20:51,What is the current goal of UAV RED?,N/A,
+participant_id,block,trial,time,auto,auto_type,message,response,correct_answer,rxn_time
+83c091c5,1,3,08:03:40,False,None,Is GAUGE YELLOW below the bounds?,N/A,,N/A
+83c091c5,1,3,08:03:45,False,None,Is GAUGE YELLOW below the bounds?,no,No,4.635052
+83c091c5,1,3,08:03:49,False,None,Is GAUGE BLUE within the bounds?,N/A,,N/A
+83c091c5,1,3,08:03:53,False,None,Is GAUGE BLUE within the bounds?,No,No,3.509986
+83c091c5,1,3,08:03:56,False,None,What is the length of Path A for UAV BLUE?,N/A,,N/A
+83c091c5,1,3,08:04:01,False,None,What is the length of Path A for UAV BLUE?,217,217 km,5.188721
+83c091c5,1,3,08:04:08,False,None,What is the current goal of UAV BLUE?,N/A,,N/A

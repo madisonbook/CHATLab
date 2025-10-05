@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrPracMulti import InstrPracMulti
+from PracticeTrials.PracChat import ChatBox
 
-class SumChat(QMainWindow):
-    def __init__(self, stats: list[int]):
+class InstrPracChat(QMainWindow):
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
 
@@ -18,18 +18,18 @@ class SumChat(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Chat Box Task Complete")
+        title = Title("Instructions: Practice Chat Box")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed the Chat Box task.")
+        participate = Subtitle("Instructions will be added once i make the thing do the thing")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
 
-        continue_button = QPushButton("Click Here to Continue")
+        continue_button = QPushButton("Click Here to Start")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartMulti(self))
+        continue_button.clicked.connect(lambda: StartChat(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -57,8 +57,7 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def StartMulti(self):
-    self.instrMulti = InstrPracMulti()
-    self.instrMulti.show()
+def StartChat(self):
+    self.monitor = ChatBox()
+    self.monitor.show()
     self.close()
-    pass

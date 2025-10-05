@@ -8,12 +8,12 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from PracticeTrials.PracUAVItem import UAVItem
-from .NavItems import GoalItem, StormItem
+from SingleTasks.UAVItem import UAVItem
+from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import singleTaskInput
 from DataLogging.LogChatBox import LogChatBox, ChatBoxCSV
-from SingleTaskSummaries.SumChat import SumChat
+from Instructions.InstrChat import InstrChat
 import random
 import datetime
 
@@ -596,12 +596,10 @@ class ChatBox(QMainWindow):
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
     def StartSummary(self):
-        from DataLogging.LogNavigation import NavigationCSV
-
-        summary = [total_correct, total_path]
-        self.showSum = SumChat(summary)
-        ChatBoxCSV()
-        self.showSum.show()
+        
+        self.showNext = InstrChat()
+        #ChatBoxCSV()
+        self.showNext.show()
         self.close()   
 
 class GenerateLevel(QWidget):
@@ -873,7 +871,7 @@ class ChatWidget(QWidget):
 
             global answer 
             answer = self.compute_answer()
-            LogChat()
+            #LogChat()
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
@@ -953,7 +951,7 @@ class ChatWidget(QWidget):
         msg_time = datetime.datetime.now()
         answer = None
 
-        LogChat()
+        #LogChat()
 
         delay = random.randint(singleTaskInput.chat_timer[0]*1000,
                            singleTaskInput.chat_timer[1]*1000)

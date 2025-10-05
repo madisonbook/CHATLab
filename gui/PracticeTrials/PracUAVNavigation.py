@@ -9,7 +9,7 @@ from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygon
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
 from Instructions.InstrUAV import InstrUAV
-from SingleTasks.UAVItem import UAVItem
+from .PracUAVItem import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import singleTaskInput

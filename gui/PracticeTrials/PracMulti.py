@@ -8,18 +8,21 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from PracticeTrials.PracUAVItem import UAVItem
-from .NavItems import GoalItem, StormItem
+from .PracUAVItem import UAVItem
+from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-from ReadInput import singleTaskInput
-from DataLogging.LogChatBox import LogChatBox, ChatBoxCSV
-from SingleTaskSummaries.SumChat import SumChat
+from ReadInput import multi1Input
+from DataLogging.LogMulti import LogMulti, MultiCSV
+from Instructions.InstrMulti1 import InstrMulti1
 import random
 import datetime
 
 base_width = 115
 base_height = 250
 border_thickness = 4
+
+total_oob = 0
+total_reset = 0
 
 summary = []
 gauges = []
@@ -33,21 +36,21 @@ chat_box = ["N/A", "N/A"]
 msg_time = None
 answer = None
 
-class ChatBox(QMainWindow):
+class PracMulti(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
-        #self.card_update_timer.timeout.connect(self.TimerUpdateCards)
+        self.card_update_timer.timeout.connect(self.TimerUpdateCards)
 
         main_layout = QVBoxLayout()
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Chat Box")
+        title = Title("Task: Practice Multitasking")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 
@@ -69,23 +72,23 @@ class ChatBox(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
-        storm_items = [StormItem(1, singleTaskInput.nav_storm_x[0], singleTaskInput.nav_storm_y[0]),
-                      StormItem(2, singleTaskInput.nav_storm_x[1], singleTaskInput.nav_storm_y[1]),
-                      StormItem(3, singleTaskInput.nav_storm_x[2], singleTaskInput.nav_storm_y[2]),
-                      StormItem(4, singleTaskInput.nav_storm_x[3], singleTaskInput.nav_storm_y[3])]
+        storm_items = [StormItem(1, multi1Input.nav_storm_x[0], multi1Input.nav_storm_y[0]),
+                      StormItem(2, multi1Input.nav_storm_x[1], multi1Input.nav_storm_y[1]),
+                      StormItem(3, multi1Input.nav_storm_x[2], multi1Input.nav_storm_y[2]),
+                      StormItem(4, multi1Input.nav_storm_x[3], multi1Input.nav_storm_y[3])]
 
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, singleTaskInput.nav_goal_x[0], singleTaskInput.nav_goal_y[0]),
-                      GoalItem(2, singleTaskInput.nav_goal_x[1], singleTaskInput.nav_goal_y[1]),
-                      GoalItem(3, singleTaskInput.nav_goal_x[2], singleTaskInput.nav_goal_y[2]),
-                      GoalItem(4, singleTaskInput.nav_goal_x[3], singleTaskInput.nav_goal_y[3])]
+        goal_items = [GoalItem(1, multi1Input.nav_goal_x[0], multi1Input.nav_goal_y[0]),
+                      GoalItem(2, multi1Input.nav_goal_x[1], multi1Input.nav_goal_y[1]),
+                      GoalItem(3, multi1Input.nav_goal_x[2], multi1Input.nav_goal_y[2]),
+                      GoalItem(4, multi1Input.nav_goal_x[3], multi1Input.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
-        uav_blue = UAVItem(1, "#90D5FF", "BLUE", singleTaskInput.nav_uav_x[0], singleTaskInput.nav_uav_y[0],
-                           goal_items[0], goal_items, storm_items, singleTaskInput.nav_uav_fuel[0], 
-                           singleTaskInput.nav_uav_speed[0], singleTaskInput.nav_path_angle[0], self.HandleClick, left_nav)
+        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multi1Input.nav_uav_x[0], multi1Input.nav_uav_y[0],
+                           goal_items[0], goal_items, storm_items, multi1Input.nav_uav_fuel[0], 
+                           multi1Input.nav_uav_speed[0], multi1Input.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
         uav_blue.goal_item.setZValue(2)
@@ -106,9 +109,9 @@ class ChatBox(QMainWindow):
         uav_blue.ra_path.setVisible(False)
         uav_blue.ra_label.setVisible(False)
    
-        uav_red = UAVItem(2, "#FF7F7F", "RED", singleTaskInput.nav_uav_x[1], singleTaskInput.nav_uav_y[1],
-                          goal_items[1], goal_items, storm_items, singleTaskInput.nav_uav_fuel[1], 
-                           singleTaskInput.nav_uav_speed[1], singleTaskInput.nav_path_angle[1], self.HandleClick, left_nav)
+        uav_red = UAVItem(2, "#FF7F7F", "RED", multi1Input.nav_uav_x[1], multi1Input.nav_uav_y[1],
+                          goal_items[1], goal_items, storm_items, multi1Input.nav_uav_fuel[1], 
+                           multi1Input.nav_uav_speed[1], multi1Input.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
         uav_red.goal_item.setZValue(2)
@@ -129,9 +132,9 @@ class ChatBox(QMainWindow):
         uav_red.ra_path.setVisible(False)
         uav_red.ra_label.setVisible(False)
 
-        uav_green = UAVItem(3, "#88E788", "GREEN", singleTaskInput.nav_uav_x[2], singleTaskInput.nav_uav_y[2],
-                           goal_items[2], goal_items, storm_items, singleTaskInput.nav_uav_fuel[2], 
-                           singleTaskInput.nav_uav_speed[2], singleTaskInput.nav_path_angle[2], self.HandleClick, left_nav)
+        uav_green = UAVItem(3, "#88E788", "GREEN", multi1Input.nav_uav_x[2], multi1Input.nav_uav_y[2],
+                           goal_items[2], goal_items, storm_items, multi1Input.nav_uav_fuel[2], 
+                           multi1Input.nav_uav_speed[2], multi1Input.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
         uav_green.goal_item.setZValue(2)
@@ -152,9 +155,9 @@ class ChatBox(QMainWindow):
         uav_green.ra_path.setVisible(False)
         uav_green.ra_label.setVisible(False)
 
-        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", singleTaskInput.nav_uav_x[3], singleTaskInput.nav_uav_y[3], 
-                           goal_items[3], goal_items, storm_items, singleTaskInput.nav_uav_fuel[3], 
-                           singleTaskInput.nav_uav_speed[3], singleTaskInput.nav_path_angle[3], self.HandleClick, left_nav)
+        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multi1Input.nav_uav_x[3], multi1Input.nav_uav_y[3], 
+                           goal_items[3], goal_items, storm_items, multi1Input.nav_uav_fuel[3], 
+                           multi1Input.nav_uav_speed[3], multi1Input.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
         uav_yellow.goal_item.setZValue(2)
@@ -184,24 +187,21 @@ class ChatBox(QMainWindow):
 
         game_form.addWidget(view)
 
-        # Create right content with fixed sizes
         right_content = QVBoxLayout()
         
-        # Fixed-size UAV info section
+
         self.uav_info_stack = QStackedWidget()
         self.uav_info_widget = self.CreateUAVInfoWidget()
         self.uav_info_stack.addWidget(self.uav_info_widget)
         self.uav_info_stack.setCurrentWidget(self.uav_info_widget)
         self.uav_info_stack.setFixedHeight(200)
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        
-        # Fixed-size chat box
+
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
         self.chat_box = ChatWidget(context_items=items_on_screen)
         self.chat_box.setFixedHeight(140)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
-        # Fixed-size gauges section
         monitor_levels = QHBoxLayout()
         monitor_levels.addStretch()
 
@@ -220,13 +220,12 @@ class ChatBox(QMainWindow):
 
         monitor_levels.addStretch()
         
-        # Create a widget for gauges with fixed height
         gauges_widget = QWidget()
         gauges_widget.setLayout(monitor_levels)
-        gauges_widget.setFixedHeight(360)  # Slightly larger than gauge height + button
+        gauges_widget.setFixedHeight(360)
         gauges_widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
-        # Add all components with fixed sizes
+
         right_content.addWidget(gauges_widget)
         right_content.addWidget(self.uav_info_stack)
         right_content.addWidget(self.chat_box)
@@ -240,7 +239,7 @@ class ChatBox(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(singleTaskInput.chat_duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(multi1Input.duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
@@ -358,7 +357,7 @@ class ChatBox(QMainWindow):
     def CreateUAVInfoWidget(self):
         widget = QWidget()
         widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        widget.setFixedHeight(200)  # Set fixed height
+        widget.setFixedHeight(200)
         layout = QVBoxLayout()
 
         self.card_uav = self.CreateUAVCard()
@@ -384,16 +383,15 @@ class ChatBox(QMainWindow):
         layout = QHBoxLayout()
 
         font = QFont("Times New Roman", 18, QFont.Weight.DemiBold)
-        # Use fixed-width text to prevent layout shifts
-        uav_name = QLabel("UAV: -------")  # Longer placeholder
-        fuel = QLabel("Fuel: ----- km")    # Include units in placeholder
-        target = QLabel("Target: -")        # Single digit placeholder
+       
+        uav_name = QLabel("UAV: -------") 
+        fuel = QLabel("Fuel: ----- km")
+        target = QLabel("Target: -")
         
         uav_name.setFont(font)
         fuel.setFont(font)
         target.setFont(font)
-        
-        # Set minimum widths to prevent layout shifts
+  
         uav_name.setMinimumWidth(150)
         fuel.setMinimumWidth(130)
         target.setMinimumWidth(80)
@@ -451,7 +449,7 @@ class ChatBox(QMainWindow):
 
         font = QFont("Times New Roman", 14)
 
-        # Use longer placeholders with consistent formatting
+
         distance = QLabel("Distance to target: ----- km")
         fuel = QLabel("Fuel Usage: ---%")
         warnings = QLabel("Hazard Probability: ---%")
@@ -547,7 +545,7 @@ class ChatBox(QMainWindow):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
         
-        #self.curr_uav.MoveToGoalA()
+        self.curr_uav.MoveToGoalA()
         self.ClickCancel()
         
 
@@ -555,7 +553,7 @@ class ChatBox(QMainWindow):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
         
-        #self.curr_uav.MoveToGoalB()
+        self.curr_uav.MoveToGoalB()
         self.ClickCancel()
         pass
 
@@ -592,15 +590,13 @@ class ChatBox(QMainWindow):
         if self.curr_uav:
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
-            #self.card_update_timer.start()
+            self.card_update_timer.start()
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
     def StartSummary(self):
-        from DataLogging.LogNavigation import NavigationCSV
-
-        summary = [total_correct, total_path]
-        self.showSum = SumChat(summary)
-        ChatBoxCSV()
+        
+        self.showSum = InstrMulti1()
+        #MultiCSV("output_files/multi1_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -610,23 +606,23 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = max(10, min(240, int(random.normalvariate(singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_sd[idx]))))
-        #self.monitor_level = random.randint(singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_sd[idx], singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_sd[idx])
+        height = max(10, min(240, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
+        #self.monitor_level = random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_sd[idx], multi1Input.gauge_mean[idx] + multi1Input.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
         self.color_text = color_text
 
-        #self.animation_timer = QTimer(self)
-        #self.animation_timer.timeout.connect(lambda: self.Animate())
-        #self.animation_duration = 500
-        #self.animation_interval = 16
+        self.animation_timer = QTimer(self)
+        self.animation_timer.timeout.connect(lambda: self.Animate())
+        self.animation_duration = 500
+        self.animation_interval = 16
         self.animation_start_time = None
         self.animation_start_height = self.monitor_level
         self.animation_end_height = self.monitor_level
 
-        #self.timer = QTimer(self)
-        #self.timer.timeout.connect(lambda: self.ChangeHeight(idx))
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(lambda: self.ChangeHeight(idx))
     
         self.form = QVBoxLayout()
 
@@ -654,11 +650,11 @@ class GenerateLevel(QWidget):
         outline.setPen(pen)
 
         top_bar = level.addRect(0, 0, 40, 0)
-        top_bar.setPos(0, singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx])
+        top_bar.setPos(0, multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx])
         top_bar.setPen(pen)
 
         low_bar = level.addRect(0, 0, 40, 0)
-        low_bar.setPos(0, singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx])
+        low_bar.setPos(0, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx])
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
@@ -681,31 +677,31 @@ class GenerateLevel(QWidget):
 
         self.form.addWidget(reset_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        #self.TimerDelay()
+        self.TimerDelay()
 
     def ResetLevel(self, idx:int):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(singleTaskInput.gauge_mean[idx])
-        self.monitor_level = singleTaskInput.gauge_mean[idx]
+        self.AnimateHeight(multi1Input.gauge_mean[idx])
+        self.monitor_level = multi1Input.gauge_mean[idx]
         self.reset = True
 
         if self.oob:
             global total_reset 
             total_reset = total_reset + 1
             self.oob = False
-            #LogGauges()
+            #LogMultiTask("Monitor Reset")
 
         self.oob_time = None
         self.TimerDelay()
         pass
 
     def TimerDelay(self):
-        delay = random.randint(singleTaskInput.gauge_timer[0]*1000, singleTaskInput.gauge_timer[1]*1000)
+        delay = random.randint(multi1Input.gauge_timer[0]*1000, multi1Input.gauge_timer[1]*1000)
         self.reset = False
         self.timer.start(delay)
 
     def ChangeHeight(self, idx: int):
-        new_height = max(10, min(290, int(random.normalvariate(singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_sd[idx]))))
+        new_height = max(10, min(290, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
         
         self.AnimateHeight(new_height)
         self.monitor_level = new_height
@@ -717,12 +713,12 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
-            #LogGauges()
+            #LogMultiTask("Monitor OOB")
 
         self.TimerDelay()
 
     def CheckOOB(self, new_height, idx):
-        if new_height < (singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx]) or new_height > (singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx]):
+        if new_height < (multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx]) or new_height > (multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx]):
             self.oob = True
         else:
             self.oob = False
@@ -863,7 +859,7 @@ class ChatWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
 
-        #delay = random.randint(singleTaskInput.chat_timer[0]*1000, singleTaskInput.chat_timer[1]*1000)
+        #delay = random.randint(multi1Input.chat_timer[0]*1000, multi1Input.chat_timer[1]*1000)
         self.timer.start(2000)
 
     def handle_user_message(self):
@@ -873,7 +869,7 @@ class ChatWidget(QWidget):
 
             global answer 
             answer = self.compute_answer()
-            LogChat()
+            #LogMultiTask("Chat Reply")
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
@@ -899,7 +895,7 @@ class ChatWidget(QWidget):
             gauge = next((g for g in gauges if getattr(g, "color_text", "") == color), None)
             idx = {"RED": 0, "YELLOW": 1, "GREEN": 2, "BLUE": 3}.get(color)
             if gauge:
-                mean, dist = singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_dist[idx]
+                mean, dist = multi1Input.gauge_mean[idx], multi1Input.gauge_dist[idx]
                 low, high = mean - dist, mean + dist
                 curr_level = getattr(gauge, "monitor_level", 0)
                 q = question.lower()
@@ -953,10 +949,10 @@ class ChatWidget(QWidget):
         msg_time = datetime.datetime.now()
         answer = None
 
-        LogChat()
+        #LogMultiTask("Chat Msg")
 
-        delay = random.randint(singleTaskInput.chat_timer[0]*1000,
-                           singleTaskInput.chat_timer[1]*1000)
+        delay = random.randint(multi1Input.chat_timer[0]*1000,
+                           multi1Input.chat_timer[1]*1000)
         self.timer.start(delay)
 
     def add_message_card(self, item: str):
@@ -1000,11 +996,12 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def LogChat():
-    block = 1
-    trial = 3
+# (block, trial, auto, auto_type, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time, output_file):
+def LogMultiTask(log_type):
+    block = 2
+    trial = 1
     auto = str(False)
     auto_type = "None"
 
-    LogChatBox(block, trial, chat_box, answer, msg_time, auto, auto_type)
+    LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass
