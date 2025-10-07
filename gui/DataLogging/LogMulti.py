@@ -7,7 +7,7 @@ multi_log = []
 total_score = 0
 
 
-def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
+def LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
     
     curr_format = datetime.datetime.now().strftime("%H:%M:%S")
     curr_time = datetime.datetime.now()
@@ -25,8 +25,7 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
         trial, 
         curr_format,
         log_type,
-        str(auto),
-        auto_type
+        mtr_auto
         ]
   
     for gauge in gauges:
@@ -40,7 +39,7 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
             str(gauge.reset)
         ])
 
-    for i in range(4): 
+    for i in range(len(oob)): 
         if not oob[i] and reset[i]:
             mtr_rxn_time = (curr_time - oob_time[i]).total_seconds()
             break
@@ -48,7 +47,8 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
     data_row.extend([
         total_oob,
         total_reset,
-        str(mtr_rxn_time)
+        str(mtr_rxn_time),
+        nav_auto
     ])
 
     for uav in uavs:
@@ -77,6 +77,7 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
     data_row.extend([
         str(sum_goals),
         str(total_score),
+        chat_auto,
         chat_box[0],
         chat_box[1],
         answer
@@ -85,7 +86,7 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
     if chat_box[1] != "N/A":
         chat_rxn_time = (curr_time - msg_time).total_seconds()
 
-        data_row.extend([
+    data_row.extend([
             str(chat_rxn_time),
         ])
     
@@ -94,18 +95,18 @@ def LogMulti(block, trial, log_type, auto, auto_type, gauges, total_oob, total_r
 def MultiCSV(filename):
 
     file_header = [
-        "participant_id", "block", "trial", "time", "type", "auto", "auto_type",
+        "participant_id", "block", "trial", "time", "type", "mtr_auto",
         "gauge1_level", "gauge1_oob", "gauge1_reset",
         "gauge2_level", "gauge2_oob", "gauge2_reset",
         "gauge3_level", "gauge3_oob", "gauge3_reset",
         "gauge4_level", "gauge4_oob", "gauge4_reset",
-        "total_oob", "total_reset", "mtr_rxn_time",
+        "total_oob", "total_reset", "mtr_rxn_time", "nav_auto",
         "uav1_moving", "uav1_idle", "uav1_fuel", "uav1_patha_length", "uav1_patha_stormchance", "uav1_pathb_length", "uav1_pathb_stormchance", "uav1_onpath", "uav1_stormhit", "uav1_goal", "uav1_atgoal", "uav1_goalsreached", "uav1_score",
         "uav2_moving", "uav2_idle", "uav2_fuel", "uav2_patha_length", "uav2_patha_stormchance", "uav2_pathb_length", "uav2_pathb_stormchance", "uav2_onpath", "uav2_stormhit", "uav2_goal", "uav2_atgoal", "uav2_goalsreached", "uav2_score",
         "uav3_moving", "uav3_idle", "uav3_fuel", "uav3_patha_length", "uav3_patha_stormchance", "uav3_pathb_length", "uav3_pathb_stormchance", "uav3_onpath", "uav3_stormhit", "uav3_goal", "uav3_atgoal", "uav3_goalsreached", "uav3_score",
         "uav4_moving", "uav4_idle", "uav4_fuel", "uav4_patha_length", "uav4_patha_stormchance", "uav4_pathb_length", "uav4_pathb_stormchance", "uav4_onpath", "uav4_stormhit", "uav4_goal", "uav4_atgoal", "uav4_goalsreached", "uav4_score",
         "total_goals_reached", "total_score",
-        "message", "response", "correct_answer", "chat_rxn_time"
+        "chat_auto", "message", "response", "correct_answer", "chat_rxn_time"
     ]
 
     with open(filename, "w", newline="") as file:

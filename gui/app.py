@@ -5,7 +5,7 @@ import sys
 from ConsentWindow import ConsentWindow
 from Instructions.InstrPracChat import InstrPracChat
 from SingleTasks.ChatBoxTemp import ChatBox
-from MultiTasks.multi1 import MultiTask1
+from MultiTasks.multi_auto1 import Multi_Auto1
 from ReadInput.singleTaskInput import read_vals
 from ReadInput.multi1Input import read_multi1
 from ReadInput.breakBlockInput import read_break
@@ -19,6 +19,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = InstrPracChat()
+window = Multi_Auto1()
 window.show()
 app.exec()

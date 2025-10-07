@@ -40,7 +40,7 @@ mtr_auto = False
 nav_auto = False
 chat_auto = False
 
-class MultiTask1(QMainWindow):
+class Multi_Auto1(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -202,7 +202,8 @@ class MultiTask1(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        self.chat_box = ChatWidget(context_items=items_on_screen)
+        chat_auto_btn = self.CreateAutomationButton("Chat Box", "chat_auto")
+        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn)
         self.chat_box.setFixedHeight(140)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
@@ -223,6 +224,9 @@ class MultiTask1(QMainWindow):
             monitor_levels.addSpacing(5)
 
         monitor_levels.addStretch()
+
+        monitor_auto_btn = self.CreateAutomationButton("Monitor Levels", "mtr_auto")
+        monitor_levels.addWidget(monitor_auto_btn)
         
         gauges_widget = QWidget()
         gauges_widget.setLayout(monitor_levels)
@@ -362,6 +366,7 @@ class MultiTask1(QMainWindow):
         widget = QWidget()
         widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         widget.setFixedHeight(200)
+        outer = QHBoxLayout()
         layout = QVBoxLayout()
 
         self.card_uav = self.CreateUAVCard()
@@ -373,7 +378,12 @@ class MultiTask1(QMainWindow):
         inner.addWidget(self.card_a)
         inner.addWidget(self.card_b)
         layout.addLayout(inner)
-        widget.setLayout(layout)
+        outer.addLayout(layout)
+
+        nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
+        outer.addWidget(nav_auto_btn)
+
+        widget.setLayout(outer)
         widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         widget.card_a = self.card_a
         widget.card_b = self.card_b
@@ -597,6 +607,38 @@ class MultiTask1(QMainWindow):
             self.card_update_timer.start()
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
+    def CreateAutomationButton(self, label, state_var_name):
+        button = QPushButton(f"Auto is OFF")
+        button.setFont(QFont("Times New Roman", 12))
+        button.setCheckable(True)
+        button.setStyleSheet("""
+            QPushButton {
+                border: 2px solid black;
+                border-radius: 6px;
+                padding: 4px 10px;
+            }
+            QPushButton:checked {
+                background-color: #d0ffd0;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """)
+
+        def toggle_state():
+            global mtr_auto, nav_auto, chat_auto
+
+            current_state = globals()[state_var_name]
+            new_state = not current_state
+            globals()[state_var_name] = new_state
+
+            button.setText(f"Auto is {'ON ' if new_state else 'OFF'}")
+            #print(f"{state_var_name} = {mtr_auto}")
+            
+        button.clicked.connect(toggle_state)
+
+        return button
+
     def StartSummary(self):
         #from DataLogging.LogNavigation import NavigationCSV
 
@@ -755,7 +797,7 @@ class GenerateLevel(QWidget):
             self.animation_timer.stop()
 
 class ChatWidget(QWidget):
-    def __init__(self, context_items):
+    def __init__(self, context_items, chat_auto_btn):
         super().__init__()
         
         # Set fixed size for the chat widget
@@ -846,6 +888,7 @@ class ChatWidget(QWidget):
 
         main_layout.addWidget(left_group, 2)
         main_layout.addWidget(right_group, 3)
+        main_layout.addWidget(chat_auto_btn)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 
@@ -1004,7 +1047,7 @@ def Subtitle(str: str):
 
 # block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time
 def LogMultiTask(log_type):
-    block = 2
+    block = 3
     trial = 1
 
     LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
