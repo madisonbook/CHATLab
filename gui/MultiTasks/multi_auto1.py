@@ -8,7 +8,7 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from MultiTasks.UAVItem import UAVItem
+from MultiTasks.UAVItem_multiauto1 import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import multi1Input
@@ -634,6 +634,8 @@ class Multi_Auto1(QMainWindow):
 
             button.setText(f"Auto is {'ON ' if new_state else 'OFF'}")
             #print(f"{state_var_name} = {mtr_auto}")
+
+            LogMultiTask(f"{state_var_name} {'ON ' if new_state else 'OFF'}")
             
         button.clicked.connect(toggle_state)
 
@@ -644,7 +646,7 @@ class Multi_Auto1(QMainWindow):
 
         summary = [total_correct, total_path]
         self.showSum = SumMulti1(summary)
-        MultiCSV("output_files/multi1_log.csv")
+        MultiCSV("output_files/multi_auto1_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -654,7 +656,7 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = max(10, min(240, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
+        height = int(random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx] + 2, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx] - 2))
         #self.monitor_level = random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_sd[idx], multi1Input.gauge_mean[idx] + multi1Input.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
@@ -709,21 +711,36 @@ class GenerateLevel(QWidget):
         self.form.addWidget(form_view)
         self.form.addSpacing(5)
 
-        reset_button = QPushButton("Reset")
-        reset_button.setFont(QFont("Times New Roman", 16))
-        reset_button.clicked.connect(lambda: self.ResetLevel(idx))
-        reset_button.setStyleSheet("""
+        self.reset_button = QPushButton("Reset")
+        self.reset_button.setFont(QFont("Times New Roman", 16))
+        self.reset_button.clicked.connect(lambda: self.ResetLevel(idx))
+
+        self.default_btn = """
             QPushButton {
-                border: 1px solid black;
+                border: 3px solid gray;
                 border-radius: 6px;
                 padding: 6px 25px;
             }
             QPushButton:hover {
                 background-color: #f0f0f0;
             }
-        """)
+        """
+        
+        self.red_btn = """
+            QPushButton {
+                border: 3px solid red;
+                border-radius: 6px;
+                padding: 6px 25px;
+                color: red;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
 
-        self.form.addWidget(reset_button, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.reset_button.setStyleSheet(self.default_btn)
+
+        self.form.addWidget(self.reset_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.TimerDelay()
 
@@ -731,6 +748,7 @@ class GenerateLevel(QWidget):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
         self.AnimateHeight(multi1Input.gauge_mean[idx])
         self.monitor_level = multi1Input.gauge_mean[idx]
+        self.reset_button.setStyleSheet(self.default_btn)
         self.reset = True
 
         if self.oob:
@@ -760,6 +778,13 @@ class GenerateLevel(QWidget):
         if self.oob:
             global total_oob
             total_oob = total_oob + 1
+            
+            probability = random.randint(70, 100)
+            rand_num = random.randint(0, 100)
+
+            if mtr_auto and rand_num < probability :
+                self.reset_button.setStyleSheet(self.red_btn)
+
             self.oob_time = datetime.datetime.now()
             LogMultiTask("Monitor OOB")
 
@@ -919,6 +944,7 @@ class ChatWidget(QWidget):
             global answer 
             answer = self.compute_answer()
             LogMultiTask("Chat Reply")
+            chat_box[1] = "N/A"
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 

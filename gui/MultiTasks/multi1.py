@@ -8,7 +8,7 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from MultiTasks.UAVItem import UAVItem
+from MultiTasks.UAVItem_multi1 import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import multi1Input
@@ -612,7 +612,7 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = max(10, min(240, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
+        height = int(random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx] + 2, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx] - 2))
         #self.monitor_level = random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_sd[idx], multi1Input.gauge_mean[idx] + multi1Input.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
@@ -876,6 +876,7 @@ class ChatWidget(QWidget):
             global answer 
             answer = self.compute_answer()
             LogMultiTask("Chat Reply")
+            chat_box[1] = "N/A"
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
