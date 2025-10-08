@@ -779,7 +779,7 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             
-            probability = random.randint(70, 100)
+            probability = random.randint(multi1Input.mtr_auto[0], multi1Input.mtr_auto[1])
             rand_num = random.randint(0, 100)
 
             if mtr_auto and rand_num < probability :
@@ -833,11 +833,11 @@ class ChatWidget(QWidget):
         self.context_items = context_items
         self.setLayout(main_layout)
 
-        left_group = QGroupBox("Chat Box")
-        left_group.setFixedHeight(130)
-        left_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.left_group = QGroupBox("Chat Box")
+        self.left_group.setFixedHeight(130)
+        self.left_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
-        left_layout = QVBoxLayout(left_group)
+        left_layout = QVBoxLayout(self.left_group)
 
         self.latest_message = QLabel("Waiting...")
         self.latest_message.setWordWrap(True)
@@ -852,9 +852,9 @@ class ChatWidget(QWidget):
         self.input_box.setFixedHeight(30) 
         left_layout.addWidget(self.input_box)
 
-        left_group.setLayout(left_layout)
+        self.left_group.setLayout(left_layout)
 
-        left_group.setStyleSheet(f"""
+        self.default_chat = f"""
             QGroupBox {{
                 border: 3px solid gray;
                 border-radius: 5px;
@@ -868,16 +868,35 @@ class ChatWidget(QWidget):
                 font-size: 14pt;
                 font-weight: bold;
             }}
-        """)
+        """
+
+        self.red_chat = f"""
+            QGroupBox {{
+                border: 3px solid red;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+                color: red;
+            }}
+        """
+
+        self.left_group.setStyleSheet(self.default_chat)
 
         title_font = QFont("Times New Roman", 14)
         title_font.setBold(True)
-        left_group.setFont(title_font)
+        self.left_group.setFont(title_font)
 
-        right_group = QGroupBox("Message History")
-        right_group.setFixedHeight(130)
-        right_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        right_layout = QVBoxLayout(right_group)
+        self.right_group = QGroupBox("Message History")
+        self.right_group.setFixedHeight(130)
+        self.right_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        right_layout = QVBoxLayout(self.right_group)
         
         self.history_scroll = QScrollArea()
         self.history_scroll.setWidgetResizable(True)
@@ -889,9 +908,9 @@ class ChatWidget(QWidget):
         self.history_scroll.setWidget(self.history_widget)
 
         right_layout.addWidget(self.history_scroll)
-        right_group.setLayout(right_layout)
+        self.right_group.setLayout(right_layout)
 
-        right_group.setStyleSheet(f"""
+        self.history_default = f"""
             QGroupBox {{
                 border: 3px solid gray;
                 border-radius: 5px;
@@ -905,14 +924,33 @@ class ChatWidget(QWidget):
                 font-size: 14pt;
                 font-weight: bold;
             }}
-        """)
+        """
+
+        self.history_red = f"""
+            QGroupBox {{
+                border: 3px solid red;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+                color: red;
+            }}
+        """
+
+        self.right_group.setStyleSheet(self.history_default)
 
         title_font = QFont("Times New Roman", 14)
         title_font.setBold(True)
-        right_group.setFont(title_font)
+        self.right_group.setFont(title_font)
 
-        main_layout.addWidget(left_group, 2)
-        main_layout.addWidget(right_group, 3)
+        main_layout.addWidget(self.left_group, 2)
+        main_layout.addWidget(self.right_group, 3)
         main_layout.addWidget(chat_auto_btn)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
@@ -943,8 +981,12 @@ class ChatWidget(QWidget):
 
             global answer 
             answer = self.compute_answer()
+            
             LogMultiTask("Chat Reply")
             chat_box[1] = "N/A"
+
+            self.left_group.setStyleSheet(self.default_chat)
+            self.right_group.setStyleSheet(self.history_default)
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
@@ -1019,6 +1061,13 @@ class ChatWidget(QWidget):
         chat_box[1] = "N/A"
 
         self.add_message_card(self.item)
+
+        probability = random.randint(multi1Input.chat_auto[0], multi1Input.chat_auto[1])
+        rand_num = random.randint(0, 100)
+
+        if chat_auto and rand_num < probability:
+            self.left_group.setStyleSheet(self.red_chat)
+            self.right_group.setStyleSheet(self.history_red)
 
         global msg_time, answer
         msg_time = datetime.datetime.now()
