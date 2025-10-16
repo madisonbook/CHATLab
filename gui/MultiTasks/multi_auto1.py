@@ -274,10 +274,11 @@ class Multi_Auto1(QMainWindow):
         buttons = QHBoxLayout()
         buttons.setContentsMargins(0, 0, 0, 0)
 
-        a_button = QPushButton("Path A")
-        a_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
-        a_button.clicked.connect(lambda: self.ClickPathA())
-        a_button.setStyleSheet("""
+        self.a_button = QPushButton("Path A")
+        self.a_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
+        self.a_button.clicked.connect(lambda: self.ClickPathA())
+
+        self.a_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
                 border-radius: 6px;
@@ -287,10 +288,10 @@ class Multi_Auto1(QMainWindow):
                 background-color: #f0f0f0;
             }
         """)
-        b_button = QPushButton("Path B")
-        b_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
-        b_button.clicked.connect(lambda: self.ClickPathB())
-        b_button.setStyleSheet("""
+        self.b_button = QPushButton("Path B")
+        self.b_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
+        self.b_button.clicked.connect(lambda: self.ClickPathB())
+        self.b_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
                 border-radius: 6px;
@@ -326,14 +327,14 @@ class Multi_Auto1(QMainWindow):
                 background-color: #f0f0f0;
             }
         """)
-        a_button.setVisible(True)
-        b_button.setVisible(True)
+        self.a_button.setVisible(True)
+        self.b_button.setVisible(True)
         #home_button.setVisible(True)
         cancel_button.setVisible(True)
 
         buttons.addStretch()
-        buttons.addWidget(a_button)
-        buttons.addWidget(b_button)
+        buttons.addWidget(self.a_button)
+        buttons.addWidget(self.b_button)
         #buttons.addWidget(home_button)
         buttons.addWidget(cancel_button)
         buttons.addStretch()
@@ -361,6 +362,45 @@ class Multi_Auto1(QMainWindow):
         proxy.setPos(0, 625)
 
         return proxy
+    
+    def UpdateButtons(self, uav: UAVItem):
+
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+        
+        red_btn = """
+            QPushButton {
+                border: 2px solid red;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: red;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+
+        probability = random.randint(multi1Input.nav_auto[0], multi1Input.nav_auto[1])
+        rand_num = random.randint(0, 100)
+        
+        if nav_auto and rand_num < probability:
+            if uav.hit_chancea < uav.hit_chanceb + 10:
+                self.a_button.setStyleSheet(red_btn)
+                self.b_button.setStyleSheet(default_btn)
+            else:
+                self.b_button.setStyleSheet(red_btn)
+                self.a_button.setStyleSheet(default_btn)
+
+        pass
     
     def CreateUAVInfoWidget(self):
         widget = QWidget()
@@ -602,6 +642,7 @@ class Multi_Auto1(QMainWindow):
                 break
 
         if self.curr_uav:
+            self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
