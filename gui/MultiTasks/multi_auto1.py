@@ -376,6 +376,11 @@ class Multi_Auto1(QMainWindow):
                 background-color: #f0f0f0;
             }
         """
+
+        if not nav_auto:
+            self.a_button.setStyleSheet(default_btn)
+            self.b_button.setStyleSheet(default_btn)
+            pass
         
         red_btn = """
             QPushButton {
