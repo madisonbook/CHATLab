@@ -398,7 +398,7 @@ class Multi_Auto1(QMainWindow):
         rand_num = random.randint(0, 100)
         
         if nav_auto and rand_num < probability:
-            if uav.hit_chancea < uav.hit_chanceb + 10:
+            if uav.hit_chancea < uav.hit_chanceb + multi1Input.nav_auto_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
             else:

@@ -16,10 +16,11 @@ nav_goal_pts = []
 nav_uav_fuel = []
 nav_uav_speed = []
 nav_path_angle = []
+nav_auto_path = 0
 nav_auto = []
 chat_timer = []
 chat_auto = [] 
-duration = None
+duration = 0
 
 def read_multi1():
     try:
@@ -46,13 +47,14 @@ def read_multi1():
             nav_uav_fuel = [int(item) for item in rows[11][1:5]]
             nav_uav_speed = [int(item) for item in rows[12][1:5]]
 
-            global nav_path_angle, nav_auto, chat_timer, chat_auto, duration
+            global nav_path_angle, nav_auto_path, nav_auto, chat_timer, chat_auto, duration
             nav_path_angle = [int(item) for item in rows[13][1:5]]
-            nav_auto = [int(item) for item in rows[14][1:3]]
-            chat_timer = [int(item) for item in rows[15][1:3]]
-            chat_auto = [int(item) for item in rows[16][1:3]]
+            nav_auto_path = int(rows[14][1])
+            nav_auto = [int(item) for item in rows[15][1:3]]
+            chat_timer = [int(item) for item in rows[16][1:3]]
+            chat_auto = [int(item) for item in rows[17][1:3]]
 
-            duration = int(rows[14][1])
+            duration = int(rows[18][1])
 
     except FileNotFoundError:
         print("file not found.")
