@@ -8,12 +8,12 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from MultiTasks.UAVItem_multi1 import UAVItem
+from MultiTasks.UAVItem_multi2 import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
 from ReadInput import multi1Input
-from DataLogging.LogMulti import LogMulti, MultiCSV
-from MultiTaskSummaries.SumMulti1 import SumMulti1
+from DataLogging.LogMulti import LogMulti, MultiCSV, ClearMultiLog
+from MultiTaskSummaries.SumMulti2 import SumMulti2
 import random
 import datetime
 
@@ -40,7 +40,7 @@ mtr_auto = False
 nav_auto = False
 chat_auto = False
 
-class MultiTask1(QMainWindow):
+class MultiTask2(QMainWindow):
     def __init__(self):
 
         # Clear global variables for this task
@@ -70,7 +70,7 @@ class MultiTask1(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Multitasking 1")
+        title = Title("Task: Multitasking 2")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 
@@ -228,11 +228,9 @@ class MultiTask1(QMainWindow):
         colors = ["#FF7F7F", "#FFEE8c", "#88E788", "#90D5FF"]
         color_text = ["RED", "YELLOW", "GREEN", "BLUE"]
         idx = 0
-
-        
         for color in colors:
             gauge = GenerateLevel(color, idx, color_text[idx])
-            idx = idx + 1 
+            idx = idx + 1
             gauges.append(gauge)
             monitor_levels.addLayout(gauge.form)
             monitor_levels.addSpacing(5)
@@ -685,8 +683,8 @@ class MultiTask1(QMainWindow):
 
         summary = [total_correct, total_path]
         self.stopAllTimers()
-        self.showSum = SumMulti1(summary)
-        #MultiCSV("output_files/multi_log.csv")
+        self.showSum = SumMulti2(summary)
+        MultiCSV("output_files/multi_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -1090,7 +1088,7 @@ def Subtitle(str: str):
 # block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time
 def LogMultiTask(log_type):
     block = 2
-    trial = 1
+    trial = 2
 
     LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass

@@ -6,6 +6,11 @@ from participant import PARTICIPANT_ID
 multi_log = []
 total_score = 0
 
+def ClearMultiLog():
+    global multi_log, total_score
+    multi_log = []
+    total_score = 0
+
 
 def LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
     
