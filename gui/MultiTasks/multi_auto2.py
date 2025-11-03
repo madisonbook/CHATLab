@@ -8,12 +8,12 @@ from PyQt6.QtCore import Qt, QTimer, QPointF, QRectF
 from PyQt6.QtGui import QFont, QBrush, QPen, QColor, QPixmap, QPainter, QPolygonF, QPainterPath
 from PyQt6.QtWidgets import QGraphicsPolygonItem, QGraphicsPathItem, QGraphicsRectItem, QStackedWidget, QGraphicsProxyWidget
 import math
-from MultiTasks.UAVItem_multi2 import UAVItem
+from MultiTasks.UAVItem_multiauto2 import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-from ReadInput import multi2Input
-from DataLogging.LogMulti import LogMulti, MultiCSV, ClearMultiLog
-from MultiTaskSummaries.SumMulti2 import SumMulti2
+from ReadInput import multiauto2Input
+from DataLogging.LogMulti import LogMulti, MultiCSV
+from MultiTaskSummaries.SumMultiAuto2 import SumMultiAuto2
 import random
 import datetime
 
@@ -40,24 +40,8 @@ mtr_auto = False
 nav_auto = False
 chat_auto = False
 
-class MultiTask2(QMainWindow):
+class Multi_Auto2(QMainWindow):
     def __init__(self):
-
-        # Clear global variables for this task
-        global total_oob, total_reset, summary, gauges, UAVs, total_path, total_correct
-        global chat_box, msg_time, answer
-        
-        total_oob = 0
-        total_reset = 0
-        summary = []
-        gauges = []
-        UAVs = []
-        total_path = 0
-        total_correct = 0
-        chat_box = ["N/A", "N/A"]
-        msg_time = None
-        answer = None
-
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
@@ -70,7 +54,7 @@ class MultiTask2(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Multitasking 2")
+        title = Title("Task: Multitasking 1")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 
@@ -92,23 +76,23 @@ class MultiTask2(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
-        storm_items = [StormItem(1, multi2Input.nav_storm_x[0], multi2Input.nav_storm_y[0]),
-                      StormItem(2, multi2Input.nav_storm_x[1], multi2Input.nav_storm_y[1]),
-                      StormItem(3, multi2Input.nav_storm_x[2], multi2Input.nav_storm_y[2]),
-                      StormItem(4, multi2Input.nav_storm_x[3], multi2Input.nav_storm_y[3])]
+        storm_items = [StormItem(1, multiauto2Input.nav_storm_x[0], multiauto2Input.nav_storm_y[0]),
+                      StormItem(2, multiauto2Input.nav_storm_x[1], multiauto2Input.nav_storm_y[1]),
+                      StormItem(3, multiauto2Input.nav_storm_x[2], multiauto2Input.nav_storm_y[2]),
+                      StormItem(4, multiauto2Input.nav_storm_x[3], multiauto2Input.nav_storm_y[3])]
 
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, multi2Input.nav_goal_x[0], multi2Input.nav_goal_y[0]),
-                      GoalItem(2, multi2Input.nav_goal_x[1], multi2Input.nav_goal_y[1]),
-                      GoalItem(3, multi2Input.nav_goal_x[2], multi2Input.nav_goal_y[2]),
-                      GoalItem(4, multi2Input.nav_goal_x[3], multi2Input.nav_goal_y[3])]
+        goal_items = [GoalItem(1, multiauto2Input.nav_goal_x[0], multiauto2Input.nav_goal_y[0]),
+                      GoalItem(2, multiauto2Input.nav_goal_x[1], multiauto2Input.nav_goal_y[1]),
+                      GoalItem(3, multiauto2Input.nav_goal_x[2], multiauto2Input.nav_goal_y[2]),
+                      GoalItem(4, multiauto2Input.nav_goal_x[3], multiauto2Input.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
-        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multi2Input.nav_uav_x[0], multi2Input.nav_uav_y[0],
-                           goal_items[0], goal_items, storm_items, multi2Input.nav_uav_fuel[0], 
-                           multi2Input.nav_uav_speed[0], multi2Input.nav_path_angle[0], self.HandleClick, left_nav)
+        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multiauto2Input.nav_uav_x[0], multiauto2Input.nav_uav_y[0],
+                           goal_items[0], goal_items, storm_items, multiauto2Input.nav_uav_fuel[0], 
+                           multiauto2Input.nav_uav_speed[0], multiauto2Input.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
         uav_blue.goal_item.setZValue(2)
@@ -129,9 +113,9 @@ class MultiTask2(QMainWindow):
         uav_blue.ra_path.setVisible(False)
         uav_blue.ra_label.setVisible(False)
    
-        uav_red = UAVItem(2, "#FF7F7F", "RED", multi2Input.nav_uav_x[1], multi2Input.nav_uav_y[1],
-                          goal_items[1], goal_items, storm_items, multi2Input.nav_uav_fuel[1], 
-                           multi2Input.nav_uav_speed[1], multi2Input.nav_path_angle[1], self.HandleClick, left_nav)
+        uav_red = UAVItem(2, "#FF7F7F", "RED", multiauto2Input.nav_uav_x[1], multiauto2Input.nav_uav_y[1],
+                          goal_items[1], goal_items, storm_items, multiauto2Input.nav_uav_fuel[1], 
+                           multiauto2Input.nav_uav_speed[1], multiauto2Input.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
         uav_red.goal_item.setZValue(2)
@@ -152,9 +136,9 @@ class MultiTask2(QMainWindow):
         uav_red.ra_path.setVisible(False)
         uav_red.ra_label.setVisible(False)
 
-        uav_green = UAVItem(3, "#88E788", "GREEN", multi2Input.nav_uav_x[2], multi2Input.nav_uav_y[2],
-                           goal_items[2], goal_items, storm_items, multi2Input.nav_uav_fuel[2], 
-                           multi2Input.nav_uav_speed[2], multi2Input.nav_path_angle[2], self.HandleClick, left_nav)
+        uav_green = UAVItem(3, "#88E788", "GREEN", multiauto2Input.nav_uav_x[2], multiauto2Input.nav_uav_y[2],
+                           goal_items[2], goal_items, storm_items, multiauto2Input.nav_uav_fuel[2], 
+                           multiauto2Input.nav_uav_speed[2], multiauto2Input.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
         uav_green.goal_item.setZValue(2)
@@ -175,9 +159,9 @@ class MultiTask2(QMainWindow):
         uav_green.ra_path.setVisible(False)
         uav_green.ra_label.setVisible(False)
 
-        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multi2Input.nav_uav_x[3], multi2Input.nav_uav_y[3], 
-                           goal_items[3], goal_items, storm_items, multi2Input.nav_uav_fuel[3], 
-                           multi2Input.nav_uav_speed[3], multi2Input.nav_path_angle[3], self.HandleClick, left_nav)
+        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multiauto2Input.nav_uav_x[3], multiauto2Input.nav_uav_y[3], 
+                           goal_items[3], goal_items, storm_items, multiauto2Input.nav_uav_fuel[3], 
+                           multiauto2Input.nav_uav_speed[3], multiauto2Input.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
         uav_yellow.goal_item.setZValue(2)
@@ -218,7 +202,8 @@ class MultiTask2(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        self.chat_box = ChatWidget(context_items=items_on_screen)
+        chat_auto_btn = self.CreateAutomationButton("Chat Box", "chat_auto")
+        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn)
         self.chat_box.setFixedHeight(140)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
@@ -231,11 +216,17 @@ class MultiTask2(QMainWindow):
         for color in colors:
             gauge = GenerateLevel(color, idx, color_text[idx])
             idx = idx + 1
+
+            global gauges
             gauges.append(gauge)
+
             monitor_levels.addLayout(gauge.form)
             monitor_levels.addSpacing(5)
 
         monitor_levels.addStretch()
+
+        monitor_auto_btn = self.CreateAutomationButton("Monitor Levels", "mtr_auto")
+        monitor_levels.addWidget(monitor_auto_btn)
         
         gauges_widget = QWidget()
         gauges_widget.setLayout(monitor_levels)
@@ -256,7 +247,7 @@ class MultiTask2(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(multi2Input.duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(multiauto2Input.duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
@@ -283,10 +274,11 @@ class MultiTask2(QMainWindow):
         buttons = QHBoxLayout()
         buttons.setContentsMargins(0, 0, 0, 0)
 
-        a_button = QPushButton("Path A")
-        a_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
-        a_button.clicked.connect(lambda: self.ClickPathA())
-        a_button.setStyleSheet("""
+        self.a_button = QPushButton("Path A")
+        self.a_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
+        self.a_button.clicked.connect(lambda: self.ClickPathA())
+
+        self.a_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
                 border-radius: 6px;
@@ -296,10 +288,10 @@ class MultiTask2(QMainWindow):
                 background-color: #f0f0f0;
             }
         """)
-        b_button = QPushButton("Path B")
-        b_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
-        b_button.clicked.connect(lambda: self.ClickPathB())
-        b_button.setStyleSheet("""
+        self.b_button = QPushButton("Path B")
+        self.b_button.setFont(QFont("Times New Roman", 12, QFont.Weight.Normal))
+        self.b_button.clicked.connect(lambda: self.ClickPathB())
+        self.b_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
                 border-radius: 6px;
@@ -335,14 +327,14 @@ class MultiTask2(QMainWindow):
                 background-color: #f0f0f0;
             }
         """)
-        a_button.setVisible(True)
-        b_button.setVisible(True)
+        self.a_button.setVisible(True)
+        self.b_button.setVisible(True)
         #home_button.setVisible(True)
         cancel_button.setVisible(True)
 
         buttons.addStretch()
-        buttons.addWidget(a_button)
-        buttons.addWidget(b_button)
+        buttons.addWidget(self.a_button)
+        buttons.addWidget(self.b_button)
         #buttons.addWidget(home_button)
         buttons.addWidget(cancel_button)
         buttons.addStretch()
@@ -371,10 +363,55 @@ class MultiTask2(QMainWindow):
 
         return proxy
     
+    def UpdateButtons(self, uav: UAVItem):
+
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+
+        if not nav_auto:
+            self.a_button.setStyleSheet(default_btn)
+            self.b_button.setStyleSheet(default_btn)
+            pass
+        
+        red_btn = """
+            QPushButton {
+                border: 2px solid red;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: red;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+
+        probability = random.randint(multiauto2Input.nav_auto[0], multiauto2Input.nav_auto[1])
+        rand_num = random.randint(0, 100)
+        
+        if nav_auto and rand_num < probability:
+            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto_path:
+                self.a_button.setStyleSheet(red_btn)
+                self.b_button.setStyleSheet(default_btn)
+            else:
+                self.b_button.setStyleSheet(red_btn)
+                self.a_button.setStyleSheet(default_btn)
+
+        pass
+    
     def CreateUAVInfoWidget(self):
         widget = QWidget()
         widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         widget.setFixedHeight(200)
+        outer = QHBoxLayout()
         layout = QVBoxLayout()
 
         self.card_uav = self.CreateUAVCard()
@@ -386,7 +423,12 @@ class MultiTask2(QMainWindow):
         inner.addWidget(self.card_a)
         inner.addWidget(self.card_b)
         layout.addLayout(inner)
-        widget.setLayout(layout)
+        outer.addLayout(layout)
+
+        nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
+        outer.addWidget(nav_auto_btn)
+
+        widget.setLayout(outer)
         widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         widget.card_a = self.card_a
         widget.card_b = self.card_b
@@ -605,11 +647,46 @@ class MultiTask2(QMainWindow):
                 break
 
         if self.curr_uav:
+            self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
+    def CreateAutomationButton(self, label, state_var_name):
+        button = QPushButton(f"Auto is OFF")
+        button.setFont(QFont("Times New Roman", 12))
+        button.setCheckable(True)
+        button.setStyleSheet("""
+            QPushButton {
+                border: 2px solid black;
+                border-radius: 6px;
+                padding: 4px 10px;
+            }
+            QPushButton:checked {
+                background-color: #d0ffd0;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """)
+
+        def toggle_state():
+            global mtr_auto, nav_auto, chat_auto
+
+            current_state = globals()[state_var_name]
+            new_state = not current_state
+            globals()[state_var_name] = new_state
+
+            button.setText(f"Auto is {'ON ' if new_state else 'OFF'}")
+            #print(f"{state_var_name} = {mtr_auto}")
+
+            LogMultiTask(f"{state_var_name} {'ON ' if new_state else 'OFF'}")
+            
+        button.clicked.connect(toggle_state)
+
+        return button
+    
     def closeEvent(self, event):
         """Stop all timers when window closes to prevent logging from previous tasks"""
         
@@ -681,10 +758,10 @@ class MultiTask2(QMainWindow):
     def StartSummary(self):
         #from DataLogging.LogNavigation import NavigationCSV
 
-        summary = [total_correct, total_path]
         self.stopAllTimers()
-        self.showSum = SumMulti2(summary)
-        MultiCSV("output_files/multi_log.csv")
+        summary = [total_correct, total_path]
+        self.showSum = SumMultiAuto2(summary)
+        MultiCSV("output_files/multi_auto_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -694,8 +771,8 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = int(random.randint(multi2Input.gauge_mean[idx] - multi2Input.gauge_dist[idx] + 2, multi2Input.gauge_mean[idx] + multi2Input.gauge_dist[idx] - 2))
-        #self.monitor_level = random.randint(multi2Input.gauge_mean[idx] - multi2Input.gauge_sd[idx], multi2Input.gauge_mean[idx] + multi2Input.gauge_sd[idx])
+        height = int(random.randint(multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_dist[idx] + 2, multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_dist[idx] - 2))
+        #self.monitor_level = random.randint(multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_sd[idx], multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
@@ -738,39 +815,55 @@ class GenerateLevel(QWidget):
         outline.setPen(pen)
 
         top_bar = level.addRect(0, 0, 40, 0)
-        top_bar.setPos(0, multi2Input.gauge_mean[idx] - multi2Input.gauge_dist[idx])
+        top_bar.setPos(0, multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_dist[idx])
         top_bar.setPen(pen)
 
         low_bar = level.addRect(0, 0, 40, 0)
-        low_bar.setPos(0, multi2Input.gauge_mean[idx] + multi2Input.gauge_dist[idx])
+        low_bar.setPos(0, multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_dist[idx])
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
         self.form.addWidget(form_view)
         self.form.addSpacing(5)
 
-        reset_button = QPushButton("Reset")
-        reset_button.setFont(QFont("Times New Roman", 16))
-        reset_button.clicked.connect(lambda: self.ResetLevel(idx))
-        reset_button.setStyleSheet("""
+        self.reset_button = QPushButton("Reset")
+        self.reset_button.setFont(QFont("Times New Roman", 16))
+        self.reset_button.clicked.connect(lambda: self.ResetLevel(idx))
+
+        self.default_btn = """
             QPushButton {
-                border: 1px solid black;
+                border: 3px solid gray;
                 border-radius: 6px;
                 padding: 6px 25px;
             }
             QPushButton:hover {
                 background-color: #f0f0f0;
             }
-        """)
+        """
+        
+        self.red_btn = """
+            QPushButton {
+                border: 3px solid red;
+                border-radius: 6px;
+                padding: 6px 25px;
+                color: red;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
 
-        self.form.addWidget(reset_button, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.reset_button.setStyleSheet(self.default_btn)
+
+        self.form.addWidget(self.reset_button, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.TimerDelay()
 
     def ResetLevel(self, idx:int):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(multi2Input.gauge_mean[idx])
-        self.monitor_level = multi2Input.gauge_mean[idx]
+        self.AnimateHeight(multiauto2Input.gauge_mean[idx])
+        self.monitor_level = multiauto2Input.gauge_mean[idx]
+        self.reset_button.setStyleSheet(self.default_btn)
         self.reset = True
 
         if self.oob:
@@ -784,12 +877,12 @@ class GenerateLevel(QWidget):
         pass
 
     def TimerDelay(self):
-        delay = random.randint(multi2Input.gauge_timer[0]*1000, multi2Input.gauge_timer[1]*1000)
+        delay = random.randint(multiauto2Input.gauge_timer[0]*1000, multiauto2Input.gauge_timer[1]*1000)
         self.reset = False
         self.timer.start(delay)
 
     def ChangeHeight(self, idx: int):
-        new_height = max(10, min(290, int(random.normalvariate(multi2Input.gauge_mean[idx], multi2Input.gauge_sd[idx]))))
+        new_height = max(10, min(290, int(random.normalvariate(multiauto2Input.gauge_mean[idx], multiauto2Input.gauge_sd[idx]))))
         
         self.AnimateHeight(new_height)
         self.monitor_level = new_height
@@ -800,13 +893,20 @@ class GenerateLevel(QWidget):
         if self.oob:
             global total_oob
             total_oob = total_oob + 1
+            
+            probability = random.randint(multiauto2Input.mtr_auto[0], multiauto2Input.mtr_auto[1])
+            rand_num = random.randint(0, 100)
+
+            if mtr_auto and rand_num < probability :
+                self.reset_button.setStyleSheet(self.red_btn)
+
             self.oob_time = datetime.datetime.now()
             LogMultiTask("Monitor OOB")
 
         self.TimerDelay()
 
     def CheckOOB(self, new_height, idx):
-        if new_height < (multi2Input.gauge_mean[idx] - multi2Input.gauge_dist[idx]) or new_height > (multi2Input.gauge_mean[idx] + multi2Input.gauge_dist[idx]):
+        if new_height < (multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_dist[idx]) or new_height > (multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_dist[idx]):
             self.oob = True
         else:
             self.oob = False
@@ -837,7 +937,7 @@ class GenerateLevel(QWidget):
             self.animation_timer.stop()
 
 class ChatWidget(QWidget):
-    def __init__(self, context_items):
+    def __init__(self, context_items, chat_auto_btn):
         super().__init__()
         
         # Set fixed size for the chat widget
@@ -848,11 +948,11 @@ class ChatWidget(QWidget):
         self.context_items = context_items
         self.setLayout(main_layout)
 
-        left_group = QGroupBox("Chat Box")
-        left_group.setFixedHeight(130)
-        left_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.left_group = QGroupBox("Chat Box")
+        self.left_group.setFixedHeight(130)
+        self.left_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
-        left_layout = QVBoxLayout(left_group)
+        left_layout = QVBoxLayout(self.left_group)
 
         self.latest_message = QLabel("Waiting...")
         self.latest_message.setWordWrap(True)
@@ -867,9 +967,9 @@ class ChatWidget(QWidget):
         self.input_box.setFixedHeight(30) 
         left_layout.addWidget(self.input_box)
 
-        left_group.setLayout(left_layout)
+        self.left_group.setLayout(left_layout)
 
-        left_group.setStyleSheet(f"""
+        self.default_chat = f"""
             QGroupBox {{
                 border: 3px solid gray;
                 border-radius: 5px;
@@ -883,16 +983,35 @@ class ChatWidget(QWidget):
                 font-size: 14pt;
                 font-weight: bold;
             }}
-        """)
+        """
+
+        self.red_chat = f"""
+            QGroupBox {{
+                border: 3px solid red;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+                color: red;
+            }}
+        """
+
+        self.left_group.setStyleSheet(self.default_chat)
 
         title_font = QFont("Times New Roman", 14)
         title_font.setBold(True)
-        left_group.setFont(title_font)
+        self.left_group.setFont(title_font)
 
-        right_group = QGroupBox("Message History")
-        right_group.setFixedHeight(130)
-        right_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        right_layout = QVBoxLayout(right_group)
+        self.right_group = QGroupBox("Message History")
+        self.right_group.setFixedHeight(130)
+        self.right_group.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        right_layout = QVBoxLayout(self.right_group)
         
         self.history_scroll = QScrollArea()
         self.history_scroll.setWidgetResizable(True)
@@ -904,9 +1023,9 @@ class ChatWidget(QWidget):
         self.history_scroll.setWidget(self.history_widget)
 
         right_layout.addWidget(self.history_scroll)
-        right_group.setLayout(right_layout)
+        self.right_group.setLayout(right_layout)
 
-        right_group.setStyleSheet(f"""
+        self.history_default = f"""
             QGroupBox {{
                 border: 3px solid gray;
                 border-radius: 5px;
@@ -920,14 +1039,34 @@ class ChatWidget(QWidget):
                 font-size: 14pt;
                 font-weight: bold;
             }}
-        """)
+        """
+
+        self.history_red = f"""
+            QGroupBox {{
+                border: 3px solid red;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 3px 0 3px;
+                font-family: "Times New Roman";
+                font-size: 14pt;
+                font-weight: bold;
+                color: red;
+            }}
+        """
+
+        self.right_group.setStyleSheet(self.history_default)
 
         title_font = QFont("Times New Roman", 14)
         title_font.setBold(True)
-        right_group.setFont(title_font)
+        self.right_group.setFont(title_font)
 
-        main_layout.addWidget(left_group, 2)
-        main_layout.addWidget(right_group, 3)
+        main_layout.addWidget(self.left_group, 2)
+        main_layout.addWidget(self.right_group, 3)
+        main_layout.addWidget(chat_auto_btn)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 
@@ -947,7 +1086,7 @@ class ChatWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
 
-        #delay = random.randint(multi2Input.chat_timer[0]*1000, multi2Input.chat_timer[1]*1000)
+        #delay = random.randint(multiauto2Input.chat_timer[0]*1000, multiauto2Input.chat_timer[1]*1000)
         self.timer.start(2000)
 
     def handle_user_message(self):
@@ -957,8 +1096,12 @@ class ChatWidget(QWidget):
 
             global answer 
             answer = self.compute_answer()
+            
             LogMultiTask("Chat Reply")
             chat_box[1] = "N/A"
+
+            self.left_group.setStyleSheet(self.default_chat)
+            self.right_group.setStyleSheet(self.history_default)
             self.input_box.clear()
             self.latest_message.setText("Waiting...")
 
@@ -984,7 +1127,7 @@ class ChatWidget(QWidget):
             gauge = next((g for g in gauges if getattr(g, "color_text", "") == color), None)
             idx = {"RED": 0, "YELLOW": 1, "GREEN": 2, "BLUE": 3}.get(color)
             if gauge:
-                mean, dist = multi2Input.gauge_mean[idx], multi2Input.gauge_dist[idx]
+                mean, dist = multiauto2Input.gauge_mean[idx], multiauto2Input.gauge_dist[idx]
                 low, high = mean - dist, mean + dist
                 curr_level = getattr(gauge, "monitor_level", 0)
                 q = question.lower()
@@ -1034,14 +1177,21 @@ class ChatWidget(QWidget):
 
         self.add_message_card(self.item)
 
+        probability = random.randint(multiauto2Input.chat_auto[0], multiauto2Input.chat_auto[1])
+        rand_num = random.randint(0, 100)
+
+        if chat_auto and rand_num < probability:
+            self.left_group.setStyleSheet(self.red_chat)
+            self.right_group.setStyleSheet(self.history_red)
+
         global msg_time, answer
         msg_time = datetime.datetime.now()
         answer = None
 
         LogMultiTask("Chat Msg")
 
-        delay = random.randint(multi2Input.chat_timer[0]*1000,
-                           multi2Input.chat_timer[1]*1000)
+        delay = random.randint(multiauto2Input.chat_timer[0]*1000,
+                           multiauto2Input.chat_timer[1]*1000)
         self.timer.start(delay)
 
     def add_message_card(self, item: str):
@@ -1087,7 +1237,7 @@ def Subtitle(str: str):
 
 # block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time
 def LogMultiTask(log_type):
-    block = 2
+    block = 3
     trial = 2
 
     LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)

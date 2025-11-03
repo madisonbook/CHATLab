@@ -11,9 +11,9 @@ import math
 from MultiTasks.UAVItem_multiauto1 import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-from ReadInput import multi1Input
+from ReadInput import multiauto1Input
 from DataLogging.LogMulti import LogMulti, MultiCSV
-from MultiTaskSummaries.SumMulti1 import SumMulti1
+from MultiTaskSummaries.SumMultiAuto1 import SumMultiAuto1
 import random
 import datetime
 
@@ -76,23 +76,23 @@ class Multi_Auto1(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
-        storm_items = [StormItem(1, multi1Input.nav_storm_x[0], multi1Input.nav_storm_y[0]),
-                      StormItem(2, multi1Input.nav_storm_x[1], multi1Input.nav_storm_y[1]),
-                      StormItem(3, multi1Input.nav_storm_x[2], multi1Input.nav_storm_y[2]),
-                      StormItem(4, multi1Input.nav_storm_x[3], multi1Input.nav_storm_y[3])]
+        storm_items = [StormItem(1, multiauto1Input.nav_storm_x[0], multiauto1Input.nav_storm_y[0]),
+                      StormItem(2, multiauto1Input.nav_storm_x[1], multiauto1Input.nav_storm_y[1]),
+                      StormItem(3, multiauto1Input.nav_storm_x[2], multiauto1Input.nav_storm_y[2]),
+                      StormItem(4, multiauto1Input.nav_storm_x[3], multiauto1Input.nav_storm_y[3])]
 
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, multi1Input.nav_goal_x[0], multi1Input.nav_goal_y[0]),
-                      GoalItem(2, multi1Input.nav_goal_x[1], multi1Input.nav_goal_y[1]),
-                      GoalItem(3, multi1Input.nav_goal_x[2], multi1Input.nav_goal_y[2]),
-                      GoalItem(4, multi1Input.nav_goal_x[3], multi1Input.nav_goal_y[3])]
+        goal_items = [GoalItem(1, multiauto1Input.nav_goal_x[0], multiauto1Input.nav_goal_y[0]),
+                      GoalItem(2, multiauto1Input.nav_goal_x[1], multiauto1Input.nav_goal_y[1]),
+                      GoalItem(3, multiauto1Input.nav_goal_x[2], multiauto1Input.nav_goal_y[2]),
+                      GoalItem(4, multiauto1Input.nav_goal_x[3], multiauto1Input.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
-        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multi1Input.nav_uav_x[0], multi1Input.nav_uav_y[0],
-                           goal_items[0], goal_items, storm_items, multi1Input.nav_uav_fuel[0], 
-                           multi1Input.nav_uav_speed[0], multi1Input.nav_path_angle[0], self.HandleClick, left_nav)
+        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multiauto1Input.nav_uav_x[0], multiauto1Input.nav_uav_y[0],
+                           goal_items[0], goal_items, storm_items, multiauto1Input.nav_uav_fuel[0], 
+                           multiauto1Input.nav_uav_speed[0], multiauto1Input.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
         uav_blue.goal_item.setZValue(2)
@@ -113,9 +113,9 @@ class Multi_Auto1(QMainWindow):
         uav_blue.ra_path.setVisible(False)
         uav_blue.ra_label.setVisible(False)
    
-        uav_red = UAVItem(2, "#FF7F7F", "RED", multi1Input.nav_uav_x[1], multi1Input.nav_uav_y[1],
-                          goal_items[1], goal_items, storm_items, multi1Input.nav_uav_fuel[1], 
-                           multi1Input.nav_uav_speed[1], multi1Input.nav_path_angle[1], self.HandleClick, left_nav)
+        uav_red = UAVItem(2, "#FF7F7F", "RED", multiauto1Input.nav_uav_x[1], multiauto1Input.nav_uav_y[1],
+                          goal_items[1], goal_items, storm_items, multiauto1Input.nav_uav_fuel[1], 
+                           multiauto1Input.nav_uav_speed[1], multiauto1Input.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
         uav_red.goal_item.setZValue(2)
@@ -136,9 +136,9 @@ class Multi_Auto1(QMainWindow):
         uav_red.ra_path.setVisible(False)
         uav_red.ra_label.setVisible(False)
 
-        uav_green = UAVItem(3, "#88E788", "GREEN", multi1Input.nav_uav_x[2], multi1Input.nav_uav_y[2],
-                           goal_items[2], goal_items, storm_items, multi1Input.nav_uav_fuel[2], 
-                           multi1Input.nav_uav_speed[2], multi1Input.nav_path_angle[2], self.HandleClick, left_nav)
+        uav_green = UAVItem(3, "#88E788", "GREEN", multiauto1Input.nav_uav_x[2], multiauto1Input.nav_uav_y[2],
+                           goal_items[2], goal_items, storm_items, multiauto1Input.nav_uav_fuel[2], 
+                           multiauto1Input.nav_uav_speed[2], multiauto1Input.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
         uav_green.goal_item.setZValue(2)
@@ -159,9 +159,9 @@ class Multi_Auto1(QMainWindow):
         uav_green.ra_path.setVisible(False)
         uav_green.ra_label.setVisible(False)
 
-        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multi1Input.nav_uav_x[3], multi1Input.nav_uav_y[3], 
-                           goal_items[3], goal_items, storm_items, multi1Input.nav_uav_fuel[3], 
-                           multi1Input.nav_uav_speed[3], multi1Input.nav_path_angle[3], self.HandleClick, left_nav)
+        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multiauto1Input.nav_uav_x[3], multiauto1Input.nav_uav_y[3], 
+                           goal_items[3], goal_items, storm_items, multiauto1Input.nav_uav_fuel[3], 
+                           multiauto1Input.nav_uav_speed[3], multiauto1Input.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
         uav_yellow.goal_item.setZValue(2)
@@ -247,7 +247,7 @@ class Multi_Auto1(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(multi1Input.duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(multiauto1Input.duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
@@ -394,11 +394,11 @@ class Multi_Auto1(QMainWindow):
             }
         """
 
-        probability = random.randint(multi1Input.nav_auto[0], multi1Input.nav_auto[1])
+        probability = random.randint(multiauto1Input.nav_auto[0], multiauto1Input.nav_auto[1])
         rand_num = random.randint(0, 100)
         
         if nav_auto and rand_num < probability:
-            if uav.hit_chancea < uav.hit_chanceb + multi1Input.nav_auto_path:
+            if uav.hit_chancea < uav.hit_chanceb + multiauto1Input.nav_auto_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
             else:
@@ -686,13 +686,82 @@ class Multi_Auto1(QMainWindow):
         button.clicked.connect(toggle_state)
 
         return button
+    
+    def closeEvent(self, event):
+        """Stop all timers when window closes to prevent logging from previous tasks"""
+        
+        # Stop the card update timer
+        if hasattr(self, 'card_update_timer') and self.card_update_timer is not None:
+            self.card_update_timer.stop()
+        
+        # Stop all gauge timers
+        global gauges
+        for gauge in gauges:
+            if hasattr(gauge, 'timer') and gauge.timer is not None:
+                gauge.timer.stop()
+            if hasattr(gauge, 'animation_timer') and gauge.animation_timer is not None:
+                gauge.animation_timer.stop()
+        
+        # Stop chat widget timer
+        if hasattr(self, 'chat_box') and self.chat_box is not None:
+            if hasattr(self.chat_box, 'timer') and self.chat_box.timer is not None:
+                self.chat_box.timer.stop()
+        
+        # Stop all UAV timers
+        global UAVs
+        for uav in UAVs:
+            if uav is not None:
+                if hasattr(uav, 'movement_timer') and uav.movement_timer is not None:
+                    uav.movement_timer.stop()
+                if hasattr(uav, 'update_timer') and uav.update_timer is not None:
+                    uav.update_timer.stop()
+                if hasattr(uav, 'timer') and uav.timer is not None:
+                    uav.timer.stop()
+                if hasattr(uav, 'idle_timer') and uav.idle_timer is not None:
+                    uav.idle_timer.stop()
+        
+        # Accept the close event
+        event.accept()
+
+    def stopAllTimers(self):
+        """Helper method to stop all timers - can be called from anywhere"""
+        
+        # Stop the card update timer
+        if hasattr(self, 'card_update_timer') and self.card_update_timer is not None:
+            self.card_update_timer.stop()
+        
+        # Stop all gauge timers
+        global gauges
+        for gauge in gauges:
+            if gauge is not None:  # Check gauge itself
+                if hasattr(gauge, 'timer') and gauge.timer is not None:
+                    gauge.timer.stop()
+                if hasattr(gauge, 'animation_timer') and gauge.animation_timer is not None:
+                    gauge.animation_timer.stop()
+        
+        # Stop chat widget timer
+        if hasattr(self, 'chat_box') and self.chat_box is not None:
+            if hasattr(self.chat_box, 'timer') and self.chat_box.timer is not None:
+                self.chat_box.timer.stop()
+        
+        # Stop all UAV timers
+        global UAVs
+        for uav in UAVs:
+            if uav is not None:  # Check UAV itself
+                if hasattr(uav, 'movement_timer') and uav.movement_timer is not None:
+                    uav.movement_timer.stop()
+                if hasattr(uav, 'update_timer') and uav.update_timer is not None:
+                    uav.update_timer.stop()
+                if hasattr(uav, 'timer') and uav.timer is not None:
+                    uav.timer.stop()
 
     def StartSummary(self):
         #from DataLogging.LogNavigation import NavigationCSV
 
+        self.stopAllTimers()
         summary = [total_correct, total_path]
-        self.showSum = SumMulti1(summary)
-        MultiCSV("output_files/multi_auto1_log.csv")
+        self.showSum = SumMultiAuto1(summary)
+        MultiCSV("output_files/multi_auto_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -702,8 +771,8 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = int(random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx] + 2, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx] - 2))
-        #self.monitor_level = random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_sd[idx], multi1Input.gauge_mean[idx] + multi1Input.gauge_sd[idx])
+        height = int(random.randint(multiauto1Input.gauge_mean[idx] - multiauto1Input.gauge_dist[idx] + 2, multiauto1Input.gauge_mean[idx] + multiauto1Input.gauge_dist[idx] - 2))
+        #self.monitor_level = random.randint(multiauto1Input.gauge_mean[idx] - multiauto1Input.gauge_sd[idx], multiauto1Input.gauge_mean[idx] + multiauto1Input.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
@@ -746,11 +815,11 @@ class GenerateLevel(QWidget):
         outline.setPen(pen)
 
         top_bar = level.addRect(0, 0, 40, 0)
-        top_bar.setPos(0, multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx])
+        top_bar.setPos(0, multiauto1Input.gauge_mean[idx] - multiauto1Input.gauge_dist[idx])
         top_bar.setPen(pen)
 
         low_bar = level.addRect(0, 0, 40, 0)
-        low_bar.setPos(0, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx])
+        low_bar.setPos(0, multiauto1Input.gauge_mean[idx] + multiauto1Input.gauge_dist[idx])
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
@@ -792,8 +861,8 @@ class GenerateLevel(QWidget):
 
     def ResetLevel(self, idx:int):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(multi1Input.gauge_mean[idx])
-        self.monitor_level = multi1Input.gauge_mean[idx]
+        self.AnimateHeight(multiauto1Input.gauge_mean[idx])
+        self.monitor_level = multiauto1Input.gauge_mean[idx]
         self.reset_button.setStyleSheet(self.default_btn)
         self.reset = True
 
@@ -808,12 +877,12 @@ class GenerateLevel(QWidget):
         pass
 
     def TimerDelay(self):
-        delay = random.randint(multi1Input.gauge_timer[0]*1000, multi1Input.gauge_timer[1]*1000)
+        delay = random.randint(multiauto1Input.gauge_timer[0]*1000, multiauto1Input.gauge_timer[1]*1000)
         self.reset = False
         self.timer.start(delay)
 
     def ChangeHeight(self, idx: int):
-        new_height = max(10, min(290, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
+        new_height = max(10, min(290, int(random.normalvariate(multiauto1Input.gauge_mean[idx], multiauto1Input.gauge_sd[idx]))))
         
         self.AnimateHeight(new_height)
         self.monitor_level = new_height
@@ -825,7 +894,7 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             
-            probability = random.randint(multi1Input.mtr_auto[0], multi1Input.mtr_auto[1])
+            probability = random.randint(multiauto1Input.mtr_auto[0], multiauto1Input.mtr_auto[1])
             rand_num = random.randint(0, 100)
 
             if mtr_auto and rand_num < probability :
@@ -837,7 +906,7 @@ class GenerateLevel(QWidget):
         self.TimerDelay()
 
     def CheckOOB(self, new_height, idx):
-        if new_height < (multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx]) or new_height > (multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx]):
+        if new_height < (multiauto1Input.gauge_mean[idx] - multiauto1Input.gauge_dist[idx]) or new_height > (multiauto1Input.gauge_mean[idx] + multiauto1Input.gauge_dist[idx]):
             self.oob = True
         else:
             self.oob = False
@@ -1017,7 +1086,7 @@ class ChatWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
 
-        #delay = random.randint(multi1Input.chat_timer[0]*1000, multi1Input.chat_timer[1]*1000)
+        #delay = random.randint(multiauto1Input.chat_timer[0]*1000, multiauto1Input.chat_timer[1]*1000)
         self.timer.start(2000)
 
     def handle_user_message(self):
@@ -1058,7 +1127,7 @@ class ChatWidget(QWidget):
             gauge = next((g for g in gauges if getattr(g, "color_text", "") == color), None)
             idx = {"RED": 0, "YELLOW": 1, "GREEN": 2, "BLUE": 3}.get(color)
             if gauge:
-                mean, dist = multi1Input.gauge_mean[idx], multi1Input.gauge_dist[idx]
+                mean, dist = multiauto1Input.gauge_mean[idx], multiauto1Input.gauge_dist[idx]
                 low, high = mean - dist, mean + dist
                 curr_level = getattr(gauge, "monitor_level", 0)
                 q = question.lower()
@@ -1108,7 +1177,7 @@ class ChatWidget(QWidget):
 
         self.add_message_card(self.item)
 
-        probability = random.randint(multi1Input.chat_auto[0], multi1Input.chat_auto[1])
+        probability = random.randint(multiauto1Input.chat_auto[0], multiauto1Input.chat_auto[1])
         rand_num = random.randint(0, 100)
 
         if chat_auto and rand_num < probability:
@@ -1121,8 +1190,8 @@ class ChatWidget(QWidget):
 
         LogMultiTask("Chat Msg")
 
-        delay = random.randint(multi1Input.chat_timer[0]*1000,
-                           multi1Input.chat_timer[1]*1000)
+        delay = random.randint(multiauto1Input.chat_timer[0]*1000,
+                           multiauto1Input.chat_timer[1]*1000)
         self.timer.start(delay)
 
     def add_message_card(self, item: str):

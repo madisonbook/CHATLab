@@ -4,9 +4,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrMultiAuto1 import InstrMultiAuto1
+#from MultiTasks.multi_auto2 import Multi_Auto2
 
-class SumMulti2(QMainWindow):
+class SumMultiAuto2(QMainWindow):
     def __init__(self, stats: list[int]):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
@@ -18,11 +18,11 @@ class SumMulti2(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Multitasking 2 Complete")
+        title = Title("Multitasking with Automation 2 Complete")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Congratulations! You have successfully completed Multitasking 2.")
+        participate = Subtitle("Congratulations! You have successfully completed Multitasking with Automation 2.")
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
@@ -58,7 +58,7 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartChat(self):
-    self.showSum = InstrMultiAuto1()
-    self.showSum.show()
+    #self.showSum = Multi_Auto2()
+    #self.showSum.show()
     self.close()  
     pass

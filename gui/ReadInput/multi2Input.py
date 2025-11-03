@@ -22,10 +22,10 @@ chat_timer = []
 chat_auto = [] 
 duration = 0
 
-def read_multi1():
+def read_multi2():
     try:
 
-        with open('input_files/multi1_input.csv', 'r', newline='') as filename: 
+        with open('input_files/multi2_input.csv', 'r', newline='') as filename: 
             reader = csv.reader(filename)
 
             rows = list(reader)
@@ -38,7 +38,7 @@ def read_multi1():
 
             global nav_uav_x, nav_uav_y, nav_goal_x, nav_goal_y, nav_storm_x, nav_storm_y, nav_uav_fuel, nav_uav_speed
             nav_uav_x = [int(item) for item in rows[4][1:5]]
-            nav_uav_y = [int(item) for item in rows[5][1:5]]   
+            nav_uav_y = [int(item) for item in rows[5][1:5]]      
             nav_goal_x = [int(item) for item in rows[6][1:5]]
             nav_goal_y = [int(item) for item in rows[7][1:5]]
             nav_storm_x = [int(item) for item in rows[8][1:5]]
@@ -46,7 +46,7 @@ def read_multi1():
             nav_uav_fuel = [int(item) for item in rows[10][1:5]]
             nav_uav_speed = [int(item) for item in rows[11][1:5]]
 
-            global nav_path_angle, nav_auto_path, nav_auto, chat_timer, chat_auto, duration
+            global nav_path_angle, nav_auto_path, nav_auto, chat_timer, duration
             nav_path_angle = [int(item) for item in rows[12][1:5]]
             chat_timer = [int(item) for item in rows[13][1:3]]
 
