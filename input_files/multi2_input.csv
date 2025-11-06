@@ -12,4 +12,4 @@ nav_uav_fuel,1000,1000,1000,1000
 nav_uav_speed,3,3,3,3
 nav_path_angle,120,150,120,140
 chat_timer,8,10,,
-duration,30,,,
+duration,10,,,

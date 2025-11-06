@@ -54,7 +54,7 @@ class Multi_Auto2(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Multitasking 1")
+        title = Title("Task: Multitasking with Automation 2")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 
