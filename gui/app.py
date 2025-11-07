@@ -26,6 +26,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = MultiTask1()
+window = ConsentWindow()
 window.show()
 app.exec()

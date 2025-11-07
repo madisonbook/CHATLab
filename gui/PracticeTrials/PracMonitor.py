@@ -55,7 +55,7 @@ class PracMonitorLevels(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(30*1000, lambda: self.StartSummary())
+        QTimer.singleShot(singleTaskInput.gauge_duration*1000, lambda: self.StartSummary())
 
     def StartSummary(self):
         self.showSum = InstrMonitor()

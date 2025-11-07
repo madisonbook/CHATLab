@@ -189,7 +189,7 @@ class UAVNavigation(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(30*1000, lambda: self.StartSummary())
+        QTimer.singleShot(singleTaskInput.nav_duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
