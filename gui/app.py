@@ -3,11 +3,13 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from ConsentWindow import ConsentWindow
-from Instructions.InstrPracChat import InstrPracChat
+from Instructions.InstrPracUAV import InstrPracUAV
 from SingleTasks.ChatBoxTemp import ChatBox
 from MultiTasks.multi_auto1 import Multi_Auto1
 from MultiTasks.multi1 import MultiTask1
-from ReadInput.singleTaskInput import read_vals
+from ReadInput.singleTaskInput import read_single
+from ReadInput.practiceInput import read_practice
+from ReadInput.practiceMultiInput import read_practice_multi
 from ReadInput.multi1Input import read_multi1
 from ReadInput.multi2Input import read_multi2
 from ReadInput.multiauto1Input import read_multiauto1
@@ -15,7 +17,9 @@ from ReadInput.multiauto2Input import read_multiauto2
 from ReadInput.breakBlockInput import read_break
 
 try:
-    read_vals()
+    read_practice()
+    read_practice_multi()
+    read_single()
     read_multi1()
     read_multi2()
     read_multiauto1()
@@ -26,6 +30,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = ConsentWindow()
+window = InstrPracUAV()
 window.show()
 app.exec()

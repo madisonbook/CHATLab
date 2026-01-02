@@ -8,7 +8,7 @@ from PyQt6.QtGui import QFont, QBrush, QPen, QColor
 from Instructions.InstrMonitor import InstrMonitor
 #from SingleTaskSummaries.SumMonitor import SumMonitor
 from participant import PARTICIPANT_ID
-from ReadInput import singleTaskInput
+from ReadInput import practiceInput
 import random
 import datetime
 
@@ -55,7 +55,7 @@ class PracMonitorLevels(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(singleTaskInput.gauge_duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(practiceInput.gauge_duration*1000, lambda: self.StartSummary())
 
     def StartSummary(self):
         self.showSum = InstrMonitor()
@@ -68,7 +68,7 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        self.monitor_level = random.randint(singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx], singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx])
+        self.monitor_level = random.randint(practiceInput.gauge_mean[idx] - practiceInput.gauge_dist[idx], practiceInput.gauge_mean[idx] + practiceInput.gauge_dist[idx])
         self.oob_time = None
 
         self.animation_timer = QTimer(self)
@@ -108,11 +108,11 @@ class GenerateLevel(QWidget):
         outline.setPen(pen)
 
         top_bar = level.addRect(0, 0, 40, 0)
-        top_bar.setPos(0, singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx])
+        top_bar.setPos(0, practiceInput.gauge_mean[idx] - practiceInput.gauge_dist[idx])
         top_bar.setPen(pen)
 
         low_bar = level.addRect(0, 0, 40, 0)
-        low_bar.setPos(0, singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx])
+        low_bar.setPos(0, practiceInput.gauge_mean[idx] + practiceInput.gauge_dist[idx])
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
@@ -139,8 +139,8 @@ class GenerateLevel(QWidget):
 
     def ResetLevel(self, idx:int):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(singleTaskInput.gauge_mean[idx])
-        self.monitor_level = singleTaskInput.gauge_mean[idx]
+        self.AnimateHeight(practiceInput.gauge_mean[idx])
+        self.monitor_level = practiceInput.gauge_mean[idx]
         self.reset = True
 
         if self.oob:
@@ -154,12 +154,12 @@ class GenerateLevel(QWidget):
         pass
 
     def TimerDelay(self):
-        delay = random.randint(singleTaskInput.gauge_timer[0]*1000, singleTaskInput.gauge_timer[1]*1000)
+        delay = random.randint(practiceInput.gauge_timer[0]*1000, practiceInput.gauge_timer[1]*1000)
         self.reset = False
         self.timer.start(delay)
 
     def ChangeHeight(self, idx: int):
-        new_height = max(10, min(290, int(random.normalvariate(singleTaskInput.gauge_mean[idx], singleTaskInput.gauge_sd[idx]))))
+        new_height = max(10, min(290, int(random.normalvariate(practiceInput.gauge_mean[idx], practiceInput.gauge_sd[idx]))))
         
         self.AnimateHeight(new_height)
         self.monitor_level = new_height
@@ -176,7 +176,7 @@ class GenerateLevel(QWidget):
         self.TimerDelay()
 
     def CheckOOB(self, new_height, idx):
-        if new_height < (singleTaskInput.gauge_mean[idx] - singleTaskInput.gauge_dist[idx]) or new_height > (singleTaskInput.gauge_mean[idx] + singleTaskInput.gauge_dist[idx]):
+        if new_height < (practiceInput.gauge_mean[idx] - practiceInput.gauge_dist[idx]) or new_height > (practiceInput.gauge_mean[idx] + practiceInput.gauge_dist[idx]):
             self.oob = True
         else:
             self.oob = False

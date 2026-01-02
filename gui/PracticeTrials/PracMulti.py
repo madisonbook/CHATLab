@@ -11,7 +11,7 @@ import math
 from .PracUAVItem import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-from ReadInput import multi1Input
+from ReadInput import practiceMultiInput
 from DataLogging.LogMulti import LogMulti, MultiCSV
 from Instructions.InstrMulti1 import InstrMulti1
 import random
@@ -72,23 +72,23 @@ class PracMulti(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
-        storm_items = [StormItem(1, multi1Input.nav_storm_x[0], multi1Input.nav_storm_y[0]),
-                      StormItem(2, multi1Input.nav_storm_x[1], multi1Input.nav_storm_y[1]),
-                      StormItem(3, multi1Input.nav_storm_x[2], multi1Input.nav_storm_y[2]),
-                      StormItem(4, multi1Input.nav_storm_x[3], multi1Input.nav_storm_y[3])]
+        storm_items = [StormItem(1, practiceMultiInput.nav_storm_x[0], practiceMultiInput.nav_storm_y[0]),
+                      StormItem(2, practiceMultiInput.nav_storm_x[1], practiceMultiInput.nav_storm_y[1]),
+                      StormItem(3, practiceMultiInput.nav_storm_x[2], practiceMultiInput.nav_storm_y[2]),
+                      StormItem(4, practiceMultiInput.nav_storm_x[3], practiceMultiInput.nav_storm_y[3])]
 
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, multi1Input.nav_goal_x[0], multi1Input.nav_goal_y[0]),
-                      GoalItem(2, multi1Input.nav_goal_x[1], multi1Input.nav_goal_y[1]),
-                      GoalItem(3, multi1Input.nav_goal_x[2], multi1Input.nav_goal_y[2]),
-                      GoalItem(4, multi1Input.nav_goal_x[3], multi1Input.nav_goal_y[3])]
+        goal_items = [GoalItem(1, practiceMultiInput.nav_goal_x[0], practiceMultiInput.nav_goal_y[0]),
+                      GoalItem(2, practiceMultiInput.nav_goal_x[1], practiceMultiInput.nav_goal_y[1]),
+                      GoalItem(3, practiceMultiInput.nav_goal_x[2], practiceMultiInput.nav_goal_y[2]),
+                      GoalItem(4, practiceMultiInput.nav_goal_x[3], practiceMultiInput.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
-        uav_blue = UAVItem(1, "#90D5FF", "BLUE", multi1Input.nav_uav_x[0], multi1Input.nav_uav_y[0],
-                           goal_items[0], goal_items, storm_items, multi1Input.nav_uav_fuel[0], 
-                           multi1Input.nav_uav_speed[0], multi1Input.nav_path_angle[0], self.HandleClick, left_nav)
+        uav_blue = UAVItem(1, "#90D5FF", "BLUE", practiceMultiInput.nav_uav_x[0], practiceMultiInput.nav_uav_y[0],
+                           goal_items[0], goal_items, storm_items, practiceMultiInput.nav_uav_fuel[0], 
+                           practiceMultiInput.nav_uav_speed[0], practiceMultiInput.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
         uav_blue.goal_item.setZValue(2)
@@ -109,9 +109,9 @@ class PracMulti(QMainWindow):
         uav_blue.ra_path.setVisible(False)
         uav_blue.ra_label.setVisible(False)
    
-        uav_red = UAVItem(2, "#FF7F7F", "RED", multi1Input.nav_uav_x[1], multi1Input.nav_uav_y[1],
-                          goal_items[1], goal_items, storm_items, multi1Input.nav_uav_fuel[1], 
-                           multi1Input.nav_uav_speed[1], multi1Input.nav_path_angle[1], self.HandleClick, left_nav)
+        uav_red = UAVItem(2, "#FF7F7F", "RED", practiceMultiInput.nav_uav_x[1], practiceMultiInput.nav_uav_y[1],
+                          goal_items[1], goal_items, storm_items, practiceMultiInput.nav_uav_fuel[1], 
+                           practiceMultiInput.nav_uav_speed[1], practiceMultiInput.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
         uav_red.goal_item.setZValue(2)
@@ -132,9 +132,9 @@ class PracMulti(QMainWindow):
         uav_red.ra_path.setVisible(False)
         uav_red.ra_label.setVisible(False)
 
-        uav_green = UAVItem(3, "#88E788", "GREEN", multi1Input.nav_uav_x[2], multi1Input.nav_uav_y[2],
-                           goal_items[2], goal_items, storm_items, multi1Input.nav_uav_fuel[2], 
-                           multi1Input.nav_uav_speed[2], multi1Input.nav_path_angle[2], self.HandleClick, left_nav)
+        uav_green = UAVItem(3, "#88E788", "GREEN", practiceMultiInput.nav_uav_x[2], practiceMultiInput.nav_uav_y[2],
+                           goal_items[2], goal_items, storm_items, practiceMultiInput.nav_uav_fuel[2], 
+                           practiceMultiInput.nav_uav_speed[2], practiceMultiInput.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
         uav_green.goal_item.setZValue(2)
@@ -155,9 +155,9 @@ class PracMulti(QMainWindow):
         uav_green.ra_path.setVisible(False)
         uav_green.ra_label.setVisible(False)
 
-        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", multi1Input.nav_uav_x[3], multi1Input.nav_uav_y[3], 
-                           goal_items[3], goal_items, storm_items, multi1Input.nav_uav_fuel[3], 
-                           multi1Input.nav_uav_speed[3], multi1Input.nav_path_angle[3], self.HandleClick, left_nav)
+        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", practiceMultiInput.nav_uav_x[3], practiceMultiInput.nav_uav_y[3], 
+                           goal_items[3], goal_items, storm_items, practiceMultiInput.nav_uav_fuel[3], 
+                           practiceMultiInput.nav_uav_speed[3], practiceMultiInput.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
         uav_yellow.goal_item.setZValue(2)
@@ -239,7 +239,7 @@ class PracMulti(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(multi1Input.duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(practiceMultiInput.duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
@@ -606,8 +606,8 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
-        height = max(10, min(240, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
-        #self.monitor_level = random.randint(multi1Input.gauge_mean[idx] - multi1Input.gauge_sd[idx], multi1Input.gauge_mean[idx] + multi1Input.gauge_sd[idx])
+        height = max(10, min(240, int(random.normalvariate(practiceMultiInput.gauge_mean[idx], practiceMultiInput.gauge_sd[idx]))))
+        #self.monitor_level = random.randint(practiceMultiInput.gauge_mean[idx] - practiceMultiInput.gauge_sd[idx], practiceMultiInput.gauge_mean[idx] + practiceMultiInput.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
         self.setFixedHeight(350)
@@ -650,11 +650,11 @@ class GenerateLevel(QWidget):
         outline.setPen(pen)
 
         top_bar = level.addRect(0, 0, 40, 0)
-        top_bar.setPos(0, multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx])
+        top_bar.setPos(0, practiceMultiInput.gauge_mean[idx] - practiceMultiInput.gauge_dist[idx])
         top_bar.setPen(pen)
 
         low_bar = level.addRect(0, 0, 40, 0)
-        low_bar.setPos(0, multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx])
+        low_bar.setPos(0, practiceMultiInput.gauge_mean[idx] + practiceMultiInput.gauge_dist[idx])
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
@@ -681,8 +681,8 @@ class GenerateLevel(QWidget):
 
     def ResetLevel(self, idx:int):
         #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(multi1Input.gauge_mean[idx])
-        self.monitor_level = multi1Input.gauge_mean[idx]
+        self.AnimateHeight(practiceMultiInput.gauge_mean[idx])
+        self.monitor_level = practiceMultiInput.gauge_mean[idx]
         self.reset = True
 
         if self.oob:
@@ -696,12 +696,12 @@ class GenerateLevel(QWidget):
         pass
 
     def TimerDelay(self):
-        delay = random.randint(multi1Input.gauge_timer[0]*1000, multi1Input.gauge_timer[1]*1000)
+        delay = random.randint(practiceMultiInput.gauge_timer[0]*1000, practiceMultiInput.gauge_timer[1]*1000)
         self.reset = False
         self.timer.start(delay)
 
     def ChangeHeight(self, idx: int):
-        new_height = max(10, min(290, int(random.normalvariate(multi1Input.gauge_mean[idx], multi1Input.gauge_sd[idx]))))
+        new_height = max(10, min(290, int(random.normalvariate(practiceMultiInput.gauge_mean[idx], practiceMultiInput.gauge_sd[idx]))))
         
         self.AnimateHeight(new_height)
         self.monitor_level = new_height
@@ -718,7 +718,7 @@ class GenerateLevel(QWidget):
         self.TimerDelay()
 
     def CheckOOB(self, new_height, idx):
-        if new_height < (multi1Input.gauge_mean[idx] - multi1Input.gauge_dist[idx]) or new_height > (multi1Input.gauge_mean[idx] + multi1Input.gauge_dist[idx]):
+        if new_height < (practiceMultiInput.gauge_mean[idx] - practiceMultiInput.gauge_dist[idx]) or new_height > (practiceMultiInput.gauge_mean[idx] + practiceMultiInput.gauge_dist[idx]):
             self.oob = True
         else:
             self.oob = False
@@ -859,7 +859,7 @@ class ChatWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.add_random_message)
 
-        #delay = random.randint(multi1Input.chat_timer[0]*1000, multi1Input.chat_timer[1]*1000)
+        #delay = random.randint(practiceMultiInput.chat_timer[0]*1000, practiceMultiInput.chat_timer[1]*1000)
         self.timer.start(2000)
 
     def handle_user_message(self):
@@ -895,7 +895,7 @@ class ChatWidget(QWidget):
             gauge = next((g for g in gauges if getattr(g, "color_text", "") == color), None)
             idx = {"RED": 0, "YELLOW": 1, "GREEN": 2, "BLUE": 3}.get(color)
             if gauge:
-                mean, dist = multi1Input.gauge_mean[idx], multi1Input.gauge_dist[idx]
+                mean, dist = practiceMultiInput.gauge_mean[idx], practiceMultiInput.gauge_dist[idx]
                 low, high = mean - dist, mean + dist
                 curr_level = getattr(gauge, "monitor_level", 0)
                 q = question.lower()
@@ -951,8 +951,8 @@ class ChatWidget(QWidget):
 
         #LogMultiTask("Chat Msg")
 
-        delay = random.randint(multi1Input.chat_timer[0]*1000,
-                           multi1Input.chat_timer[1]*1000)
+        delay = random.randint(practiceMultiInput.chat_timer[0]*1000,
+                           practiceMultiInput.chat_timer[1]*1000)
         self.timer.start(delay)
 
     def add_message_card(self, item: str):

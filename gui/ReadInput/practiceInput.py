@@ -20,10 +20,10 @@ nav_duration = None
 chat_timer = []
 chat_duration = None
 
-def read_single():
+def read_practice():
     try:
 
-        with open('input_files/single_task_input.csv', 'r', newline='') as filename: 
+        with open('input_files/practice_input.csv', 'r', newline='') as filename: 
             reader = csv.reader(filename)
 
             rows = list(reader)

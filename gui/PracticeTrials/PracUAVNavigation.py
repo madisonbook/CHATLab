@@ -12,7 +12,7 @@ from Instructions.InstrUAV import InstrUAV
 from .PracUAVItem import UAVItem
 from SingleTasks.NavItems import GoalItem, StormItem
 from participant import PARTICIPANT_ID
-from ReadInput import singleTaskInput
+from ReadInput import practiceInput
 from DataLogging.LogNavigation import LogNavigation
 
 summary = []
@@ -58,23 +58,23 @@ class UAVNavigation(QMainWindow):
         left_nav.addItem(home_base[0])
         left_nav.addItem(home_base[1])
 
-        storm_items = [StormItem(1, singleTaskInput.nav_storm_x[0], singleTaskInput.nav_storm_y[0]),
-                      StormItem(2, singleTaskInput.nav_storm_x[1], singleTaskInput.nav_storm_y[1]),
-                      StormItem(3, singleTaskInput.nav_storm_x[2], singleTaskInput.nav_storm_y[2]),
-                      StormItem(4, singleTaskInput.nav_storm_x[3], singleTaskInput.nav_storm_y[3])]
+        storm_items = [StormItem(1, practiceInput.nav_storm_x[0], practiceInput.nav_storm_y[0]),
+                      StormItem(2, practiceInput.nav_storm_x[1], practiceInput.nav_storm_y[1]),
+                      StormItem(3, practiceInput.nav_storm_x[2], practiceInput.nav_storm_y[2]),
+                      StormItem(4, practiceInput.nav_storm_x[3], practiceInput.nav_storm_y[3])]
 
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, singleTaskInput.nav_goal_x[0], singleTaskInput.nav_goal_y[0]),
-                      GoalItem(2, singleTaskInput.nav_goal_x[1], singleTaskInput.nav_goal_y[1]),
-                      GoalItem(3, singleTaskInput.nav_goal_x[2], singleTaskInput.nav_goal_y[2]),
-                      GoalItem(4, singleTaskInput.nav_goal_x[3], singleTaskInput.nav_goal_y[3])]
+        goal_items = [GoalItem(1, practiceInput.nav_goal_x[0], practiceInput.nav_goal_y[0]),
+                      GoalItem(2, practiceInput.nav_goal_x[1], practiceInput.nav_goal_y[1]),
+                      GoalItem(3, practiceInput.nav_goal_x[2], practiceInput.nav_goal_y[2]),
+                      GoalItem(4, practiceInput.nav_goal_x[3], practiceInput.nav_goal_y[3])]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
-        uav_blue = UAVItem(1, "#90D5FF", "BLUE", singleTaskInput.nav_uav_x[0], singleTaskInput.nav_uav_y[0],
-                           goal_items[0], goal_items, storm_items, singleTaskInput.nav_uav_fuel[0], 
-                           singleTaskInput.nav_uav_speed[0], singleTaskInput.nav_path_angle[0], self.HandleClick, left_nav)
+        uav_blue = UAVItem(1, "#90D5FF", "BLUE", practiceInput.nav_uav_x[0], practiceInput.nav_uav_y[0],
+                           goal_items[0], goal_items, storm_items, practiceInput.nav_uav_fuel[0], 
+                           practiceInput.nav_uav_speed[0], practiceInput.nav_path_angle[0], self.HandleClick, left_nav)
         UAVs.append(uav_blue)
         uav_blue.uav_item.setZValue(3)
         uav_blue.goal_item.setZValue(2)
@@ -95,9 +95,9 @@ class UAVNavigation(QMainWindow):
         uav_blue.ra_path.setVisible(False)
         uav_blue.ra_label.setVisible(False)
    
-        uav_red = UAVItem(2, "#FF7F7F", "RED", singleTaskInput.nav_uav_x[1], singleTaskInput.nav_uav_y[1],
-                          goal_items[1], goal_items, storm_items, singleTaskInput.nav_uav_fuel[1], 
-                           singleTaskInput.nav_uav_speed[1], singleTaskInput.nav_path_angle[1], self.HandleClick, left_nav)
+        uav_red = UAVItem(2, "#FF7F7F", "RED", practiceInput.nav_uav_x[1], practiceInput.nav_uav_y[1],
+                          goal_items[1], goal_items, storm_items, practiceInput.nav_uav_fuel[1], 
+                           practiceInput.nav_uav_speed[1], practiceInput.nav_path_angle[1], self.HandleClick, left_nav)
         UAVs.append(uav_red)
         uav_red.uav_item.setZValue(3)
         uav_red.goal_item.setZValue(2)
@@ -118,9 +118,9 @@ class UAVNavigation(QMainWindow):
         uav_red.ra_path.setVisible(False)
         uav_red.ra_label.setVisible(False)
 
-        uav_green = UAVItem(3, "#88E788", "GREEN", singleTaskInput.nav_uav_x[2], singleTaskInput.nav_uav_y[2],
-                           goal_items[2], goal_items, storm_items, singleTaskInput.nav_uav_fuel[2], 
-                           singleTaskInput.nav_uav_speed[2], singleTaskInput.nav_path_angle[2], self.HandleClick, left_nav)
+        uav_green = UAVItem(3, "#88E788", "GREEN", practiceInput.nav_uav_x[2], practiceInput.nav_uav_y[2],
+                           goal_items[2], goal_items, storm_items, practiceInput.nav_uav_fuel[2], 
+                           practiceInput.nav_uav_speed[2], practiceInput.nav_path_angle[2], self.HandleClick, left_nav)
         UAVs.append(uav_green)
         uav_green.uav_item.setZValue(3)
         uav_green.goal_item.setZValue(2)
@@ -141,9 +141,9 @@ class UAVNavigation(QMainWindow):
         uav_green.ra_path.setVisible(False)
         uav_green.ra_label.setVisible(False)
 
-        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", singleTaskInput.nav_uav_x[3], singleTaskInput.nav_uav_y[3], 
-                           goal_items[3], goal_items, storm_items, singleTaskInput.nav_uav_fuel[3], 
-                           singleTaskInput.nav_uav_speed[3], singleTaskInput.nav_path_angle[3], self.HandleClick, left_nav)
+        uav_yellow = UAVItem(4, "#FFEE8c", "YELLOW", practiceInput.nav_uav_x[3], practiceInput.nav_uav_y[3], 
+                           goal_items[3], goal_items, storm_items, practiceInput.nav_uav_fuel[3], 
+                           practiceInput.nav_uav_speed[3], practiceInput.nav_path_angle[3], self.HandleClick, left_nav)
         UAVs.append(uav_yellow)
         uav_yellow.uav_item.setZValue(3)
         uav_yellow.goal_item.setZValue(2)
@@ -189,7 +189,7 @@ class UAVNavigation(QMainWindow):
         main_layout.addStretch()
         self.showMaximized()
 
-        QTimer.singleShot(singleTaskInput.nav_duration*1000, lambda: self.StartSummary())
+        QTimer.singleShot(practiceInput.nav_duration*1000, lambda: self.StartSummary())
 
     def CreatePathChooser(self):
         self.path_stack = QStackedWidget()
