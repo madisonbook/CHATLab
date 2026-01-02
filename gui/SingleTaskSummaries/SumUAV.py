@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrChat import InstrChat
+from Instructions.InstrPracChat import InstrPracChat
 
 class SumUAV(QMainWindow):
     def __init__(self, stats: list[int]):
@@ -58,7 +58,7 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartChat(self):
-    self.instrChat = InstrChat()
+    self.instrChat = InstrPracChat()
     self.instrChat.show()
     self.close()
     pass

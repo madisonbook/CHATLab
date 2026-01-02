@@ -1,8 +1,2 @@
 participant_id,block,trial,time,auto,auto_type,message,response,correct_answer,rxn_time
-83c091c5,1,3,08:03:40,False,None,Is GAUGE YELLOW below the bounds?,N/A,,N/A
-83c091c5,1,3,08:03:45,False,None,Is GAUGE YELLOW below the bounds?,no,No,4.635052
-83c091c5,1,3,08:03:49,False,None,Is GAUGE BLUE within the bounds?,N/A,,N/A
-83c091c5,1,3,08:03:53,False,None,Is GAUGE BLUE within the bounds?,No,No,3.509986
-83c091c5,1,3,08:03:56,False,None,What is the length of Path A for UAV BLUE?,N/A,,N/A
-83c091c5,1,3,08:04:01,False,None,What is the length of Path A for UAV BLUE?,217,217 km,5.188721
-83c091c5,1,3,08:04:08,False,None,What is the current goal of UAV BLUE?,N/A,,N/A
+511545a8,1,3,10:56:01,False,None,What is the length of Path A for UAV YELLOW?,N/A,,N/A

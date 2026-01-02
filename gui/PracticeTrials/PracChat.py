@@ -47,7 +47,7 @@ class ChatBox(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: Chat Box")
+        title = Title("Task: Practice Chat Box")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 

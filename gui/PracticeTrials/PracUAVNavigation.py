@@ -36,7 +36,7 @@ class UAVNavigation(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setLayout(main_layout)
 
-        title = Title("Task: UAV Navigation")
+        title = Title("Task: Practice UAV Navigation")
         main_layout.addWidget(title)
         main_layout.addSpacing(25)
 
