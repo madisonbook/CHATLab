@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from ConsentWindow import ConsentWindow
-from Instructions.InstrPracUAV import InstrPracUAV
+from Instructions.InstrPracChat import InstrPracChat
 from SingleTasks.ChatBoxTemp import ChatBox
 from MultiTasks.multi_auto1 import Multi_Auto1
 from MultiTasks.multi1 import MultiTask1
@@ -30,6 +30,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = InstrPracUAV()
+window = InstrPracChat()
 window.show()
 app.exec()

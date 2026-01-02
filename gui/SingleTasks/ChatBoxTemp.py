@@ -684,19 +684,7 @@ class GenerateLevel(QWidget):
         #self.TimerDelay()
 
     def ResetLevel(self, idx:int):
-        #self.inner_level.setRect(0, 0, base_width, mean_level)
-        self.AnimateHeight(singleTaskInput.gauge_mean[idx])
-        self.monitor_level = singleTaskInput.gauge_mean[idx]
-        self.reset = True
-
-        if self.oob:
-            global total_reset 
-            total_reset = total_reset + 1
-            self.oob = False
-            #LogGauges()
-
-        self.oob_time = None
-        self.TimerDelay()
+        
         pass
 
     def TimerDelay(self):
