@@ -39,16 +39,16 @@ class ConsentWindow(QMainWindow):
         questions = QWidget()
         questions.setLayout(self.stacked_questions)
 
-        self.q_employment = QWidget()
-        q1 = QVBoxLayout()
-        self.group1_title = GroupTitle("Are you currently employed by NC State?")
-        group1, self.radio1_1, self.radio1_2 = EmployedGroup()
-        button_layout, self.button_employed = SubmitEmployeed(self, self.radio1_1, self.radio1_2)
+        #self.q_employment = QWidget()
+        #q1 = QVBoxLayout()
+        #self.group1_title = GroupTitle("Are you currently employed by NC State?")
+        #group1, self.radio1_1, self.radio1_2 = EmployedGroup()
+        #button_layout, self.button_employed = SubmitEmployeed(self, self.radio1_1, self.radio1_2)
 
-        q1.addWidget(self.group1_title)
-        q1.addLayout(group1)
-        q1.addLayout(button_layout)
-        self.q_employment.setLayout(q1)
+        #q1.addWidget(self.group1_title)
+        #q1.addLayout(group1)
+        #q1.addLayout(button_layout)
+        #self.q_employment.setLayout(q1)
         
         self.q_consent = QWidget()
         q2 = QVBoxLayout()
@@ -61,7 +61,7 @@ class ConsentWindow(QMainWindow):
         q2.addLayout(button_layout2)
         self.q_consent.setLayout(q2)
 
-        self.stacked_questions.addWidget(self.q_employment)
+        #self.stacked_questions.addWidget(self.q_employment)
         self.stacked_questions.addWidget(self.q_consent)
 
         body_layout.addWidget(questions)
