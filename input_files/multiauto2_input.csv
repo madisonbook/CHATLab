@@ -3,6 +3,8 @@ gauge_dist,15,50,50,20
 gauge_sd,60,30,50,40
 gauge_timer,5,10,,
 mtr_auto,100,100,,
+mtr_auto_oas,True,,,
+mtr_auto_clickable,True,,,
 nav_uav_x,200,300,400,600
 nav_uav_y,500,200,500,150
 nav_goal_x,400,100,600,300
@@ -14,6 +16,10 @@ nav_uav_speed,4,4,4,4
 nav_path_angle,140,100,150,160
 nav_auto_path,10,,,
 nav_auto,100,100,,
+nav_auto_oas,True,,,
+nav_auto_clickable,True,,,
 chat_timer,8,10,,
 chat_auto,100,100,,
+chat_auto_oas,True,,,
+chat_auto_clickable,False,,,
 duration,10,,,

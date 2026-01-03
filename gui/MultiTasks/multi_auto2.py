@@ -654,10 +654,23 @@ class Multi_Auto2(QMainWindow):
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
     def CreateAutomationButton(self, label, state_var_name):
-        button = QPushButton(f"Auto is OFF")
+
+        oas_name = f"{state_var_name}_oas"
+        clickable_name = f"{state_var_name}_clickable"
+
+        start_on = getattr(multiauto2Input, oas_name, False)
+        clickable = getattr(multiauto2Input, clickable_name, True)
+
+        globals()[state_var_name] = start_on
+
+
+        button = QPushButton()
         button.setFont(QFont("Times New Roman", 12))
         button.setCheckable(True)
-        button.setStyleSheet("""
+        button.setChecked(start_on)
+        button.setText(f"Auto is {'ON' if start_on else 'OFF'}")
+
+        enabled_style = """
             QPushButton {
                 border: 2px solid black;
                 border-radius: 6px;
@@ -669,7 +682,20 @@ class Multi_Auto2(QMainWindow):
             QPushButton:hover {
                 background-color: #f0f0f0;
             }
-        """)
+        """
+
+        disabled_style = """
+            QPushButton {
+                border: 2px solid gray;
+                border-radius: 6px;
+                padding: 4px 10px;
+                color: gray;
+                background-color: #e0e0e0;
+            }
+        """
+
+        button.setStyleSheet(enabled_style if clickable else disabled_style)
+        button.setEnabled(clickable)
 
         def toggle_state():
             global mtr_auto, nav_auto, chat_auto
@@ -678,14 +704,16 @@ class Multi_Auto2(QMainWindow):
             new_state = not current_state
             globals()[state_var_name] = new_state
 
-            button.setText(f"Auto is {'ON ' if new_state else 'OFF'}")
-            #print(f"{state_var_name} = {mtr_auto}")
+            button.setText(f"Auto is {'ON' if new_state else 'OFF'}")
+            button.setChecked(new_state)
 
-            LogMultiTask(f"{state_var_name} {'ON ' if new_state else 'OFF'}")
-            
-        button.clicked.connect(toggle_state)
+            LogMultiTask(f"{state_var_name} {'ON' if new_state else 'OFF'}")
+
+        if clickable:
+            button.clicked.connect(toggle_state)
 
         return button
+
     
     def closeEvent(self, event):
         """Stop all timers when window closes to prevent logging from previous tasks"""
