@@ -1,0 +1,27 @@
+gauge_mean,the mean value of each of the 4 gauges. This is the center between the bounding bars.
+gauge_dist,the distance between the upper or lower bar and the mean for each of the 4 gauges.
+gauge_sd,the standard deviation of the normal distribution used to update the bar levels for each of the 4 gauges.
+gauge_timer,minimum and maximum bounds in seconds that the gauges will update.
+mtr_auto,minimum and maximum bounds on the accurracy of the automation.
+mtr_auto_oas,is gauge automation on at start? True if yes, False if no.
+mtr_auto_clickable,can gauge automation be toggled on/off? True if yes, False if no.
+nav_uav_x,x coordinates of the starting positions of the 4 UAVs.
+nav_uav_y,y coordinates of the starting positions of the 4 UAVs.
+nav_goal_x,x coordinates of the positions of the 4 goal positions.
+nav_goal_y,y coordinates of the positions of the 4 goal positions.
+nav_storm_x,x coordinates of the starting positions of the 4 storms.
+nav_storm_y,y coordinates of the starting positions of the 4 storms.
+nav_uav_fuel,starting fuel levels for each of the 4 UAVs.
+nav_uav_speed,speed of each of the 4 UAVs.
+nav_path_angle,path angle of the initial B path generated for each of the 4 UAVs.
+nav_auto_path,sensitivity of path recommendation, how much longer should path B be to be recommended?
+nav_auto,minimum and maximum bounds on the accurracy of the automation.
+nav_auto_oas,is navigation automation on at start? True if yes, False if no.
+nav_auto_clickable,can navigation automation be toggled on/off? True if yes, False if no.
+chat_timer,minimum and maximum bounds of seconds between chat messages.
+chat_auto,minimum and maximum bounds on the accurracy of the automation.
+chat_auto_oas,is chat box automation on at start? True if yes, False if no.
+chat_auto_clickable,can chat box automation be toggled on/off? True if yes, False if no.
+duration,duration of the task in seconds
+
+break_block_input.txt,each line corresponds to its own instructional block. Helpful to use an editor with line numbers.
