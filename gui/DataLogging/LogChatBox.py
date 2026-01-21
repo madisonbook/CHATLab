@@ -1,11 +1,12 @@
 import datetime
+import os
 import csv
 from participant import PARTICIPANT_ID
 
 chat_log = []
 
 def LogChatBox(block, trial, chat_box, answer, msg_time, auto, auto_type):
-    curr_format = datetime.datetime.now().strftime("%H:%M:%S")
+    curr_format = datetime.datetime.now().strftime("%m:%d:%Y_%H:%M:%S")
     curr_time = datetime.datetime.now()
 
     data_row = [
@@ -40,7 +41,13 @@ def ChatBoxCSV(filename="output_files/chat_log.csv"):
         "participant_id", "block", "trial", "time", "auto", "auto_type", "message", "response", "correct_answer", "rxn_time"
     ]
 
-    with open(filename, "w", newline="") as file:
+    file_exists = os.path.exists(filename)
+    write_header = not file_exists or os.path.getsize(filename) == 0
+
+    with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(file_header)
+
+        if write_header:
+            writer.writerow(file_header)
+
         writer.writerows(chat_log)

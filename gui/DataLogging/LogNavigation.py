@@ -1,12 +1,13 @@
 import datetime
 import csv
+import os
 from participant import PARTICIPANT_ID
 
 navigation_log = []
 total_score = 0
 
 def LogNavigation(block, trial, uavs, auto, auto_type):
-    curr_format = datetime.datetime.now().strftime("%H:%M:%S")
+    curr_format = datetime.datetime.now().strftime("%m:%d:%Y_%H:%M:%S")
     sum_goals = 0
     #total_score = 0
     #max_score = 0
@@ -62,7 +63,13 @@ def NavigationCSV(filename="output_files/navigation_log.csv"):
         "total_goals_reached", "total_score"
     ]
 
-    with open(filename, "w", newline="") as file:
+    file_exists = os.path.exists(filename)
+    write_header = not file_exists or os.path.getsize(filename) == 0
+
+    with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(file_header)
+
+        if write_header:
+            writer.writerow(file_header)
+
         writer.writerows(navigation_log)

@@ -1,5 +1,6 @@
 import datetime
 import csv
+import os
 from participant import PARTICIPANT_ID
 
 
@@ -14,7 +15,7 @@ def ClearMultiLog():
 
 def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
     
-    curr_format = datetime.datetime.now().strftime("%H:%M:%S")
+    curr_format = datetime.datetime.now().strftime("%m:%d:%Y_%H:%M:%S")
     curr_time = datetime.datetime.now()
     sum_goals = 0
     
@@ -101,21 +102,35 @@ def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, 
 def MultiCSV(filename):
 
     file_header = [
-        "participant_id", "block", "trial", "time", "type", "mtr_auto1", "mtr_auto2"
+        "participant_id", "block", "trial", "time", "type", "mtr_auto1", "mtr_auto2",
         "gauge1_level", "gauge1_oob", "gauge1_reset",
         "gauge2_level", "gauge2_oob", "gauge2_reset",
         "gauge3_level", "gauge3_oob", "gauge3_reset",
         "gauge4_level", "gauge4_oob", "gauge4_reset",
         "total_oob", "total_reset", "mtr_rxn_time", "nav_auto",
-        "uav1_moving", "uav1_idle", "uav1_fuel", "uav1_patha_length", "uav1_patha_stormchance", "uav1_pathb_length", "uav1_pathb_stormchance", "uav1_onpath", "uav1_stormhit", "uav1_goal", "uav1_atgoal", "uav1_goalsreached", "uav1_score",
-        "uav2_moving", "uav2_idle", "uav2_fuel", "uav2_patha_length", "uav2_patha_stormchance", "uav2_pathb_length", "uav2_pathb_stormchance", "uav2_onpath", "uav2_stormhit", "uav2_goal", "uav2_atgoal", "uav2_goalsreached", "uav2_score",
-        "uav3_moving", "uav3_idle", "uav3_fuel", "uav3_patha_length", "uav3_patha_stormchance", "uav3_pathb_length", "uav3_pathb_stormchance", "uav3_onpath", "uav3_stormhit", "uav3_goal", "uav3_atgoal", "uav3_goalsreached", "uav3_score",
-        "uav4_moving", "uav4_idle", "uav4_fuel", "uav4_patha_length", "uav4_patha_stormchance", "uav4_pathb_length", "uav4_pathb_stormchance", "uav4_onpath", "uav4_stormhit", "uav4_goal", "uav4_atgoal", "uav4_goalsreached", "uav4_score",
+        "uav1_moving", "uav1_idle", "uav1_fuel", "uav1_patha_length", "uav1_patha_stormchance",
+        "uav1_pathb_length", "uav1_pathb_stormchance", "uav1_onpath", "uav1_stormhit",
+        "uav1_goal", "uav1_atgoal", "uav1_goalsreached", "uav1_score",
+        "uav2_moving", "uav2_idle", "uav2_fuel", "uav2_patha_length", "uav2_patha_stormchance",
+        "uav2_pathb_length", "uav2_pathb_stormchance", "uav2_onpath", "uav2_stormhit",
+        "uav2_goal", "uav2_atgoal", "uav2_goalsreached", "uav2_score",
+        "uav3_moving", "uav3_idle", "uav3_fuel", "uav3_patha_length", "uav3_patha_stormchance",
+        "uav3_pathb_length", "uav3_pathb_stormchance", "uav3_onpath", "uav3_stormhit",
+        "uav3_goal", "uav3_atgoal", "uav3_goalsreached", "uav3_score",
+        "uav4_moving", "uav4_idle", "uav4_fuel", "uav4_patha_length", "uav4_patha_stormchance",
+        "uav4_pathb_length", "uav4_pathb_stormchance", "uav4_onpath", "uav4_stormhit",
+        "uav4_goal", "uav4_atgoal", "uav4_goalsreached", "uav4_score",
         "total_goals_reached", "total_score",
         "chat_auto", "message", "response", "correct_answer", "chat_rxn_time"
     ]
 
-    with open(filename, "w", newline="") as file:
+    file_exists = os.path.exists(filename)
+    write_header = not file_exists or os.path.getsize(filename) == 0
+
+    with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(file_header)
+
+        if write_header:
+            writer.writerow(file_header)
+
         writer.writerows(multi_log)

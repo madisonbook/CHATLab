@@ -1,12 +1,13 @@
 import datetime
 import csv
+import os
 from participant import PARTICIPANT_ID
 
 monitor_log = []
 
 def LogMonitor(block, trial, gauges, auto, auto_type, total_oob, total_reset):
     curr_time = datetime.datetime.now()
-    curr_format = datetime.datetime.now().strftime("%H:%M:%S")
+    curr_format = datetime.datetime.now().strftime("%m:%d:%Y_%H:%M:%S")
 
     data_row = [
         PARTICIPANT_ID, 
@@ -57,7 +58,13 @@ def MonitorCSV(filename="output_files/monitor_log.csv"):
         "total_oob", "total_reset", "rxn_time"
     ]
 
-    with open(filename, "w", newline="") as file:
+    file_exists = os.path.exists(filename)
+    write_header = not file_exists or os.path.getsize(filename) == 0
+
+    with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(file_header)
+
+        if write_header:
+            writer.writerow(file_header)
+
         writer.writerows(monitor_log)
