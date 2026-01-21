@@ -1,0 +1,34 @@
+participant_id,UUID given to participant across all trials
+block,the trial block the participant is in
+trial,the trial within the block the participant is in
+time,the date and timestamp of the logged action
+type,the type of action that set off the data logging
+mtr_auto1,is monitor automation 1 on? True if yes False if no.
+mtr_auto2,is monitor automation 2 on? True if yes False if no.
+gaugeN_level,the current height level of the Nth gauge
+gaugeN_oob,is the Nth gauge out of bounds? True if yes False if no.
+gaugeN_reset,is the Nth gauge being reset? True if yes False if no.
+total_oob,the total number of gauges that have gone out of bounds in the task
+total_reset,the total number of times gauges have been reset.
+mtr_rxn_time,the reaction time between the gauge going out of bounds and being reset.
+nav_auto,is navigation automation on? True if yes False if no.
+uavN_moving,is the Nth UAV currently moving? True if yes False if no.
+uavN_idle,has the Nth UAV not moved for more than 10 seconds? True if yes False if no.
+uavN_fuel,current fuel level of the Nth UAV
+uavN_patha_length,length of the Nth UAV's path A
+uavN_patha_stormchance,chance of getting hit by a storm if taking the Nth UAV's path A
+uavN_pathb_length,length of the Nth UAV's path B
+uavN_pathb_stormchance,chance of getting hit by a storm if taking the Nth UAV's path B
+uavN_onpath,the path (A or B) that the UAV is currently on
+uavN_stormhit,did the UAV hit a storm? True if yes False if no.
+uavN_goal,current goal position for the Nth UAV
+uavN_atgoal,is the UAV at the goal position? True if yes False if no.
+uavN_goalsreached,the number of goals that the Nth UAV has reached
+uavN_score,the total score of the Nth UAV
+total_goals_reached,the total goals that all of the UAVs have reached
+total_score,the combined score of all of the UAVs
+chat_auto,is the chat box automation on? True if yes False if no.
+message,the current message contents sent to the participant
+response,the response submitted by the participant
+correct_answer,the correct response
+chat_rxn_time,the reaction time of participant to reply to chat message
