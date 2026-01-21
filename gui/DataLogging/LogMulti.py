@@ -12,7 +12,7 @@ def ClearMultiLog():
     total_score = 0
 
 
-def LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
+def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
     
     curr_format = datetime.datetime.now().strftime("%H:%M:%S")
     curr_time = datetime.datetime.now()
@@ -30,7 +30,8 @@ def LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, tota
         trial, 
         curr_format,
         log_type,
-        mtr_auto
+        mtr_auto1,
+        mtr_auto2
         ]
   
     for gauge in gauges:
@@ -100,7 +101,7 @@ def LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, tota
 def MultiCSV(filename):
 
     file_header = [
-        "participant_id", "block", "trial", "time", "type", "mtr_auto",
+        "participant_id", "block", "trial", "time", "type", "mtr_auto1", "mtr_auto2"
         "gauge1_level", "gauge1_oob", "gauge1_reset",
         "gauge2_level", "gauge2_oob", "gauge2_reset",
         "gauge3_level", "gauge3_oob", "gauge3_reset",

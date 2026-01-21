@@ -36,7 +36,8 @@ chat_box = ["N/A", "N/A"]
 msg_time = None
 answer = None
 
-mtr_auto = False
+mtr_auto1= False
+mtr_auto2 = False
 nav_auto = False
 chat_auto = False
 
@@ -225,8 +226,31 @@ class Multi_Auto1(QMainWindow):
 
         monitor_levels.addStretch()
 
-        monitor_auto_btn = self.CreateAutomationButton("Monitor Levels", "mtr_auto")
-        monitor_levels.addWidget(monitor_auto_btn)
+        mtr_buttons = QVBoxLayout()
+
+        mtr_buttons.addStretch()
+
+        auto1_label = QLabel("Auto 1")
+        auto1_label.setFont(QFont("Times New Roman", 14))
+        auto1_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        mtr_buttons.addWidget(auto1_label)
+
+        monitor_auto1_btn = self.CreateAutomationButton("Monitor Levels 1", "mtr_auto1")
+        mtr_buttons.addWidget(monitor_auto1_btn)
+
+        mtr_buttons.addSpacing(20)
+
+        auto2_label = QLabel("Auto 2")
+        auto2_label.setFont(QFont("Times New Roman", 14))
+        auto2_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        mtr_buttons.addWidget(auto2_label)
+
+        monitor_auto2_btn = self.CreateAutomationButton("Monitor Levels 2", "mtr_auto2")
+        mtr_buttons.addWidget(monitor_auto2_btn)
+
+        mtr_buttons.addStretch()
+
+        monitor_levels.addLayout(mtr_buttons)
         
         gauges_widget = QWidget()
         gauges_widget.setLayout(monitor_levels)
@@ -698,7 +722,7 @@ class Multi_Auto1(QMainWindow):
         button.setEnabled(clickable)
 
         def toggle_state():
-            global mtr_auto, nav_auto, chat_auto
+            global mtr_auto1, mtr_auto2, nav_auto, chat_auto
 
             current_state = globals()[state_var_name]
             new_state = not current_state
@@ -921,15 +945,22 @@ class GenerateLevel(QWidget):
         if self.oob:
             global total_oob
             total_oob = total_oob + 1
-            
-            probability = random.randint(multiauto1Input.mtr_auto[0], multiauto1Input.mtr_auto[1])
-            rand_num = random.randint(0, 100)
-
-            if mtr_auto and rand_num < probability :
-                self.reset_button.setStyleSheet(self.red_btn)
-
             self.oob_time = datetime.datetime.now()
             LogMultiTask("Monitor OOB")
+
+            if mtr_auto1:
+                probability = random.randint(multiauto1Input.mtr_auto1[0], multiauto1Input.mtr_auto1[1])
+                rand_num = random.randint(0, 100)
+
+                if rand_num < probability: 
+                    self.reset_button.setStyleSheet(self.red_btn)
+
+            if mtr_auto2:
+                probability = random.randint(multiauto1Input.mtr_auto2[0], multiauto1Input.mtr_auto2[1])
+                rand_num = random.randint(0, 100)
+
+                if rand_num < probability:
+                    self.ResetLevel(idx)
 
         self.TimerDelay()
 
@@ -1268,5 +1299,5 @@ def LogMultiTask(log_type):
     block = 3
     trial = 1
 
-    LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
+    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass

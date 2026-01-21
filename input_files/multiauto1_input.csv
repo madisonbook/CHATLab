@@ -2,9 +2,12 @@ gauge_mean,80,120,100,60
 gauge_dist,20,15,50,40
 gauge_sd,60,30,50,40
 gauge_timer,5,10,,
-mtr_auto,70,70,,
-mtr_auto_oas,False,,,
-mtr_auto_clickable,False,,,
+mtr_auto1,70,70,,
+mtr_auto1_oas,False,,,
+mtr_auto1_clickable,False,,,
+mtr_auto2,100,100,,
+mtr_auto2_oas,True,,,
+mtr_auto2_clickable,True,,,
 nav_uav_x,600,300,600,500
 nav_uav_y,500,200,100,500
 nav_goal_x,700,100,350,300
