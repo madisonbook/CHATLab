@@ -134,3 +134,5 @@ def MultiCSV(filename):
             writer.writerow(file_header)
 
         writer.writerows(multi_log)
+
+    ClearMultiLog()

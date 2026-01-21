@@ -36,7 +36,8 @@ chat_box = ["N/A", "N/A"]
 msg_time = None
 answer = None
 
-mtr_auto = False
+mtr_auto1 = False
+mtr_auto2 = False
 nav_auto = False
 chat_auto = False
 
@@ -686,7 +687,7 @@ class MultiTask1(QMainWindow):
         summary = [total_correct, total_path]
         self.stopAllTimers()
         self.showSum = SumMulti1(summary)
-        #MultiCSV("output_files/multi_log.csv")
+        MultiCSV("output_files/multi_log.csv")
         self.showSum.show()
         self.close()   
 
@@ -1092,5 +1093,5 @@ def LogMultiTask(log_type):
     block = 2
     trial = 1
 
-    LogMulti(block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
+    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass
