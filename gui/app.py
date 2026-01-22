@@ -30,6 +30,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = MultiTask1()
+window = Multi_Auto1()
 window.show()
 app.exec()
