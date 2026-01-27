@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Instructions.InstrMultiAuto1 import InstrMultiAuto1
+from Instructions.InstrPracMtrAuto import InstrPracMtrAuto
 
 class SumMulti2(QMainWindow):
     def __init__(self, stats: list[int]):
@@ -58,7 +58,7 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartChat(self):
-    self.showSum = InstrMultiAuto1()
+    self.showSum = InstrPracMtrAuto()
     self.showSum.show()
     self.close()  
     pass

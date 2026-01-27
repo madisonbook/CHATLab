@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QGuiApplication
-from SingleTasks.MonitorLevels import MonitorLevels
+from PracticeTrials.PracChatAuto import PracChatAuto
 from ReadInput import breakBlockInput
 
 class InstrPracChatAuto(QMainWindow):
@@ -66,6 +66,6 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartMonitor(self):
-    self.monitor = MonitorLevels()
+    self.monitor = PracChatAuto()
     self.monitor.show()
     self.close()

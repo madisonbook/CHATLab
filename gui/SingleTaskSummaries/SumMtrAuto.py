@@ -1,14 +1,13 @@
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QRadioButton, QGroupBox,
-    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow,  QSizePolicy
+    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QPlainTextEdit
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QGuiApplication
-from PracticeTrials.PracMtrAuto import PracMtrAuto
-from ReadInput import breakBlockInput
+from PyQt6.QtGui import QFont
+from Instructions.InstrPracUAVAuto import InstrPracUAVAuto
 
-class InstrPracMtrAuto(QMainWindow):
-    def __init__(self):
+class SumMtrAuto(QMainWindow):
+    def __init__(self, stats: list[int]):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
 
@@ -19,18 +18,18 @@ class InstrPracMtrAuto(QMainWindow):
 
         main_layout.addStretch()
 
-        title = Title("Instructions: Monitor Levels with Automation")
+        title = Title("Monitor Levels with Automation Task Complete")
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("instructions tbd")
-        main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
+        participate = Subtitle("Congratulations! You have successfully completed the Monitor Levels with Automation task.")
+        main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)
 
-        continue_button = QPushButton("Click Here to Start")
+        continue_button = QPushButton("Click Here to Continue")
         continue_button.setFont(QFont("Times New Roman", 16))
-        continue_button.clicked.connect(lambda: StartMonitor(self))
+        continue_button.clicked.connect(lambda: StartUAV(self))
         continue_button.setStyleSheet("""
             QPushButton {
                 border: 1px solid black;
@@ -54,18 +53,11 @@ def Title(str: str):
 
 def Subtitle(str: str):
     subtitle_label = QLabel(str)
-    subtitle_label.setFont(QFont("Times New Roman", 18, QFont.Weight.Medium))
-    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-    subtitle_label.setWordWrap(True)
-
-    screen = QGuiApplication.primaryScreen().geometry()
-    screen_width = screen.width()
-    subtitle_label.setMaximumWidth(int(screen_width * 0.75))
-    subtitle_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-
+    subtitle_label.setFont(QFont("Times New Roman", 16, QFont.Weight.DemiBold))
+    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-def StartMonitor(self):
-    self.monitor = PracMtrAuto()
-    self.monitor.show()
+def StartUAV(self):
+    self.instrUAV = InstrPracUAVAuto()
+    self.instrUAV.show()
     self.close()
