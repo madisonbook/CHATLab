@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
+from MultiTaskSummaries.DebriefWindow import DebriefWindow
 #from MultiTasks.multi_auto2 import Multi_Auto2
 
 class SumMultiAuto2(QMainWindow):
@@ -58,7 +59,7 @@ def Subtitle(str: str):
     return subtitle_label
 
 def StartChat(self):
-    #self.showSum = Multi_Auto2()
-    #self.showSum.show()
+    self.showSum = DebriefWindow()
+    self.showSum.show()
     self.close()  
     pass

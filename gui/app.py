@@ -5,9 +5,11 @@ import sys
 from ConsentWindow import ConsentWindow
 from Instructions.InstrMonitor import InstrMonitor
 from SingleTasks.ChatBoxTemp import ChatBox
-from MultiTasks.multi_auto1 import Multi_Auto1
+from MultiTasks.multi_auto2 import Multi_Auto2
 from MultiTasks.multi1 import MultiTask1
 from PracticeTrials.PracMtrAuto import PracMtrAuto
+from MultiTaskSummaries.DebriefWindow import DebriefWindow
+from MultiTaskSummaries.SumMultiAuto2 import SumMultiAuto2
 from ReadInput.singleTaskInput import read_single
 from ReadInput.practiceInput import read_practice
 from ReadInput.practiceMultiInput import read_practice_multi
@@ -33,6 +35,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = InstrMonitor()
+window = Multi_Auto2()
 window.show()
 app.exec()
