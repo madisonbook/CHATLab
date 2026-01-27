@@ -1,6 +1,12 @@
 In the next trial, you will be monitoring gauges from an external system. The four gauges will be marked with upper and lower acceptable limits on the left sides. If the colored fill of the gauge goes outside of those bounds, you will need to click "Reset" as quickly as possible. When you are ready, click the button to begin a practice trial.
-
-
 Now, the real Monitoring Gauges trial will begin. When you are ready, click the button to start.
 In the next trial, you will see drones represented by colored triangles. If you click on a drone, it will present two paths: A or B. You will select the path that will get the drone to its new location using as little fuel as possible. Using the least amount of fuel will earn you 10 points. Choosing a longer path will earn you 8 points. If you select a path that takes your drone through a storm, you will lose additional fuel and only earn 5 points. When you are ready, click the button to begin the practice trial. 
 Now, the real UAV Navigation trial will begin. When you are ready, click the button to start.
+Instructions for Practice Chat
+Instructions for Chat
+Instructions for Practice Multi
+Instructions for Multi
+Instructions for Practice Mtr with Auto 
+Instructions for Practice UAV with Auto 
+Instructions for Practice Chat with Auto 
+Instructions for Multi with Auto

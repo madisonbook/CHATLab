@@ -35,6 +35,6 @@ except Exception as e:
 
 app = QApplication(sys.argv)
 
-window = Multi_Auto2()
+window = ConsentWindow()
 window.show()
 app.exec()

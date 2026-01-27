@@ -25,6 +25,9 @@ class SumMulti1(QMainWindow):
         participate = Subtitle("Congratulations! You have successfully completed Multitasking 1.")
         main_layout.addWidget(participate)
 
+        participate = Subtitle("Click to start Multitasking 2.")
+        main_layout.addWidget(participate)
+
         main_layout.addSpacing(10)
 
         continue_button = QPushButton("Click Here to Continue")
