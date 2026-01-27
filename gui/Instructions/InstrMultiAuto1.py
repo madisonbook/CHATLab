@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from MultiTasks.multi_auto1 import Multi_Auto1
+from ReadInput import breakBlockInput
 
 class InstrMultiAuto1(QMainWindow):
     def __init__(self):
@@ -22,7 +23,11 @@ class InstrMultiAuto1(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Multitasking & auto time yippeeeee")
+        if breakBlockInput.break12:
+            participate = Subtitle(breakBlockInput.break12)
+        else: 
+            participate = Subtitle("Please let your research assistant know that you've reached a break point.")
+
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)

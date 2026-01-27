@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from PracticeTrials.PracChat import ChatBox
+from ReadInput import breakBlockInput
 
 class InstrPracChat(QMainWindow):
     def __init__(self):
@@ -22,7 +23,11 @@ class InstrPracChat(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Instructions will be added once i make the thing do the thing")
+        if breakBlockInput.break5:
+            participate = Subtitle(breakBlockInput.break5)
+        else: 
+            participate = Subtitle("Please let your research assistant know that you've reached a break point.")
+
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)

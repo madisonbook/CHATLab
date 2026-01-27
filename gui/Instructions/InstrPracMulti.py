@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from PracticeTrials.PracMulti import PracMulti
+from ReadInput import breakBlockInput
 
 class InstrPracMulti(QMainWindow):
     def __init__(self):
@@ -22,7 +23,11 @@ class InstrPracMulti(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("Multitasking time yippeeeee")
+        if breakBlockInput.break7:
+            participate = Subtitle(breakBlockInput.break7)
+        else: 
+            participate = Subtitle("Please let your research assistant know that you've reached a break point.")
+
         main_layout.addWidget(participate)
 
         main_layout.addSpacing(10)

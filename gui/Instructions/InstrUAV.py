@@ -23,7 +23,11 @@ class InstrUAV(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle(breakBlockInput.break4)
+        if breakBlockInput.break4:
+            participate = Subtitle(breakBlockInput.break4)
+        else: 
+            participate = Subtitle("Please let your research assistant know that you've reached a break point.")
+
         main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
         main_layout.addSpacing(10)
 

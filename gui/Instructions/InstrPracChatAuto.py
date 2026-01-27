@@ -7,6 +7,7 @@ from PyQt6.QtGui import QFont, QGuiApplication
 from PracticeTrials.PracChatAuto import PracChatAuto
 from ReadInput import breakBlockInput
 
+
 class InstrPracChatAuto(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -23,7 +24,11 @@ class InstrPracChatAuto(QMainWindow):
         main_layout.addWidget(title)
         main_layout.addSpacing(10)
 
-        participate = Subtitle("instructions tbd")
+        if breakBlockInput.break11:
+            participate = Subtitle(breakBlockInput.break11)
+        else: 
+            participate = Subtitle("Please let your research assistant know that you've reached a break point.")
+
         main_layout.addWidget(participate, 0, Qt.AlignmentFlag.AlignHCenter)
 
         main_layout.addSpacing(10)
