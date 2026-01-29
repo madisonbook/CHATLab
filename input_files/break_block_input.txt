@@ -4,8 +4,8 @@ In the next trial, you will see drones represented by colored triangles. If you 
 Now, the real UAV Navigation trial will begin. When you are ready, click the button to start.
 Instructions for Practice Chat
 Instructions for Chat
-Instructions for Practice Multi
-Instructions for Multi
+Instructions for Practice Multi In the next trial, you will see drones represented by colored triangles. If you click on a drone, it will present two paths: A or B. You will select the path that will get the drone to its new location using as little fuel as possible. Using the least amount of fuel will earn you 10 points. Choosing a longer path will earn you 8 points. If you select a path that takes your drone through a storm, you will lose additional fuel and only earn 5 points. When you are ready, click the button to begin the practice trial. 
+Instructions for Multi In the next trial, you will see drones represented by colored triangles. If you click on a drone, it will present two paths: A or B. You will select the path t In the next trial, you will see drones represented by colored triangles. If you click on a drone, it will present two paths: A or B. You will select the path t In the next trial, you will see drones represented by colored triangles. If you click on a drone, it will present two paths: A or B. You will select the path t
 Instructions for Practice Mtr with Auto 
 Instructions for Practice UAV with Auto 
 Instructions for Practice Chat with Auto 

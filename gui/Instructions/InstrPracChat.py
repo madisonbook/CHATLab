@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QRadioButton, QGroupBox,
-    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QPlainTextEdit
+    QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QSizePolicy
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QGuiApplication
 from PracticeTrials.PracChat import ChatBox
 from ReadInput import breakBlockInput
 
@@ -28,7 +28,7 @@ class InstrPracChat(QMainWindow):
         else: 
             participate = Subtitle("Please let your research assistant know that you've reached a break point.")
 
-        main_layout.addWidget(participate)
+        main_layout.addWidget(participate, 0, alignment=Qt.AlignmentFlag.AlignCenter)
 
         main_layout.addSpacing(10)
 
@@ -58,8 +58,15 @@ def Title(str: str):
 
 def Subtitle(str: str):
     subtitle_label = QLabel(str)
-    subtitle_label.setFont(QFont("Times New Roman", 16, QFont.Weight.DemiBold))
-    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    subtitle_label.setFont(QFont("Times New Roman", 18, QFont.Weight.Medium))
+    subtitle_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+    subtitle_label.setWordWrap(True)
+
+    screen = QGuiApplication.primaryScreen().geometry()
+    screen_width = screen.width()
+    subtitle_label.setMaximumWidth(int(screen_width * 0.75))
+    subtitle_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+
     return subtitle_label
 
 def StartChat(self):
