@@ -53,7 +53,7 @@ class DebriefWindow(QMainWindow):
 
         #body_layout.addWidget(questions)
         main_layout.addLayout(body_layout)
-        main_layout.addSpacing(10)
+        main_layout.addSpacing(150)
 
         self.showMaximized()
 

@@ -20,7 +20,7 @@ UAVs = []
 total_path = 0
 total_correct = 0
 
-img_size = 800
+img_size = 900
 
 class UAVNavigation(QMainWindow):
     def __init__(self):
@@ -300,7 +300,7 @@ class UAVNavigation(QMainWindow):
         proxy = QGraphicsProxyWidget()
         proxy.setWidget(wrapper)
 
-        proxy.setPos(0, 625)
+        proxy.setPos(0, 775)
 
         return proxy
     
@@ -549,7 +549,7 @@ class UAVNavigation(QMainWindow):
     def CreateHomeBase(self):
         width = 130
         height = 30
-        rect = QGraphicsRectItem(800 - width - 10 , 10, width, height)
+        rect = QGraphicsRectItem(img_size - width - 10 , 10, width, height)
         rect.setBrush(Qt.GlobalColor.white)
         rect.setPen(QPen(Qt.GlobalColor.black, 3))
 
@@ -559,7 +559,7 @@ class UAVNavigation(QMainWindow):
         text.setDefaultTextColor(Qt.GlobalColor.black)
 
         text_rect = text.boundingRect()
-        text.setPos(800 - width - 10 + (width - text_rect.width()) / 2,
+        text.setPos(img_size - width - 10 + (width - text_rect.width()) / 2,
                     10 + (height - text_rect.height()) / 2)
         
         rect.setZValue(2)

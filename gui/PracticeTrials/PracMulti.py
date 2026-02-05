@@ -17,8 +17,8 @@ from Instructions.InstrMulti1 import InstrMulti1
 import random
 import datetime
 
-base_width = 115
-base_height = 250
+base_width = 140
+base_height = 300
 border_thickness = 4
 
 total_oob = 0
@@ -30,7 +30,7 @@ UAVs = []
 total_path = 0
 total_correct = 0
 
-img_size = 800
+img_size = 900
 
 chat_box = ["N/A", "N/A"]
 msg_time = None
@@ -199,7 +199,7 @@ class PracMulti(QMainWindow):
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
         self.chat_box = ChatWidget(context_items=items_on_screen)
-        self.chat_box.setFixedHeight(140)
+        self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
         monitor_levels = QHBoxLayout()
@@ -216,18 +216,19 @@ class PracMulti(QMainWindow):
             gauges.append(gauge)
 
             monitor_levels.addLayout(gauge.form)
-            monitor_levels.addSpacing(5)
+            monitor_levels.addSpacing(25)
 
         monitor_levels.addStretch()
         
         gauges_widget = QWidget()
         gauges_widget.setLayout(monitor_levels)
-        gauges_widget.setFixedHeight(360)
+        gauges_widget.setFixedHeight(425)
         gauges_widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
-
+        right_content.addStretch()
         right_content.addWidget(gauges_widget)
         right_content.addWidget(self.uav_info_stack)
+        right_content.addSpacing(15)
         right_content.addWidget(self.chat_box)
         right_content.addStretch()
         right_content.addStretch()
@@ -350,7 +351,7 @@ class PracMulti(QMainWindow):
         proxy = QGraphicsProxyWidget()
         proxy.setWidget(wrapper)
 
-        proxy.setPos(0, 625)
+        proxy.setPos(0, 775)
 
         return proxy
     
@@ -560,7 +561,7 @@ class PracMulti(QMainWindow):
     def CreateHomeBase(self):
         width = 130
         height = 30
-        rect = QGraphicsRectItem(800 - width - 10 , 10, width, height)
+        rect = QGraphicsRectItem(img_size - width - 10 , 10, width, height)
         rect.setBrush(Qt.GlobalColor.white)
         rect.setPen(QPen(Qt.GlobalColor.black, 3))
 
@@ -570,7 +571,7 @@ class PracMulti(QMainWindow):
         text.setDefaultTextColor(Qt.GlobalColor.black)
 
         text_rect = text.boundingRect()
-        text.setPos(800 - width - 10 + (width - text_rect.width()) / 2,
+        text.setPos(img_size - width - 10 + (width - text_rect.width()) / 2,
                     10 + (height - text_rect.height()) / 2)
         
         rect.setZValue(2)
@@ -610,7 +611,7 @@ class GenerateLevel(QWidget):
         #self.monitor_level = random.randint(practiceMultiInput.gauge_mean[idx] - practiceMultiInput.gauge_sd[idx], practiceMultiInput.gauge_mean[idx] + practiceMultiInput.gauge_sd[idx])
         self.monitor_level = height
         self.oob_time = None
-        self.setFixedHeight(350)
+        self.setFixedHeight(600)
         self.color_text = color_text
 
         self.animation_timer = QTimer(self)
@@ -658,6 +659,11 @@ class GenerateLevel(QWidget):
         low_bar.setPen(pen)
 
         form_view = QGraphicsView(level)
+        form_view.setFixedSize(base_width + border_thickness, base_height + border_thickness)
+        form_view.setSceneRect(0, 0, base_width + border_thickness, base_height + border_thickness)
+        form_view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        form_view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        form_view.setFrameStyle(0)
         self.form.addWidget(form_view)
         self.form.addSpacing(5)
 
