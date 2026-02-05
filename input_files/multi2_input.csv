@@ -8,7 +8,7 @@ nav_goal_x,300,500,150,600
 nav_goal_y,300,300,200,400
 nav_storm_x,350,150,450,550
 nav_storm_y,400,550,400,200
-nav_uav_fuel,1000,1000,1000,1000
+nav_uav_fuel,1200,1200,1200,1200
 nav_uav_speed,3,3,3,3
 nav_path_angle,120,150,120,140
 chat_timer,15,25,,

@@ -9,7 +9,7 @@ nav_goal_x,150,250,350,450
 nav_goal_y,300,300,300,300
 nav_storm_x,150,150,450,550
 nav_storm_y,400,250,400,200
-nav_uav_fuel,1000,1000,1000,1000
+nav_uav_fuel,1200,1200,1200,1200
 nav_uav_speed,3,4,1,2
 nav_path_angle,120,150,120,140
 nav_duration,60,,,
