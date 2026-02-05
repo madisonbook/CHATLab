@@ -1,8 +1,8 @@
 ﻿gauge_mean,80,120,100,60
 gauge_dist,20,15,50,40
 gauge_sd,60,30,50,40
-gauge_timer,2,10,,
-gauge_duration,5,,,
+gauge_timer,4,10,,
+gauge_duration,30,,,
 nav_uav_x,600,300,600,500
 nav_uav_y,500,200,100,500
 nav_goal_x,700,100,350,300
@@ -12,6 +12,6 @@ nav_storm_y,400,250,400,200
 nav_uav_fuel,1000,1000,1000,1000
 nav_uav_speed,3,4,1,2
 nav_path_angle,120,150,120,140
-nav_duration,5,,,
-chat_timer,5,15,,
-chat_duration,5,,,
+nav_duration,60,,,
+chat_timer,15,25,,
+chat_duration,60,,,
