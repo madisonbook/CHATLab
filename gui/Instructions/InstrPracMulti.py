@@ -64,7 +64,8 @@ def Subtitle(str: str):
 
     screen = QGuiApplication.primaryScreen().geometry()
     screen_width = screen.width()
-    subtitle_label.setMaximumWidth(int(screen_width * 0.75))
+    subtitle_label.setMinimumWidth(int(screen_width * .67))
+    subtitle_label.setMaximumWidth(int(screen_width * .8))
     subtitle_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
     return subtitle_label
 

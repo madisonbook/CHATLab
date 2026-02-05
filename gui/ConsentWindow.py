@@ -20,7 +20,7 @@ class ConsentWindow(QMainWindow):
 
         title_label = Title("Consent Form: Automation Use in Multitasking Contexts")
         main_layout.addWidget(title_label)
-        #main_layout.addSpacing(10)
+        main_layout.addSpacing(10)
 
         subtitle_study = Subtitle("Title of Study: Automation Use in Multitasking Contexts")
         main_layout.addWidget(subtitle_study)
@@ -100,11 +100,10 @@ Instead of participating in this research project, you can select another study 
 
 If you have any questions about the research or how it is implemented, please contact the researcher, Colleen Patton, at cpatton4@ncsu.edu. Please reference study number 28230 when contacting anyone about this project.
 
-If you have questions about your rights as a participant or are concerned with your treatment throughout the research process, please contact the NC State University IRB Director at IRB-Director@ncsu.edu, 919-515-8754, or fill out a confidential form online at https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/ 
-                            """)
+If you have questions about your rights as a participant or are concerned with your treatment throughout the research process, please contact the NC State University IRB Director at IRB-Director@ncsu.edu, 919-515-8754, or fill out a confidential form online at https://research.ncsu.edu/administration/compliance/research-compliance/irb/irb-forms-and-templates/participant-concern-and-complaint-form/ """)
     
     text_block.setReadOnly(True)
-    text_block.setFixedHeight(500)
+    text_block.setFixedHeight(600)
     text_block.setFont(QFont("Times New Roman", 14, QFont.Weight.Normal))
     text_block.setFixedWidth(1300)
 
