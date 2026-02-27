@@ -91,7 +91,7 @@ If you participate in this study, you will engage in a simulated unmanned ariel 
 
 You can choose to not participate in the study or stop participating at any time by informing the research assistant. 
 
-Participants will or have their activity in the task recorded during the research activities. If you do not want this information collected, you cannot participate in this research. We would like to use these recordings for data analysis. We will keep these recordings indefinitely, but they will not be linked to you. 
+Participants will have their activity in the task recorded during the research activities. If you do not want this information collected, you cannot participate in this research. We would like to use these recordings for data analysis. We will keep these recordings indefinitely, but they will not be linked to you. 
 
 There are minimal risks associated with your participation in this research. There are no direct benefits to you from participating in this research.
 
