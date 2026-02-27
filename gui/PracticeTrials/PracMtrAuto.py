@@ -17,8 +17,8 @@ from SingleTaskSummaries.SumMtrAuto import SumMtrAuto
 import random
 import datetime
 
-base_width = 115
-base_height = 250
+base_width = 140
+base_height = 300
 border_thickness = 4
 
 total_oob = 0
@@ -329,10 +329,12 @@ class PracMtrAuto(QMainWindow):
         game_form.addLayout(mtr_buttons)
 
         game_form.addStretch()
+        game_form.addStretch()
 
         main_layout.addLayout(game_form)
 
         main_layout.addStretch()
+        
         self.showMaximized()
 
         QTimer.singleShot(practiceMultiAuto.duration*1000, lambda: self.StartSummary())

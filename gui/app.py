@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from ConsentWindow import ConsentWindow
-from Instructions.InstrMonitor import InstrMonitor
-from SingleTasks.ChatBoxTemp import ChatBox
+from Instructions.InstrUAV import InstrUAV
+from SingleTasks.UAVNavigation import UAVNavigation
 from MultiTasks.multi_auto2 import Multi_Auto2
 from MultiTasks.multi1 import MultiTask1
 from PracticeTrials.PracMtrAuto import PracMtrAuto

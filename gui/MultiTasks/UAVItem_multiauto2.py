@@ -71,8 +71,8 @@ class UAVItem():
         self.starting_fuel = self.fuel
         self.storm_hit = False
 
-        fuel_buffer = 150
-        hb_x, hb_y = 730, 30
+        fuel_buffer = 200
+        hb_x, hb_y = 800, 30
         dist_to_HB = math.hypot(self.curr_pos.x() - hb_x, self.curr_pos.y() - hb_y)
         self.at_goal = False
 
@@ -259,6 +259,8 @@ class UAVItem():
                 self.fuel -= math.hypot(dx, dy)
                 if self.fuel < 0:
                     self.fuel = 0
+                    self.uav_item.is_moving = False
+                    self.LogAction("UAV No Fuel")
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -328,7 +330,9 @@ class UAVItem():
                 self.curr_pos = new_pos
                 self.fuel -= math.hypot(dx1, dy1)
                 if self.fuel < 0:
-                    self.fuel = 0      
+                    self.fuel = 0  
+                    self.uav_item.is_moving = False
+                    self.LogAction("UAV No Fuel")    
 
         def AnimateP2(): 
             if self.fuel > 0:
@@ -357,6 +361,8 @@ class UAVItem():
                 self.fuel -= math.hypot(dx2, dy2)
                 if self.fuel < 0:
                     self.fuel = 0   
+                    self.uav_item.is_moving = False
+                    self.LogAction("UAV No Fuel")
 
         self.timer = QTimer()
         self.uav_item.is_moving = True

@@ -12,7 +12,7 @@ from ReadInput import practiceInput
 import random
 import datetime
 
-base_width = 125
+base_width = 140
 base_height = 300
 border_thickness = 4
 
