@@ -396,6 +396,6 @@ class ClickableUAV(QGraphicsPolygonItem):
         self.is_moving = False
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton and not self.is_moving:
+        if event.button() == Qt.MouseButton.LeftButton:
             self.on_click_callback()
         event.accept()
