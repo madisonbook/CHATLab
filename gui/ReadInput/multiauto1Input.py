@@ -29,6 +29,9 @@ chat_timer = []
 chat_auto = [] 
 chat_auto_oas = None
 chat_auto_clickable = None
+chat_auto2 = [] 
+chat_auto2_oas = None
+chat_auto2_clickable = None
 duration = 0
 
 def _as_bool(val, default=False):
@@ -68,7 +71,7 @@ def read_multiauto1():
             nav_uav_fuel = [int(item) for item in rows[16][1:5]]
             nav_uav_speed = [int(item) for item in rows[17][1:5]]
 
-            global nav_path_angle, nav_auto_path, nav_auto, nav_auto_oas, nav_auto_clickable, chat_timer, chat_auto, chat_auto_oas, chat_auto_clickable, duration
+            global nav_path_angle, nav_auto_path, nav_auto, nav_auto_oas, nav_auto_clickable, chat_timer, chat_auto, chat_auto_oas, chat_auto_clickable, chat_auto2, chat_auto2_oas, chat_auto2_clickable, duration
             nav_path_angle = [int(item) for item in rows[18][1:5]]
             nav_auto_path = int(rows[19][1])
             nav_auto = [int(item) for item in rows[20][1:3]]
@@ -79,7 +82,11 @@ def read_multiauto1():
             chat_auto_oas = _as_bool(rows[25][1])
             chat_auto_clickable = _as_bool(rows[26][1])
 
-            duration = int(rows[27][1])
+            chat_auto2 = [int(item) for item in rows[27][1:3]]
+            chat_auto2_oas = _as_bool(rows[28][1])
+            chat_auto2_clickable = _as_bool(rows[29][1])
+
+            duration = int(rows[30][1])
 
     except FileNotFoundError:
         print("file not found.")

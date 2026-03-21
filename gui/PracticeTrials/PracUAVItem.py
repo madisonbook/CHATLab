@@ -260,6 +260,7 @@ class UAVItem():
                 if self.fuel < 0:
                     self.fuel = 0
                     self.uav_item.is_moving = False
+                    self.uav_item.SetGrayedOut(True)
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -330,7 +331,8 @@ class UAVItem():
                 self.fuel -= math.hypot(dx1, dy1)
                 if self.fuel < 0:
                     self.fuel = 0
-                    self.uav_item.is_moving = False    
+                    self.uav_item.is_moving = False
+                    self.uav_item.SetGrayedOut(True)    
 
         def AnimateP2(): 
             if self.fuel > 0:
@@ -360,6 +362,7 @@ class UAVItem():
                 if self.fuel < 0:
                     self.fuel = 0
                     self.uav_item.is_moving = False
+                    self.uav_item.SetGrayedOut(True)
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -397,6 +400,14 @@ class ClickableUAV(QGraphicsPolygonItem):
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
         self.on_click_callback = on_click_callback
         self.is_moving = False
+
+    def SetGrayedOut(self, grayed: bool):
+        if grayed:
+            self.setBrush(QBrush(QColor("#A0A0A0")))
+            self.setPen(QPen(Qt.GlobalColor.darkGray, 3))
+        else:
+            self.setBrush(QBrush(QColor(self.original_color)))
+            self.setPen(QPen(Qt.GlobalColor.black, 3))
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:

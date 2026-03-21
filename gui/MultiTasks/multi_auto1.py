@@ -39,7 +39,9 @@ answer = None
 mtr_auto1= False
 mtr_auto2 = False
 nav_auto = False
+nav_auto2 = False
 chat_auto = False
+chat_auto2 = False
 
 class Multi_Auto1(QMainWindow):
     def __init__(self):
@@ -203,8 +205,9 @@ class Multi_Auto1(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        chat_auto_btn = self.CreateAutomationButton("Chat Box", "chat_auto")
-        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn)
+        chat_auto_btn = self.CreateAutomationButton("Chat Box 1", "chat_auto1")
+        chat_auto_btn2 = self.CreateAutomationButton("Chat Box 2", "chat_auto2")
+        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto_btn2)
         self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
@@ -1002,7 +1005,7 @@ class GenerateLevel(QWidget):
             self.animation_timer.stop()
 
 class ChatWidget(QWidget):
-    def __init__(self, context_items, chat_auto_btn):
+    def __init__(self, context_items, chat_auto_btn, chat_auto_btn2):
         super().__init__()
         
         # Set fixed size for the chat widget
@@ -1132,6 +1135,7 @@ class ChatWidget(QWidget):
         main_layout.addWidget(self.left_group, 2)
         main_layout.addWidget(self.right_group, 3)
         main_layout.addWidget(chat_auto_btn)
+        main_layout.addWidget(chat_auto_btn2)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 
@@ -1248,6 +1252,13 @@ class ChatWidget(QWidget):
         if chat_auto and rand_num < probability:
             self.left_group.setStyleSheet(self.red_chat)
             self.right_group.setStyleSheet(self.history_red)
+
+        probability2 = random.randint(multiauto1Input.chat_auto2[0], multiauto1Input.chat_auto2[1])
+        rand_num2 = random.randint(0, 100)
+        if chat_auto2 and rand_num2 < probability2:
+            correct = self.compute_answer()
+            if correct:
+                self.input_box.setText(correct)
 
         global msg_time, answer
         msg_time = datetime.datetime.now()
