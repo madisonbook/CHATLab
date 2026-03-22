@@ -67,8 +67,8 @@ def read_multiauto2():
             global nav_uav_x, nav_uav_y, nav_goal_x, nav_goal_y, nav_storm_x, nav_storm_y, nav_uav_fuel, nav_uav_speed
             nav_uav_x = [int(item) for item in rows[10][1:5]]
             nav_uav_y = [int(item) for item in rows[11][1:5]]      
-            nav_goal_x = [int(item) for item in rows[12][1:5]]
-            nav_goal_y = [int(item) for item in rows[13][1:5]]
+            nav_goal_x = [int(item) for item in rows[12][1:] if item.strip()]
+            nav_goal_y = [int(item) for item in rows[13][1:] if item.strip()]
             nav_storm_x = [int(item) for item in rows[14][1:5]]
             nav_storm_y = [int(item) for item in rows[15][1:5]]
             nav_uav_fuel = [int(item) for item in rows[16][1:5]]

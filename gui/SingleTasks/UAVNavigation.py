@@ -66,10 +66,10 @@ class UAVNavigation(QMainWindow):
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, singleTaskInput.nav_goal_x[0], singleTaskInput.nav_goal_y[0]),
-                      GoalItem(2, singleTaskInput.nav_goal_x[1], singleTaskInput.nav_goal_y[1]),
-                      GoalItem(3, singleTaskInput.nav_goal_x[2], singleTaskInput.nav_goal_y[2]),
-                      GoalItem(4, singleTaskInput.nav_goal_x[3], singleTaskInput.nav_goal_y[3])]
+        goal_items = [
+            GoalItem(i + 1, singleTaskInput.nav_goal_x[i], singleTaskInput.nav_goal_y[i])
+            for i in range(len(singleTaskInput.nav_goal_x))
+        ]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
         uav_blue = UAVItem(1, "#90D5FF", "BLUE", singleTaskInput.nav_uav_x[0], singleTaskInput.nav_uav_y[0],
@@ -163,6 +163,10 @@ class UAVNavigation(QMainWindow):
         uav_yellow.hyp_label.setVisible(False)
         uav_yellow.ra_path.setVisible(False)
         uav_yellow.ra_label.setVisible(False)
+
+        for item in goal_items[4:]:
+            left_nav.addItem(item)
+            item.setZValue(2)
 
         self.path_proxy = self.CreatePathChooser()
         left_nav.addItem(self.path_proxy)
@@ -572,7 +576,7 @@ class UAVNavigation(QMainWindow):
         self.path_stack.setCurrentIndex(1)
 
         for uav in UAVs:
-            if uav.idx == goal_idx:
+            if uav.color_text == color_text:
                 self.curr_uav = uav
                 break
 

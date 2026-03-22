@@ -101,10 +101,10 @@ class MultiTask1(QMainWindow):
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, multi1Input.nav_goal_x[0], multi1Input.nav_goal_y[0]),
-                      GoalItem(2, multi1Input.nav_goal_x[1], multi1Input.nav_goal_y[1]),
-                      GoalItem(3, multi1Input.nav_goal_x[2], multi1Input.nav_goal_y[2]),
-                      GoalItem(4, multi1Input.nav_goal_x[3], multi1Input.nav_goal_y[3])]
+        goal_items = [
+            GoalItem(i + 1, multi1Input.nav_goal_x[i], multi1Input.nav_goal_y[i])
+            for i in range(len(multi1Input.nav_goal_x))
+        ]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
         uav_blue = UAVItem(1, "#90D5FF", "BLUE", multi1Input.nav_uav_x[0], multi1Input.nav_uav_y[0],
@@ -198,6 +198,10 @@ class MultiTask1(QMainWindow):
         uav_yellow.hyp_label.setVisible(False)
         uav_yellow.ra_path.setVisible(False)
         uav_yellow.ra_label.setVisible(False)
+
+        for item in goal_items[4:]:
+            left_nav.addItem(item)
+            item.setZValue(2)
 
         self.path_proxy = self.CreatePathChooser()
         left_nav.addItem(self.path_proxy)
@@ -604,7 +608,7 @@ class MultiTask1(QMainWindow):
         self.path_stack.setCurrentIndex(1)
 
         for uav in UAVs:
-            if uav.idx == goal_idx:
+            if uav.color_text == color_text:
                 self.curr_uav = uav
                 break
 

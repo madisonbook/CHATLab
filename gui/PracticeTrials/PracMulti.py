@@ -80,10 +80,10 @@ class PracMulti(QMainWindow):
         for item in storm_items:
             left_nav.addItem(item.pixmap_item)
 
-        goal_items = [GoalItem(1, practiceMultiInput.nav_goal_x[0], practiceMultiInput.nav_goal_y[0]),
-                      GoalItem(2, practiceMultiInput.nav_goal_x[1], practiceMultiInput.nav_goal_y[1]),
-                      GoalItem(3, practiceMultiInput.nav_goal_x[2], practiceMultiInput.nav_goal_y[2]),
-                      GoalItem(4, practiceMultiInput.nav_goal_x[3], practiceMultiInput.nav_goal_y[3])]
+        goal_items = [
+            GoalItem(i + 1, practiceMultiInput.nav_goal_x[i], practiceMultiInput.nav_goal_y[i])
+            for i in range(len(practiceMultiInput.nav_goal_x))
+        ]
         
         #(self, idx, color_hex, color_text, x_pos, y_pos, curr_goal, goals_list, fuel, speed, angle, on_click_callback):
         uav_blue = UAVItem(1, "#90D5FF", "BLUE", practiceMultiInput.nav_uav_x[0], practiceMultiInput.nav_uav_y[0],
@@ -165,6 +165,10 @@ class PracMulti(QMainWindow):
         uav_yellow.hyp_path.setZValue(0)
         uav_yellow.ra_label.setZValue(1)
         uav_yellow.ra_path.setZValue(0)
+
+        for item in goal_items[4:]:
+            left_nav.addItem(item)
+            item.setZValue(2)
 
         left_nav.addItem(uav_yellow.hyp_path)
         left_nav.addItem(uav_yellow.hyp_label)
@@ -584,7 +588,7 @@ class PracMulti(QMainWindow):
         self.path_stack.setCurrentIndex(1)
 
         for uav in UAVs:
-            if uav.idx == goal_idx:
+            if uav.color_text == color_text:
                 self.curr_uav = uav
                 break
 

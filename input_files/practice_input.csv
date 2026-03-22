@@ -5,8 +5,8 @@ gauge_timer,4,10,,
 gauge_duration,30,,,
 nav_uav_x,450,250,300,500
 nav_uav_y,500,400,300,200
-nav_goal_x,150,250,350,450
-nav_goal_y,300,300,300,300
+nav_goal_x,150,250,350,450,200
+nav_goal_y,300,300,300,300,400
 nav_storm_x,150,150,450,550
 nav_storm_y,400,250,400,200
 nav_uav_fuel,12,1200,1200,1200
