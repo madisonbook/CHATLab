@@ -48,6 +48,7 @@ class Multi_Auto1(QMainWindow):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
+        self.nav_auto_fires = False
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
         self.card_update_timer.timeout.connect(self.TimerUpdateCards)
@@ -422,10 +423,10 @@ class Multi_Auto1(QMainWindow):
             }
         """
 
-        probability = random.randint(multiauto1Input.nav_auto[0], multiauto1Input.nav_auto[1])
+        probability = random.randint(multiauto1Input.nav_auto2[0], multiauto1Input.nav_auto2[1])
         rand_num = random.randint(0, 100)
         
-        if nav_auto and rand_num < probability:
+        if nav_auto2 and rand_num < probability:
             if uav.hit_chancea < uav.hit_chanceb + multiauto1Input.nav_auto_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
@@ -453,8 +454,12 @@ class Multi_Auto1(QMainWindow):
         layout.addLayout(inner)
         outer.addLayout(layout)
 
+        btn_col = QVBoxLayout()
         nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
-        outer.addWidget(nav_auto_btn)
+        nav_auto2_btn = self.CreateAutomationButton("UAV Navigation 2", "nav_auto2")
+        btn_col.addWidget(nav_auto_btn)
+        btn_col.addWidget(nav_auto2_btn)
+        outer.addLayout(btn_col)
 
         widget.setLayout(outer)
         widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -593,6 +598,20 @@ class Multi_Auto1(QMainWindow):
 
         self.card_b.warnings.setText(f"Warnings: {uav.hit_chanceb}%")
 
+        # Reset all label styles first
+        normal = "color: black;"
+        highlight = "color: red; font-weight: bold;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+        # Auto 1: highlight distance and warnings on both cards
+        if nav_auto and self.nav_auto_fires:
+            self.card_a.distance.setStyleSheet(highlight)
+            self.card_a.warnings.setStyleSheet(highlight)
+            self.card_b.distance.setStyleSheet(highlight)
+            self.card_b.warnings.setStyleSheet(highlight)
+
     def TimerUpdateCards(self):
         if self.curr_uav:
             self.UpdateInfoCards(self.curr_uav)
@@ -675,11 +694,12 @@ class Multi_Auto1(QMainWindow):
                 break
 
         if self.curr_uav:
+            prob = random.randint(multiauto1Input.nav_auto2[0], multiauto1Input.nav_auto2[1])
+            self.nav_auto_fires = random.randint(0, 100) < prob
             self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
-            #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
 
     def CreateAutomationButton(self, label, state_var_name):
 
@@ -726,7 +746,7 @@ class Multi_Auto1(QMainWindow):
         button.setEnabled(clickable)
 
         def toggle_state():
-            global mtr_auto1, mtr_auto2, nav_auto, chat_auto
+            global mtr_auto1, mtr_auto2, nav_auto, nav_auto2, chat_auto, chat_auto2
 
             current_state = globals()[state_var_name]
             new_state = not current_state
@@ -1134,8 +1154,10 @@ class ChatWidget(QWidget):
 
         main_layout.addWidget(self.left_group, 2)
         main_layout.addWidget(self.right_group, 3)
-        main_layout.addWidget(chat_auto_btn)
-        main_layout.addWidget(chat_auto_btn2)
+        btn_col = QVBoxLayout()
+        btn_col.addWidget(chat_auto_btn)
+        btn_col.addWidget(chat_auto_btn2)
+        main_layout.addLayout(btn_col)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 

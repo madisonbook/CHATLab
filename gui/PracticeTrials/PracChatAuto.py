@@ -727,7 +727,7 @@ class PracChatAuto(QMainWindow):
         button.setEnabled(clickable)
 
         def toggle_state():
-            global mtr_auto1, mtr_auto2, nav_auto, chat_auto
+            global mtr_auto1, mtr_auto2, nav_auto, chat_auto, chat_auto2
 
             current_state = globals()[state_var_name]
             new_state = not current_state
@@ -1136,8 +1136,10 @@ class ChatWidget(QWidget):
 
         main_layout.addWidget(self.left_group, 2)
         main_layout.addWidget(self.right_group, 3)
-        main_layout.addWidget(chat_auto_btn)
-        main_layout.addWidget(chat_auto_btn2)
+        btn_col = QVBoxLayout()
+        btn_col.addWidget(chat_auto_btn)
+        btn_col.addWidget(chat_auto_btn2)
+        main_layout.addLayout(btn_col)
         
         self.input_box.returnPressed.connect(self.handle_user_message)
 

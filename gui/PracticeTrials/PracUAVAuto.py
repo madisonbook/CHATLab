@@ -39,6 +39,7 @@ answer = None
 mtr_auto1= False
 mtr_auto2 = False
 nav_auto = False
+nav_auto2 = False
 chat_auto = False
 
 class PracUAVAuto(QMainWindow):
@@ -46,6 +47,7 @@ class PracUAVAuto(QMainWindow):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
+        self.nav_auto_fires = False
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
         self.card_update_timer.timeout.connect(self.TimerUpdateCards)
@@ -419,10 +421,10 @@ class PracUAVAuto(QMainWindow):
             }
         """
 
-        probability = random.randint(practiceMultiAuto.nav_auto[0], practiceMultiAuto.nav_auto[1])
+        probability = random.randint(practiceMultiAuto.nav_auto2[0], practiceMultiAuto.nav_auto2[1])
         rand_num = random.randint(0, 100)
         
-        if nav_auto and rand_num < probability:
+        if nav_auto2 and rand_num < probability:
             if uav.hit_chancea < uav.hit_chanceb + practiceMultiAuto.nav_auto_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
@@ -450,8 +452,12 @@ class PracUAVAuto(QMainWindow):
         layout.addLayout(inner)
         outer.addLayout(layout)
 
+        btn_col = QVBoxLayout()
         nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
-        outer.addWidget(nav_auto_btn)
+        nav_auto2_btn = self.CreateAutomationButton("UAV Navigation 2", "nav_auto2")
+        btn_col.addWidget(nav_auto_btn)
+        btn_col.addWidget(nav_auto2_btn)
+        outer.addLayout(btn_col)
 
         widget.setLayout(outer)
         widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -575,20 +581,30 @@ class PracUAVAuto(QMainWindow):
         self.card_b.setStyleSheet(self.card_b._base_stylesheet.format(color=color))
 
         self.card_a.distance.setText(f"Distance to target: {uav.hyp_length} km")
-
         fuel_usea = round((uav.hyp_length / uav.starting_fuel) * 100)
         self.card_a.fuel.setText(f"Fuel Usage: {fuel_usea}%")
-
         uav.GetStormHitChance()
-
         self.card_a.warnings.setText(f"Warnings: {uav.hit_chancea}%")
 
         self.card_b.distance.setText(f"Distance to target: {uav.ra_length} km")
-
         fuel_useb = round((uav.ra_length / uav.starting_fuel) * 100)
         self.card_b.fuel.setText(f"Fuel Usage: {fuel_useb}%")
-
         self.card_b.warnings.setText(f"Warnings: {uav.hit_chanceb}%")
+
+        # Reset all label styles first
+        normal = "color: black;"
+        highlight = "color: red; font-weight: bold;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+        # Auto 1: highlight distance and warnings on both cards
+        if nav_auto and self.nav_auto_fires:
+            self.card_a.distance.setStyleSheet(highlight)
+            self.card_a.warnings.setStyleSheet(highlight)
+            self.card_b.distance.setStyleSheet(highlight)
+            self.card_b.warnings.setStyleSheet(highlight)
+
 
     def TimerUpdateCards(self):
         if self.curr_uav:
@@ -672,6 +688,8 @@ class PracUAVAuto(QMainWindow):
                 break
 
         if self.curr_uav:
+            prob = random.randint(practiceMultiAuto.nav_auto2[0], practiceMultiAuto.nav_auto2[1])
+            self.nav_auto_fires = random.randint(0, 100) < prob
             self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
@@ -723,7 +741,7 @@ class PracUAVAuto(QMainWindow):
         button.setEnabled(clickable)
 
         def toggle_state():
-            global mtr_auto1, mtr_auto2, nav_auto, chat_auto
+            global mtr_auto1, mtr_auto2, nav_auto, nav_auto2, chat_auto
 
             current_state = globals()[state_var_name]
             new_state = not current_state
