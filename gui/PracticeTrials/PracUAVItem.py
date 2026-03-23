@@ -257,7 +257,7 @@ class UAVItem():
                 self.uav_item.setPos(new_pos)
                 self.curr_pos = new_pos
                 self.fuel -= math.hypot(dx, dy)
-                if self.fuel < 0:
+                if self.fuel <= 0:
                     self.fuel = 0
                     self.uav_item.is_moving = False
                     self.uav_item.SetGrayedOut(True)
@@ -329,10 +329,10 @@ class UAVItem():
                 self.uav_item.setPos(new_pos)
                 self.curr_pos = new_pos
                 self.fuel -= math.hypot(dx1, dy1)
-                if self.fuel < 0:
+            if self.fuel <= 0:
                     self.fuel = 0
                     self.uav_item.is_moving = False
-                    self.uav_item.SetGrayedOut(True)    
+                    self.uav_item.SetGrayedOut(True)       
 
         def AnimateP2(): 
             if self.fuel > 0:
@@ -359,7 +359,7 @@ class UAVItem():
                 self.uav_item.setPos(new_pos)
                 self.curr_pos = new_pos
                 self.fuel -= math.hypot(dx2, dy2)
-                if self.fuel < 0:
+                if self.fuel <= 0:
                     self.fuel = 0
                     self.uav_item.is_moving = False
                     self.uav_item.SetGrayedOut(True)

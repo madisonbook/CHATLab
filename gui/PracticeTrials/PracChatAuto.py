@@ -206,7 +206,7 @@ class PracChatAuto(QMainWindow):
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
         chat_auto_btn = self.CreateAutomationButton("Chat Box", "chat_auto")
         chat_auto_btn2 = self.CreateAutomationButton("Chat Box 2", "chat_auto2")
-        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto2)
+        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto_btn2)
         self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
