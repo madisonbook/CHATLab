@@ -609,12 +609,16 @@ class Multi_Auto2(QMainWindow):
                     self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
             label.setStyleSheet(normal)
 
-        # Auto 1: highlight distance and warnings on both cards
         if nav_auto and self.nav_auto_fires:
-            self.card_a.distance.setStyleSheet(highlight)
-            self.card_a.warnings.setStyleSheet(highlight)
-            self.card_b.distance.setStyleSheet(highlight)
-            self.card_b.warnings.setStyleSheet(highlight)
+            # Decide which path is better (same logic as buttons)
+            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto_path:
+                # Highlight Path A only
+                self.card_a.distance.setStyleSheet(highlight)
+                self.card_a.warnings.setStyleSheet(highlight)
+            else:
+                # Highlight Path B only
+                self.card_b.distance.setStyleSheet(highlight)
+                self.card_b.warnings.setStyleSheet(highlight)
 
     def TimerUpdateCards(self):
         if self.curr_uav:
