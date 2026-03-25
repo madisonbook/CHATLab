@@ -311,7 +311,7 @@ class PracMtrAuto(QMainWindow):
         auto1_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         mtr_buttons.addWidget(auto1_label)
 
-        monitor_auto1_btn = self.CreateAutomationButton("Monitor Levels 1", "mtr_auto1")
+        monitor_auto1_btn = self.CreateAutomationButton("Alert", "mtr_auto1")
         mtr_buttons.addWidget(monitor_auto1_btn)
 
         mtr_buttons.addSpacing(20)
@@ -321,7 +321,7 @@ class PracMtrAuto(QMainWindow):
         auto2_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         mtr_buttons.addWidget(auto2_label)
 
-        monitor_auto2_btn = self.CreateAutomationButton("Monitor Levels 2", "mtr_auto2")
+        monitor_auto2_btn = self.CreateAutomationButton("Reset", "mtr_auto2")
         mtr_buttons.addWidget(monitor_auto2_btn)
 
         mtr_buttons.addStretch()
@@ -761,7 +761,7 @@ class PracMtrAuto(QMainWindow):
         button.setFont(QFont("Times New Roman", 12))
         button.setCheckable(True)
         button.setChecked(start_on)
-        button.setText(f"Auto is {'ON' if start_on else 'OFF'}")
+        button.setText(f"{label} is {'ON' if start_on else 'OFF'}")
 
         enabled_style = """
             QPushButton {

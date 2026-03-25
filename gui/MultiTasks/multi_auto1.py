@@ -210,8 +210,8 @@ class Multi_Auto1(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        chat_auto_btn = self.CreateAutomationButton("Chat Box 1", "chat_auto1")
-        chat_auto_btn2 = self.CreateAutomationButton("Chat Box 2", "chat_auto2")
+        chat_auto_btn = self.CreateAutomationButton("Alert", "chat_auto1")
+        chat_auto_btn2 = self.CreateAutomationButton("Msg", "chat_auto2")
         self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto_btn2)
         self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -243,7 +243,7 @@ class Multi_Auto1(QMainWindow):
         auto1_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         mtr_buttons.addWidget(auto1_label)
 
-        monitor_auto1_btn = self.CreateAutomationButton("Monitor Levels 1", "mtr_auto1")
+        monitor_auto1_btn = self.CreateAutomationButton("Alert", "mtr_auto1")
         mtr_buttons.addWidget(monitor_auto1_btn)
 
         mtr_buttons.addSpacing(20)
@@ -253,7 +253,7 @@ class Multi_Auto1(QMainWindow):
         auto2_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         mtr_buttons.addWidget(auto2_label)
 
-        monitor_auto2_btn = self.CreateAutomationButton("Monitor Levels 2", "mtr_auto2")
+        monitor_auto2_btn = self.CreateAutomationButton("Reset", "mtr_auto2")
         mtr_buttons.addWidget(monitor_auto2_btn)
 
         mtr_buttons.addStretch()
@@ -459,8 +459,8 @@ class Multi_Auto1(QMainWindow):
         outer.addLayout(layout)
 
         btn_col = QVBoxLayout()
-        nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
-        nav_auto2_btn = self.CreateAutomationButton("UAV Navigation 2", "nav_auto2")
+        nav_auto_btn = self.CreateAutomationButton("Warn", "nav_auto")
+        nav_auto2_btn = self.CreateAutomationButton("Path", "nav_auto2")
         btn_col.addWidget(nav_auto_btn)
         btn_col.addWidget(nav_auto2_btn)
         outer.addLayout(btn_col)
@@ -720,7 +720,7 @@ class Multi_Auto1(QMainWindow):
         button.setFont(QFont("Times New Roman", 12))
         button.setCheckable(True)
         button.setChecked(start_on)
-        button.setText(f"Auto is {'ON' if start_on else 'OFF'}")
+        button.setText(f"{label} is {'ON' if start_on else 'OFF'}")
 
         enabled_style = """
             QPushButton {

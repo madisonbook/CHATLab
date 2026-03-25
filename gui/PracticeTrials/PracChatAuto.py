@@ -204,8 +204,8 @@ class PracChatAuto(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        chat_auto_btn = self.CreateAutomationButton("Chat Box", "chat_auto")
-        chat_auto_btn2 = self.CreateAutomationButton("Chat Box 2", "chat_auto2")
+        chat_auto_btn = self.CreateAutomationButton("Alert", "chat_auto")
+        chat_auto_btn2 = self.CreateAutomationButton("Msg", "chat_auto2")
         self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto_btn2)
         self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -697,7 +697,7 @@ class PracChatAuto(QMainWindow):
         button.setFont(QFont("Times New Roman", 12))
         button.setCheckable(True)
         button.setChecked(start_on)
-        button.setText(f"Auto is {'ON' if start_on else 'OFF'}")
+        button.setText(f"{label} is {'ON' if start_on else 'OFF'}")
 
         enabled_style = """
             QPushButton {

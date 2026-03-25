@@ -457,8 +457,8 @@ class PracUAVAuto(QMainWindow):
         outer.addLayout(layout)
 
         btn_col = QVBoxLayout()
-        nav_auto_btn = self.CreateAutomationButton("UAV Navigation", "nav_auto")
-        nav_auto2_btn = self.CreateAutomationButton("UAV Navigation 2", "nav_auto2")
+        nav_auto_btn = self.CreateAutomationButton("Warn", "nav_auto")
+        nav_auto2_btn = self.CreateAutomationButton("Path", "nav_auto2")
         btn_col.addWidget(nav_auto_btn)
         btn_col.addWidget(nav_auto2_btn)
         outer.addLayout(btn_col)
@@ -715,7 +715,7 @@ class PracUAVAuto(QMainWindow):
         button.setFont(QFont("Times New Roman", 12))
         button.setCheckable(True)
         button.setChecked(start_on)
-        button.setText(f"Auto is {'ON' if start_on else 'OFF'}")
+        button.setText(f"{label} is {'ON' if start_on else 'OFF'}")
 
         enabled_style = """
             QPushButton {
