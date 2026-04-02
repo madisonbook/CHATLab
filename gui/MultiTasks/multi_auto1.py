@@ -761,7 +761,7 @@ class Multi_Auto1(QMainWindow):
             new_state = not current_state
             globals()[state_var_name] = new_state
 
-            button.setText(f"Auto is {'ON' if new_state else 'OFF'}")
+            button.setText(f"{label} is {'ON' if new_state else 'OFF'}")
             button.setChecked(new_state)
 
             LogMultiTask(f"{state_var_name} {'ON' if new_state else 'OFF'}")
