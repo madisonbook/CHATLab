@@ -21,17 +21,17 @@ nav_goal_pts = []
 nav_uav_fuel = []
 nav_uav_speed = []
 nav_path_angle = []
-nav_auto_path = None
-nav_auto = []
-nav_auto_oas = None
-nav_auto_clickable = None
+nav_auto1_path = None
+nav_auto1 = []
+nav_auto1_oas = None
+nav_auto1_clickable = None
 nav_auto2 = []
 nav_auto2_oas = None
 nav_auto2_clickable = None
 chat_timer = []
-chat_auto = [] 
-chat_auto_oas = None
-chat_auto_clickable = None
+chat_auto1 = [] 
+chat_auto1_oas = None
+chat_auto1_clickable = None
 chat_auto2 = [] 
 chat_auto2_oas = None
 chat_auto2_clickable = None
@@ -74,21 +74,21 @@ def read_multiauto2():
             nav_uav_fuel = [int(item) for item in rows[16][1:5]]
             nav_uav_speed = [int(item) for item in rows[17][1:5]]
 
-            global nav_path_angle, nav_auto_path, nav_auto, nav_auto_oas, nav_auto_clickable, nav_auto2, nav_auto2_oas, nav_auto2_clickable
+            global nav_path_angle, nav_auto1_path, nav_auto1, nav_auto1_oas, nav_auto1_clickable, nav_auto2, nav_auto2_oas, nav_auto2_clickable
             nav_path_angle = [int(item) for item in rows[18][1:5]]
-            nav_auto_path = int(rows[19][1])
-            nav_auto = [int(item) for item in rows[20][1:3]]
-            nav_auto_oas = _as_bool(rows[21][1])
-            nav_auto_clickable = _as_bool(rows[22][1])
+            nav_auto1_path = int(rows[19][1])
+            nav_auto1 = [int(item) for item in rows[20][1:3]]
+            nav_auto1_oas = _as_bool(rows[21][1])
+            nav_auto1_clickable = _as_bool(rows[22][1])
             nav_auto2 = [int(item) for item in rows[23][1:3]]
             nav_auto2_oas = _as_bool(rows[24][1])
             nav_auto2_clickable = _as_bool(rows[25][1])
             
-            global chat_timer, chat_auto, chat_auto_oas, chat_auto_clickable, chat_auto2, chat_auto2_oas, chat_auto2_clickable, duration
+            global chat_timer, chat_auto1, chat_auto1_oas, chat_auto1_clickable, chat_auto2, chat_auto2_oas, chat_auto2_clickable, duration
             chat_timer = [int(item) for item in rows[26][1:3]]
-            chat_auto = [int(item) for item in rows[27][1:3]]
-            chat_auto_oas = _as_bool(rows[28][1])
-            chat_auto_clickable = _as_bool(rows[29][1])
+            chat_auto1 = [int(item) for item in rows[27][1:3]]
+            chat_auto1_oas = _as_bool(rows[28][1])
+            chat_auto1_clickable = _as_bool(rows[29][1])
             chat_auto2 = [int(item) for item in rows[30][1:3]]
             chat_auto2_oas = _as_bool(rows[31][1])
             chat_auto2_clickable = _as_bool(rows[32][1])

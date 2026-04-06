@@ -733,6 +733,11 @@ class PracChatAuto(QMainWindow):
             new_state = not current_state
             globals()[state_var_name] = new_state
 
+            if new_state:
+                self._OnAutomationEnabled(state_var_name)
+            else:
+                self._OnAutomationDisabled(state_var_name)
+
             button.setText(f"{label} is {'ON' if new_state else 'OFF'}")
             button.setChecked(new_state)
 
@@ -742,6 +747,60 @@ class PracChatAuto(QMainWindow):
             button.clicked.connect(toggle_state)
 
         return button
+    
+    def _ResetPathButtonStyles(self):
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+        self.a_button.setStyleSheet(default_btn)
+        self.b_button.setStyleSheet(default_btn)
+
+        # Reset all info card label styles back to default
+        normal = "color: black;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+    def _OnAutomationDisabled(self, state_var_name):
+        """Immediately clear automation effects when toggled off."""
+
+        # --- Chat Auto 1: clear red highlight from chat box ---
+        if state_var_name == "chat_auto":
+            self.chat_box.left_group.setStyleSheet(self.chat_box.default_chat)
+            self.chat_box.right_group.setStyleSheet(self.chat_box.history_default)
+
+        # --- Chat Auto 2: clear any pre-filled answer ---
+        elif state_var_name == "chat_auto2":
+            self.chat_box.input_box.clear()
+
+    def _OnAutomationEnabled(self, state_var_name):
+
+        # --- Chat Auto 1: highlight chat box if there's an unanswered message ---
+        if state_var_name == "chat_auto":
+            if self.chat_box.latest_message.text() not in ("", "Waiting..."):
+                probability = random.randint(practiceMultiAuto.chat_auto[0], practiceMultiAuto.chat_auto[1])
+                rand_num = random.randint(0, 100)
+                if rand_num < probability:
+                    self.chat_box.left_group.setStyleSheet(self.chat_box.red_chat)
+                    self.chat_box.right_group.setStyleSheet(self.chat_box.history_red)
+
+        # --- Chat Auto 2: immediately fill in the answer if there's an unanswered message ---
+        elif state_var_name == "chat_auto2":
+            if chat_box[0] != "N/A" and chat_box[1] == "N/A":
+                probability = random.randint(practiceMultiAuto.chat_auto2[0], practiceMultiAuto.chat_auto2[1])
+                rand_num = random.randint(0, 100)
+                if rand_num < probability:
+                    correct = self.chat_box.compute_answer()
+                    if correct:
+                        self.chat_box.input_box.setText(correct)
 
     
     def closeEvent(self, event):

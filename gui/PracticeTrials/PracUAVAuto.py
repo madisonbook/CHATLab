@@ -648,12 +648,13 @@ class PracUAVAuto(QMainWindow):
             uav.ra_label.setVisible(False)
 
         self.ClearUAVCards()
+        self._ResetPathButtonStyles()
         pass
 
     def ClickPathA(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
-        
+        self._ResetPathButtonStyles()
         self.curr_uav.MoveToGoalA()
         self.ClickCancel()
         
@@ -661,7 +662,7 @@ class PracUAVAuto(QMainWindow):
     def ClickPathB(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
-        
+        self._ResetPathButtonStyles()
         self.curr_uav.MoveToGoalB()
         self.ClickCancel()
         pass
@@ -756,6 +757,11 @@ class PracUAVAuto(QMainWindow):
             new_state = not current_state
             globals()[state_var_name] = new_state
 
+            if new_state:
+                self._OnAutomationEnabled(state_var_name)
+            else:
+                self._OnAutomationDisabled(state_var_name)
+
             button.setText(f"{label} is {'ON' if new_state else 'OFF'}")
             button.setChecked(new_state)
 
@@ -765,6 +771,45 @@ class PracUAVAuto(QMainWindow):
             button.clicked.connect(toggle_state)
 
         return button
+    
+    def _ResetPathButtonStyles(self):
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+        self.a_button.setStyleSheet(default_btn)
+        self.b_button.setStyleSheet(default_btn)
+
+        # Reset all info card label styles back to default
+        normal = "color: black;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+    def _OnAutomationDisabled(self, state_var_name):
+        """Immediately clear automation effects when toggled off."""
+
+        # --- Nav Auto 1 / Nav Auto 2: reset path button styles and card highlights ---
+        if state_var_name in ("nav_auto1", "nav_auto2"):
+            self._ResetPathButtonStyles()
+            if self.curr_uav:
+                self.UpdateInfoCards(self.curr_uav)
+
+    def _OnAutomationEnabled(self, state_var_name):
+        """Immediately apply automation effects when toggled on."""
+
+        # --- Nav Auto 1 / Nav Auto 2: re-evaluate path highlights if a UAV is selected ---
+        if state_var_name in ("nav_auto1", "nav_auto2"):
+            if self.curr_uav:
+                self.UpdateButtons(self.curr_uav)
+                self.UpdateInfoCards(self.curr_uav)
 
     
     def closeEvent(self, event):

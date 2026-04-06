@@ -797,6 +797,11 @@ class PracMtrAuto(QMainWindow):
             new_state = not current_state
             globals()[state_var_name] = new_state
 
+            if new_state:
+                self._OnAutomationEnabled(state_var_name)
+            else:
+                self._OnAutomationDisabled(state_var_name)
+
             button.setText(f"{label} is {'ON' if new_state else 'OFF'}")
             button.setChecked(new_state)
 
@@ -806,6 +811,58 @@ class PracMtrAuto(QMainWindow):
             button.clicked.connect(toggle_state)
 
         return button
+    
+    def _ResetPathButtonStyles(self):
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+        self.a_button.setStyleSheet(default_btn)
+        self.b_button.setStyleSheet(default_btn)
+
+        # Reset all info card label styles back to default
+        normal = "color: black;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+    def _OnAutomationDisabled(self, state_var_name):
+        """Immediately clear automation effects when toggled off."""
+
+        # --- Monitor Auto 1: clear red highlights from all reset buttons ---
+        if state_var_name == "mtr_auto1":
+            for gauge in gauges:
+                gauge.reset_button.setStyleSheet(gauge.default_btn)
+
+
+    def _OnAutomationEnabled(self, state_var_name):
+        """Immediately apply automation effects when toggled on."""
+
+        # --- Monitor Auto 1: highlight reset buttons for any currently OOB gauges ---
+        if state_var_name == "mtr_auto1":
+            for gauge in gauges:
+                if gauge.oob:
+                    probability = random.randint(practiceMultiAuto.mtr_auto1[0], practiceMultiAuto.mtr_auto1[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        gauge.reset_button.setStyleSheet(gauge.red_btn)
+
+        # --- Monitor Auto 2: immediately reset any currently OOB gauges ---
+        elif state_var_name == "mtr_auto2":
+            for idx, gauge in enumerate(gauges):
+                if gauge.oob:
+                    probability = random.randint(practiceMultiAuto.mtr_auto2[0], practiceMultiAuto.mtr_auto2[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        gauge.ResetLevel(idx)
+
 
     
     def closeEvent(self, event):

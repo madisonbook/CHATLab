@@ -13,7 +13,7 @@ def ClearMultiLog():
     total_score = 0
 
 
-def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
+def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto1, nav_auto2, chat_auto1, chat_auto2, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time):
     
     curr_format = datetime.datetime.now().strftime("%m:%d:%Y_%H:%M:%S")
     curr_time = datetime.datetime.now()
@@ -55,7 +55,8 @@ def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, 
         total_oob,
         total_reset,
         str(mtr_rxn_time),
-        nav_auto
+        nav_auto1,
+        nav_auto2
     ])
 
     for uav in uavs:
@@ -84,7 +85,8 @@ def LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, 
     data_row.extend([
         str(sum_goals),
         str(total_score),
-        chat_auto,
+        chat_auto1,
+        chat_auto2,
         chat_box[0],
         chat_box[1],
         answer
@@ -107,7 +109,7 @@ def MultiCSV(filename):
         "gauge2_level", "gauge2_oob", "gauge2_reset",
         "gauge3_level", "gauge3_oob", "gauge3_reset",
         "gauge4_level", "gauge4_oob", "gauge4_reset",
-        "total_oob", "total_reset", "mtr_rxn_time", "nav_auto",
+        "total_oob", "total_reset", "mtr_rxn_time", "nav_auto1", "nav_auto2",
         "uav1_moving", "uav1_idle", "uav1_fuel", "uav1_patha_length", "uav1_patha_stormchance",
         "uav1_pathb_length", "uav1_pathb_stormchance", "uav1_onpath", "uav1_stormhit",
         "uav1_goal", "uav1_atgoal", "uav1_goalsreached", "uav1_score",
@@ -121,7 +123,7 @@ def MultiCSV(filename):
         "uav4_pathb_length", "uav4_pathb_stormchance", "uav4_onpath", "uav4_stormhit",
         "uav4_goal", "uav4_atgoal", "uav4_goalsreached", "uav4_score",
         "total_goals_reached", "total_score",
-        "chat_auto", "message", "response", "correct_answer", "chat_rxn_time"
+        "chat_auto1", "chat_auto2", "message", "response", "correct_answer", "chat_rxn_time"
     ]
 
     file_exists = os.path.exists(filename)

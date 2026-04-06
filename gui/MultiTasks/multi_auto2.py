@@ -38,9 +38,9 @@ answer = None
 
 mtr_auto1= False
 mtr_auto2 = False
-nav_auto = False
+nav_auto1 = False
 nav_auto2 = False
-chat_auto = False
+chat_auto1 = False
 chat_auto2 = False
 
 class Multi_Auto2(QMainWindow):
@@ -48,7 +48,7 @@ class Multi_Auto2(QMainWindow):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
-        self.nav_auto_fires = False
+        self.nav_auto1_fires = False
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
         self.card_update_timer.timeout.connect(self.TimerUpdateCards)
@@ -210,9 +210,9 @@ class Multi_Auto2(QMainWindow):
         self.uav_info_stack.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
         items_on_screen = ["UAV BLUE", "UAV GREEN", "UAV RED", "UAV YELLOW", "GAUGE RED", "GAUGE YELLOW", "GAUGE GREEN", "GAUGE BLUE"]
-        chat_auto_btn = self.CreateAutomationButton("Alert", "chat_auto1")
-        chat_auto_btn2 = self.CreateAutomationButton("Msg", "chat_auto2")
-        self.chat_box = ChatWidget(items_on_screen, chat_auto_btn, chat_auto_btn2)
+        chat_auto1_btn = self.CreateAutomationButton("Alert", "chat_auto1")
+        chat_auto1_btn2 = self.CreateAutomationButton("Msg", "chat_auto2")
+        self.chat_box = ChatWidget(items_on_screen, chat_auto1_btn, chat_auto1_btn2)
         self.chat_box.setFixedHeight(175)
         self.chat_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
@@ -410,7 +410,7 @@ class Multi_Auto2(QMainWindow):
             }
         """
 
-        if not nav_auto:
+        if not nav_auto1:
             self.a_button.setStyleSheet(default_btn)
             self.b_button.setStyleSheet(default_btn)
             pass
@@ -431,7 +431,7 @@ class Multi_Auto2(QMainWindow):
         rand_num = random.randint(0, 100)
         
         if nav_auto2 and rand_num < probability:
-            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto_path:
+            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto1_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
             else:
@@ -459,9 +459,9 @@ class Multi_Auto2(QMainWindow):
         outer.addLayout(layout)
 
         btn_col = QVBoxLayout()
-        nav_auto_btn = self.CreateAutomationButton("Warn", "nav_auto")
-        nav_auto2_btn = self.CreateAutomationButton("Path", "nav_auto2")
-        btn_col.addWidget(nav_auto_btn)
+        nav_auto1_btn = self.CreateAutomationButton("Warn", "nav_auto1", on_enable=self._RollNavAuto1Fires)
+        nav_auto2_btn = self.CreateAutomationButton("Path", "nav_auto2", on_enable=self._RollNavAuto1Fires)
+        btn_col.addWidget(nav_auto1_btn)
         btn_col.addWidget(nav_auto2_btn)
         outer.addLayout(btn_col)
 
@@ -609,9 +609,9 @@ class Multi_Auto2(QMainWindow):
                     self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
             label.setStyleSheet(normal)
 
-        if nav_auto and self.nav_auto_fires:
+        if nav_auto1 and self.nav_auto1_fires:
             # Decide which path is better (same logic as buttons)
-            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto_path:
+            if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto1_path:
                 # Highlight Path A only
                 self.card_a.distance.setStyleSheet(highlight)
                 self.card_a.warnings.setStyleSheet(highlight)
@@ -624,6 +624,13 @@ class Multi_Auto2(QMainWindow):
         if self.curr_uav:
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
+
+    def _RollNavAuto1Fires(self):
+        prob = random.randint(multiauto2Input.nav_auto2[0], multiauto2Input.nav_auto2[1])
+        self.nav_auto1_fires = random.randint(0, 100) < prob
+        if self.curr_uav:
+            self.UpdateButtons(self.curr_uav)
+            self.UpdateInfoCards(self.curr_uav)
 
     def ClearUAVCards(self):
         self.card_uav.setStyleSheet(self.card_uav._base_stylesheet.format(color="gray"))
@@ -653,12 +660,13 @@ class Multi_Auto2(QMainWindow):
             uav.ra_label.setVisible(False)
 
         self.ClearUAVCards()
+        self._ResetPathButtonStyles()
         pass
 
     def ClickPathA(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
-        
+        self._ResetPathButtonStyles()
         self.curr_uav.MoveToGoalA()
         self.ClickCancel()
         
@@ -666,7 +674,7 @@ class Multi_Auto2(QMainWindow):
     def ClickPathB(self):
         if not hasattr(self, "curr_uav") or self.curr_uav is None:
             return
-        
+        self._ResetPathButtonStyles()
         self.curr_uav.MoveToGoalB()
         self.ClickCancel()
         pass
@@ -702,14 +710,16 @@ class Multi_Auto2(QMainWindow):
                 break
 
         if self.curr_uav:
-            prob = random.randint(multiauto2Input.nav_auto2[0], multiauto2Input.nav_auto2[1])
-            self.nav_auto_fires = random.randint(0, 100) < prob
+            # Only roll automation once — when the UAV hasn't been given a path yet
+            if not self.curr_uav.uav_item.is_moving:
+                self._RollNavAuto1Fires()
+            
             self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
 
-    def CreateAutomationButton(self, label, state_var_name):
+    def CreateAutomationButton(self, label, state_var_name, on_enable=None):
 
         oas_name = f"{state_var_name}_oas"
         clickable_name = f"{state_var_name}_clickable"
@@ -754,7 +764,7 @@ class Multi_Auto2(QMainWindow):
         button.setEnabled(clickable)
 
         def toggle_state():
-            global mtr_auto1, nav_auto, chat_auto, mtr_auto2, nav_auto2, chat_auto2
+            global mtr_auto1, nav_auto1, chat_auto1, mtr_auto2, nav_auto2, chat_auto2
 
             current_state = globals()[state_var_name]
             new_state = not current_state
@@ -763,12 +773,111 @@ class Multi_Auto2(QMainWindow):
             button.setText(f"{label} is {'ON' if new_state else 'OFF'}")
             button.setChecked(new_state)
 
+            if new_state:
+                if on_enable:
+                    on_enable()
+                self._OnAutomationEnabled(state_var_name)
+            else:
+                self._OnAutomationDisabled(state_var_name)
+
             LogMultiTask(f"{state_var_name} {'ON' if new_state else 'OFF'}")
 
         if clickable:
             button.clicked.connect(toggle_state)
 
         return button
+    
+    def _ResetPathButtonStyles(self):
+        default_btn = """
+            QPushButton {
+                border: 1px solid black;
+                border-radius: 6px;
+                padding: 6px 12px;
+                color: black;
+            }
+            QPushButton:hover {
+                background-color: #f0f0f0;
+            }
+        """
+        self.a_button.setStyleSheet(default_btn)
+        self.b_button.setStyleSheet(default_btn)
+
+        # Reset all info card label styles back to default
+        normal = "color: black;"
+        for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                    self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+            label.setStyleSheet(normal)
+
+    def _OnAutomationDisabled(self, state_var_name):
+        """Immediately clear automation effects when toggled off."""
+
+        # --- Monitor Auto 1: clear red highlights from all reset buttons ---
+        if state_var_name == "mtr_auto1":
+            for gauge in gauges:
+                gauge.reset_button.setStyleSheet(gauge.default_btn)
+
+        # --- Chat Auto 1: clear red highlight from chat box ---
+        elif state_var_name == "chat_auto1":
+            self.chat_box.left_group.setStyleSheet(self.chat_box.default_chat)
+            self.chat_box.right_group.setStyleSheet(self.chat_box.history_default)
+
+        # --- Chat Auto 2: clear any pre-filled answer ---
+        elif state_var_name == "chat_auto2":
+            self.chat_box.input_box.clear()
+
+        # --- Nav Auto 1 / Nav Auto 2: reset path button styles and card highlights ---
+        elif state_var_name in ("nav_auto1", "nav_auto2"):
+            self._ResetPathButtonStyles()
+            if self.curr_uav:
+                self.UpdateInfoCards(self.curr_uav)
+
+    def _OnAutomationEnabled(self, state_var_name):
+        """Immediately apply automation effects when toggled on."""
+
+        # --- Monitor Auto 1: highlight reset buttons for any currently OOB gauges ---
+        if state_var_name == "mtr_auto1":
+            for gauge in gauges:
+                if gauge.oob:
+                    probability = random.randint(multiauto2Input.mtr_auto1[0], multiauto2Input.mtr_auto1[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        gauge.reset_button.setStyleSheet(gauge.red_btn)
+
+        # --- Monitor Auto 2: immediately reset any currently OOB gauges ---
+        elif state_var_name == "mtr_auto2":
+            for idx, gauge in enumerate(gauges):
+                if gauge.oob:
+                    probability = random.randint(multiauto2Input.mtr_auto2[0], multiauto2Input.mtr_auto2[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        gauge.ResetLevel(idx)
+
+
+        # --- Chat Auto 1: highlight chat box if there's an unanswered message ---
+        elif state_var_name == "chat_auto1":
+            print("in block")
+            if self.chat_box.latest_message.text() not in ("", "Waiting..."):
+                probability = random.randint(multiauto2Input.chat_auto1[0], multiauto2Input.chat_auto1[1])
+                rand_num = random.randint(0, 100)
+                if rand_num < probability:
+                    self.chat_box.left_group.setStyleSheet(self.chat_box.red_chat)
+                    self.chat_box.right_group.setStyleSheet(self.chat_box.history_red)
+
+        # --- Chat Auto 2: immediately fill in the answer if there's an unanswered message ---
+        elif state_var_name == "chat_auto2":
+            if chat_box[0] != "N/A" and chat_box[1] == "N/A":
+                probability = random.randint(multiauto2Input.chat_auto2[0], multiauto2Input.chat_auto2[1])
+                rand_num = random.randint(0, 100)
+                if rand_num < probability:
+                    correct = self.chat_box.compute_answer()
+                    if correct:
+                        self.chat_box.input_box.setText(correct)
+
+        # --- Nav Auto 1 / Nav Auto 2: re-evaluate path highlights if a UAV is selected ---
+        elif state_var_name in ("nav_auto1", "nav_auto2"):
+            if self.curr_uav:
+                self.UpdateButtons(self.curr_uav)
+                self.UpdateInfoCards(self.curr_uav)
 
     
     def closeEvent(self, event):
@@ -1033,7 +1142,7 @@ class GenerateLevel(QWidget):
             self.animation_timer.stop()
 
 class ChatWidget(QWidget):
-    def __init__(self, context_items, chat_auto_btn, chat_auto_btn2):
+    def __init__(self, context_items, chat_auto1_btn, chat_auto1_btn2):
         super().__init__()
         
         # Set fixed size for the chat widget
@@ -1163,8 +1272,8 @@ class ChatWidget(QWidget):
         main_layout.addWidget(self.left_group, 2)
         main_layout.addWidget(self.right_group, 3)
         btn_col = QVBoxLayout()
-        btn_col.addWidget(chat_auto_btn)
-        btn_col.addWidget(chat_auto_btn2)
+        btn_col.addWidget(chat_auto1_btn)
+        btn_col.addWidget(chat_auto1_btn2)
         main_layout.addLayout(btn_col)
         
         
@@ -1277,10 +1386,10 @@ class ChatWidget(QWidget):
 
         self.add_message_card(self.item)
 
-        probability = random.randint(multiauto2Input.chat_auto[0], multiauto2Input.chat_auto[1])
+        probability = random.randint(multiauto2Input.chat_auto1[0], multiauto2Input.chat_auto1[1])
         rand_num = random.randint(0, 100)
 
-        if chat_auto and rand_num < probability:
+        if chat_auto1 and rand_num < probability:
             self.left_group.setStyleSheet(self.red_chat)
             self.right_group.setStyleSheet(self.history_red)
 
@@ -1342,10 +1451,10 @@ def Subtitle(str: str):
     subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     return subtitle_label
 
-# block, trial, log_type, mtr_auto, nav_auto, chat_auto, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time
+# block, trial, log_type, mtr_auto, nav_auto1, chat_auto1, gauges, total_oob, total_reset, uavs, chat_box, answer, msg_time
 def LogMultiTask(log_type):
     block = 3
     trial = 2
 
-    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
+    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto1, nav_auto2, chat_auto1, chat_auto2, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass
