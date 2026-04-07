@@ -797,7 +797,7 @@ class PracUAVAuto(QMainWindow):
         """Immediately clear automation effects when toggled off."""
 
         # --- Nav Auto 1 / Nav Auto 2: reset path button styles and card highlights ---
-        if state_var_name in ("nav_auto1", "nav_auto2"):
+        if state_var_name in ("nav_auto", "nav_auto2"):
             self._ResetPathButtonStyles()
             if self.curr_uav:
                 self.UpdateInfoCards(self.curr_uav)
@@ -806,7 +806,7 @@ class PracUAVAuto(QMainWindow):
         """Immediately apply automation effects when toggled on."""
 
         # --- Nav Auto 1 / Nav Auto 2: re-evaluate path highlights if a UAV is selected ---
-        if state_var_name in ("nav_auto1", "nav_auto2"):
+        if state_var_name in ("nav_auto", "nav_auto2"):
             if self.curr_uav:
                 self.UpdateButtons(self.curr_uav)
                 self.UpdateInfoCards(self.curr_uav)
