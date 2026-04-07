@@ -23,6 +23,7 @@ class UAVItem():
         self.uav_item.setPos(x_pos, y_pos)
         self.uav_item.setRotation(self.GetAngle(x_pos, y_pos, curr_goal.pos_x, curr_goal.pos_y))
 
+        self.active = True
         self.curr_pos = QPointF(x_pos, y_pos)
         self.idx = idx
         self.at_goal = False
@@ -227,6 +228,8 @@ class UAVItem():
         closest_storm = self.storm_items[self.storm_a - 1]
 
         def Animate(): 
+            if not self.active:
+                return
             if self.fuel > 0:
                 new_x = self.curr_pos.x() + dx
                 new_y = self.curr_pos.y() + dy
@@ -311,6 +314,8 @@ class UAVItem():
         closest_storm = self.storm_items[self.storm_b - 1]
 
         def AnimateP1(): 
+            if not self.active:
+                return
             if self.fuel > 0:
                 new_x = self.curr_pos.x() + dx1
                 new_y = self.curr_pos.y() + dy1
@@ -337,6 +342,8 @@ class UAVItem():
                     self.LogAction("UAV No Fuel")     
 
         def AnimateP2(): 
+            if not self.active:
+                return
             if self.fuel > 0:
                 new_x = self.curr_pos.x() + dx2
                 new_y = self.curr_pos.y() + dy2

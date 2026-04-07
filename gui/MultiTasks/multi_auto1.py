@@ -910,6 +910,9 @@ class Multi_Auto1(QMainWindow):
                     uav.timer.stop()
                 if hasattr(uav, 'idle_timer') and uav.idle_timer is not None:
                     uav.idle_timer.stop()
+                if hasattr(uav, 'active'):
+                    uav.active = False
+                
         
         # Accept the close event
         event.accept()
@@ -945,6 +948,8 @@ class Multi_Auto1(QMainWindow):
                     uav.update_timer.stop()
                 if hasattr(uav, 'timer') and uav.timer is not None:
                     uav.timer.stop()
+                if hasattr(uav, 'active'):
+                    uav.active = False
 
     def StartSummary(self):
         #from DataLogging.LogNavigation import NavigationCSV
@@ -1453,6 +1458,9 @@ def Subtitle(str: str):
 def LogMultiTask(log_type):
     block = 3
     trial = 1
+
+    if len(gauges) < 4:  # gauges not ready yet
+        return
 
     LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto1, nav_auto2, chat_auto1, chat_auto2, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass

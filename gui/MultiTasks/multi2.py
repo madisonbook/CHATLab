@@ -39,7 +39,9 @@ answer = None
 mtr_auto1 = False
 mtr_auto2 = False
 nav_auto = False
+nav_auto2 = False
 chat_auto = False
+chat_auto2 = False
 
 class MultiTask2(QMainWindow):
     def __init__(self):
@@ -647,6 +649,8 @@ class MultiTask2(QMainWindow):
                     uav.timer.stop()
                 if hasattr(uav, 'idle_timer') and uav.idle_timer is not None:
                     uav.idle_timer.stop()
+                if hasattr(uav, 'active'):
+                    uav.active = False
         
         # Accept the close event
         event.accept()
@@ -682,6 +686,8 @@ class MultiTask2(QMainWindow):
                     uav.update_timer.stop()
                 if hasattr(uav, 'timer') and uav.timer is not None:
                     uav.timer.stop()
+                if hasattr(uav, 'active'):
+                    uav.active = False
 
     def StartSummary(self):
         #from DataLogging.LogNavigation import NavigationCSV
@@ -1100,5 +1106,5 @@ def LogMultiTask(log_type):
     block = 2
     trial = 2
 
-    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, chat_auto, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
+    LogMulti(block, trial, log_type, mtr_auto1, mtr_auto2, nav_auto, nav_auto2, chat_auto, chat_auto2, gauges, total_oob, total_reset, UAVs, chat_box, answer, msg_time)
     pass
