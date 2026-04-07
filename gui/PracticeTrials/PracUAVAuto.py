@@ -47,7 +47,8 @@ class PracUAVAuto(QMainWindow):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
-        self.nav_auto_fires = False
+        self.warn_auto_fires = False
+        self.path_auto_fires = False
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
         self.card_update_timer.timeout.connect(self.TimerUpdateCards)
@@ -425,10 +426,10 @@ class PracUAVAuto(QMainWindow):
             }
         """
 
-        probability = random.randint(practiceMultiAuto.nav_auto2[0], practiceMultiAuto.nav_auto2[1])
-        rand_num = random.randint(0, 100)
+        #probability = random.randint(practiceMultiAuto.nav_auto2[0], practiceMultiAuto.nav_auto2[1])
+        #rand_num = random.randint(0, 100)
         
-        if nav_auto2 and rand_num < probability:
+        if nav_auto2 and self.path_auto_fires:
             if uav.hit_chancea < uav.hit_chanceb + practiceMultiAuto.nav_auto_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
@@ -603,7 +604,7 @@ class PracUAVAuto(QMainWindow):
             label.setStyleSheet(normal)
 
         # Auto 1: highlight distance and warnings on both cards
-        if nav_auto and self.nav_auto_fires:
+        if nav_auto and self.warn_auto_fires:
             # Decide which path is better (same logic as buttons)
             if uav.hit_chancea < uav.hit_chanceb + practiceMultiAuto.nav_auto_path:
                 # Highlight Path A only
@@ -699,12 +700,24 @@ class PracUAVAuto(QMainWindow):
 
         if self.curr_uav:
             prob = random.randint(practiceMultiAuto.nav_auto2[0], practiceMultiAuto.nav_auto2[1])
-            self.nav_auto_fires = random.randint(0, 100) < prob
+            self.warn_auto_fires = self.ShouldAutomationFire("warn")
+            self.path_auto_fires = self.ShouldAutomationFire("path")
             self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
             #self.uav_info_stack.setCurrentWidget(self.uav_info_widgets[self.curr_uav.idx])
+
+    def ShouldAutomationFire(self, auto_type: str) -> bool:
+        if auto_type == "warn":
+            low, high = practiceMultiAuto.nav_auto
+        elif auto_type == "path":
+            low, high = practiceMultiAuto.nav_auto2
+        else:
+            return False
+
+        probability = random.randint(low, high)
+        return random.randint(0, 100) < probability
 
     def CreateAutomationButton(self, label, state_var_name):
 

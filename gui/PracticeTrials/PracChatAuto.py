@@ -1231,6 +1231,7 @@ class ChatWidget(QWidget):
             
             #LogMultiTask("Chat Reply")
             chat_box[1] = "N/A"
+            chat_box[0] = "N/A"
 
             self.left_group.setStyleSheet(self.default_chat)
             self.right_group.setStyleSheet(self.history_default)

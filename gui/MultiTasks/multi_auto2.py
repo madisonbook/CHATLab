@@ -48,7 +48,8 @@ class Multi_Auto2(QMainWindow):
         super().__init__()
         self.setWindowTitle("Automation Use in Multitasking Contexts")
         self.curr_uav = None
-        self.nav_auto1_fires = False
+        self.warn_auto_fires = False
+        self.path_auto_fires = False
         self.card_update_timer = QTimer()
         self.card_update_timer.setInterval(1000)  # 1000 ms = 1 second
         self.card_update_timer.timeout.connect(self.TimerUpdateCards)
@@ -427,10 +428,11 @@ class Multi_Auto2(QMainWindow):
             }
         """
 
-        probability = random.randint(multiauto2Input.nav_auto2[0], multiauto2Input.nav_auto2[1])
-        rand_num = random.randint(0, 100)
         
-        if nav_auto2 and rand_num < probability:
+        #probability = random.randint(multiauto2Input.nav_auto2[0], multiauto2Input.nav_auto2[1])
+        #rand_num = random.randint(0, 100)
+        
+        if nav_auto2 and self.path_auto_fires:
             if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto1_path:
                 self.a_button.setStyleSheet(red_btn)
                 self.b_button.setStyleSheet(default_btn)
@@ -609,7 +611,7 @@ class Multi_Auto2(QMainWindow):
                     self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
             label.setStyleSheet(normal)
 
-        if nav_auto1 and self.nav_auto1_fires:
+        if nav_auto1 and self.warn_auto_fires:
             # Decide which path is better (same logic as buttons)
             if uav.hit_chancea < uav.hit_chanceb + multiauto2Input.nav_auto1_path:
                 # Highlight Path A only
@@ -711,14 +713,24 @@ class Multi_Auto2(QMainWindow):
 
         if self.curr_uav:
             # Only roll automation once — when the UAV hasn't been given a path yet
-            if not self.curr_uav.uav_item.is_moving:
-                self._RollNavAuto1Fires()
-            
+            self.warn_auto_fires = self.ShouldAutomationFire("warn")
+            self.path_auto_fires = self.ShouldAutomationFire("path")
             self.UpdateButtons(self.curr_uav)
             self.UpdateInfoCards(self.curr_uav)
             self.UpdateUAVCard(self.curr_uav)
             self.card_update_timer.start()
 
+    def ShouldAutomationFire(self, auto_type: str) -> bool:
+        if auto_type == "warn":
+            low, high = multiauto2Input.nav_auto1
+        elif auto_type == "path":
+            low, high = multiauto2Input.nav_auto2
+        else:
+            return False
+
+        probability = random.randint(low, high)
+        return random.randint(0, 100) < probability
+    
     def CreateAutomationButton(self, label, state_var_name, on_enable=None):
 
         oas_name = f"{state_var_name}_oas"
@@ -855,7 +867,6 @@ class Multi_Auto2(QMainWindow):
 
         # --- Chat Auto 1: highlight chat box if there's an unanswered message ---
         elif state_var_name == "chat_auto1":
-            print("in block")
             if self.chat_box.latest_message.text() not in ("", "Waiting..."):
                 probability = random.randint(multiauto2Input.chat_auto1[0], multiauto2Input.chat_auto1[1])
                 rand_num = random.randint(0, 100)
@@ -1312,6 +1323,7 @@ class ChatWidget(QWidget):
             
             LogMultiTask("Chat Reply")
             chat_box[1] = "N/A"
+            chat_box[0] = "N/A"
 
             self.left_group.setStyleSheet(self.default_chat)
             self.right_group.setStyleSheet(self.history_default)
