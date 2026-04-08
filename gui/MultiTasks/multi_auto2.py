@@ -838,10 +838,26 @@ class Multi_Auto2(QMainWindow):
             self.chat_box.input_box.clear()
 
         # --- Nav Auto 1 / Nav Auto 2: reset path button styles and card highlights ---
-        elif state_var_name in ("nav_auto1", "nav_auto2"):
-            self._ResetPathButtonStyles()
-            if self.curr_uav:
-                self.UpdateInfoCards(self.curr_uav)
+        if state_var_name == "nav_auto1":
+            # Only reset card highlights, leave buttons alone
+            normal = "color: black;"
+            for label in (self.card_a.distance, self.card_a.fuel, self.card_a.warnings,
+                        self.card_b.distance, self.card_b.fuel, self.card_b.warnings):
+                label.setStyleSheet(normal)
+
+        if state_var_name == "nav_auto2":
+            # Only reset button styles, leave cards alone
+            default_btn = """
+                QPushButton {
+                    border: 1px solid black;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    color: black;
+                }
+                QPushButton:hover { background-color: #f0f0f0; }
+            """
+            self.a_button.setStyleSheet(default_btn)
+            self.b_button.setStyleSheet(default_btn)
 
     def _OnAutomationEnabled(self, state_var_name):
         """Immediately apply automation effects when toggled on."""
@@ -885,10 +901,15 @@ class Multi_Auto2(QMainWindow):
                         self.chat_box.input_box.setText(correct)
 
         # --- Nav Auto 1 / Nav Auto 2: re-evaluate path highlights if a UAV is selected ---
-        elif state_var_name in ("nav_auto1", "nav_auto2"):
+        if state_var_name == "nav_auto":
             if self.curr_uav:
-                self.UpdateButtons(self.curr_uav)
-                self.UpdateInfoCards(self.curr_uav)
+                self.warn_auto_fires = self.ShouldAutomationFire("warn")
+                self.UpdateInfoCards(self.curr_uav)  # only touches card highlights
+
+        if state_var_name == "nav_auto2":
+            if self.curr_uav:
+                self.path_auto_fires = self.ShouldAutomationFire("path")
+                self.UpdateButtons(self.curr_uav)  # only touches buttons
 
     
     def closeEvent(self, event):
