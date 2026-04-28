@@ -1000,6 +1000,8 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
+        self.idx = idx           
+        self.pending_oob = False
         height = int(random.randint(multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_dist[idx] + 2, multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_dist[idx] - 2))
         #self.monitor_level = random.randint(multiauto2Input.gauge_mean[idx] - multiauto2Input.gauge_sd[idx], multiauto2Input.gauge_mean[idx] + multiauto2Input.gauge_sd[idx])
         self.monitor_level = height
@@ -1104,7 +1106,7 @@ class GenerateLevel(QWidget):
             global total_reset 
             total_reset = total_reset + 1
             self.oob = False
-            LogMultiTask("Monitor Reset")
+            LogMultiTask(f"Monitor {self.idx + 1} Reset")
 
         self.oob_time = None
         self.TimerDelay()
@@ -1128,21 +1130,8 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
-            LogMultiTask("Monitor OOB")
-
-            if mtr_auto1:
-                probability = random.randint(multiauto2Input.mtr_auto1[0], multiauto2Input.mtr_auto1[1])
-                rand_num = random.randint(0, 100)
-
-                if rand_num < probability: 
-                    self.reset_button.setStyleSheet(self.red_btn)
-
-            if mtr_auto2:
-                probability = random.randint(multiauto2Input.mtr_auto2[0], multiauto2Input.mtr_auto2[1])
-                rand_num = random.randint(0, 100)
-
-                if rand_num < probability:
-                    self.ResetLevel(idx)
+            LogMultiTask(f"Monitor {self.idx + 1} OOB")
+            self.pending_oob = True
 
         self.TimerDelay()
 
@@ -1151,6 +1140,7 @@ class GenerateLevel(QWidget):
             self.oob = True
         else:
             self.oob = False
+            self.reset_button.setStyleSheet(self.default_btn)
         return
     
     def AnimateHeight(self, new_height):
@@ -1176,6 +1166,18 @@ class GenerateLevel(QWidget):
         if progress >= 1.0:
             self.monitor_level = self.animation_end_height
             self.animation_timer.stop()
+            if self.pending_oob:
+                self.pending_oob = False
+                if mtr_auto1:
+                    probability = random.randint(multiauto2Input.mtr_auto1[0], multiauto2Input.mtr_auto1[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        self.reset_button.setStyleSheet(self.red_btn)
+                if mtr_auto2:
+                    probability = random.randint(multiauto2Input.mtr_auto2[0], multiauto2Input.mtr_auto2[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        self.ResetLevel(self.idx)
 
 class ChatWidget(QWidget):
     def __init__(self, context_items, chat_auto1_btn, chat_auto1_btn2):

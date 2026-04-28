@@ -949,6 +949,9 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
+        self.idx = idx
+        self.pending_oob = False
+        self.has_moved = False
         height = int(random.randint(practiceMultiAuto.gauge_mean[idx] - practiceMultiAuto.gauge_dist[idx] + 2, practiceMultiAuto.gauge_mean[idx] + practiceMultiAuto.gauge_dist[idx] - 2))
         #self.monitor_level = random.randint(practiceMultiAuto.gauge_mean[idx] - practiceMultiAuto.gauge_sd[idx], practiceMultiAuto.gauge_mean[idx] + practiceMultiAuto.gauge_sd[idx])
         self.monitor_level = height
@@ -1072,21 +1075,8 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
+            self.pending_oob = True
             #LogMultiTask("Monitor OOB")
-
-            if mtr_auto1:
-                probability = random.randint(practiceMultiAuto.mtr_auto1[0], practiceMultiAuto.mtr_auto1[1])
-                rand_num = random.randint(0, 100)
-
-                if rand_num < probability: 
-                    self.reset_button.setStyleSheet(self.red_btn)
-
-            if mtr_auto2:
-                probability = random.randint(practiceMultiAuto.mtr_auto2[0], practiceMultiAuto.mtr_auto2[1])
-                rand_num = random.randint(0, 100)
-
-                if rand_num < probability:
-                    self.ResetLevel(idx)
 
         self.TimerDelay()
 
@@ -1094,6 +1084,7 @@ class GenerateLevel(QWidget):
         if new_height < (practiceMultiAuto.gauge_mean[idx] - practiceMultiAuto.gauge_dist[idx]) or new_height > (practiceMultiAuto.gauge_mean[idx] + practiceMultiAuto.gauge_dist[idx]):
             self.oob = True
         else:
+            self.reset_button.setStyleSheet(self.default_btn)
             self.oob = False
         return
     
@@ -1120,6 +1111,18 @@ class GenerateLevel(QWidget):
         if progress >= 1.0:
             self.monitor_level = self.animation_end_height
             self.animation_timer.stop()
+            if self.pending_oob:
+                self.pending_oob = False
+                if mtr_auto1:
+                    probability = random.randint(practiceMultiAuto.mtr_auto1[0], practiceMultiAuto.mtr_auto1[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        self.reset_button.setStyleSheet(self.red_btn)
+                if mtr_auto2:
+                    probability = random.randint(practiceMultiAuto.mtr_auto2[0], practiceMultiAuto.mtr_auto2[1])
+                    rand_num = random.randint(0, 100)
+                    if rand_num < probability:
+                        self.ResetLevel(self.idx)
 
 def Title(str: str):
     title_label = QLabel(str)

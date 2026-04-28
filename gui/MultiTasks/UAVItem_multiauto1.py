@@ -188,7 +188,7 @@ class UAVItem():
         if self.timer and self.timer.isActive():
             self.timer.stop()
             self.uav_item.is_moving = False
-            self.LogAction("UAV Hit Storm")
+            self.LogAction(f"UAV {self.idx} Hit Storm")
             QTimer.singleShot(2000, self.ResumeAfterStorm)
 
     def ResumeAfterStorm(self):
@@ -251,7 +251,7 @@ class UAVItem():
                     self.storm_hit = False
                     self.total_goal_reached += 1
                     self.score = 10 if not self.storm_hit else 5
-                    self.LogAction("UAV at Goal")
+                    self.LogAction(f"UAV {self.idx} at Goal")
                     self.GetNewGoal()
                     self.GetNewPath()
                     self.score = 0
@@ -264,7 +264,7 @@ class UAVItem():
                     self.fuel = 0
                     self.uav_item.is_moving = False
                     self.uav_item.SetGrayedOut(True)
-                    self.LogAction("UAV No Fuel")
+                    self.LogAction(f"UAV {self.idx} No Fuel")
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -275,7 +275,7 @@ class UAVItem():
             closest_storm.AnimateToPoint(self.hyp_midpoint)
             self.storm_hit = True
 
-        self.LogAction("UAV Path A")
+        self.LogAction(f"UAV {self.idx} Path A")
         self.timer.timeout.connect(Animate)
         self.timer.start(32)
 
@@ -339,7 +339,7 @@ class UAVItem():
                     self.fuel = 0  
                     self.uav_item.is_moving = False
                     self.uav_item.SetGrayedOut(True)
-                    self.LogAction("UAV No Fuel")    
+                    self.LogAction(f"UAV {self.idx} No Fuel")    
 
         def AnimateP2(): 
             if not self.active:
@@ -359,7 +359,7 @@ class UAVItem():
                     self.at_goal = True
                     self.total_goal_reached += 1
                     self.score = 8 if not self.storm_hit else 5
-                    self.LogAction("UAV at Goal")
+                    self.LogAction(f"UAV {self.idx} at Goal")
                     self.GetNewGoal()
                     self.GetNewPath()
                     self.score = 0
@@ -372,7 +372,7 @@ class UAVItem():
                     self.fuel = 0   
                     self.uav_item.is_moving = False
                     self.uav_item.SetGrayedOut(True)
-                    self.LogAction("UAV No Fuel")
+                    self.LogAction(f"UAV {self.idx} No Fuel")
 
         self.timer = QTimer()
         self.uav_item.is_moving = True
@@ -383,7 +383,7 @@ class UAVItem():
             closest_storm.AnimateToPoint(self.ra_midpoint)
             self.storm_hit = True
 
-        self.LogAction("UAV Path B")
+        self.LogAction(f"UAV {self.idx} Path B")
         self.timer.timeout.connect(AnimateP1)
         self.timer.start(32)
 
@@ -399,7 +399,7 @@ class UAVItem():
 
             if self.idle_time >= 10:
                 self.is_idle = True
-                self.LogAction("UAV Idle")
+                self.LogAction(f"UAV {self.idx} Idle")
 
     def LogAction(self, action):
         from .multi_auto1 import LogMultiTask
