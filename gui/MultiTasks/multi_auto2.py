@@ -866,39 +866,27 @@ class Multi_Auto2(QMainWindow):
         if state_var_name == "mtr_auto1":
             for gauge in gauges:
                 if gauge.oob:
-                    probability = random.randint(multiauto2Input.mtr_auto1[0], multiauto2Input.mtr_auto1[1])
-                    rand_num = random.randint(0, 100)
-                    if rand_num < probability:
-                        gauge.reset_button.setStyleSheet(gauge.red_btn)
+                    gauge.reset_button.setStyleSheet(gauge.red_btn)
 
         # --- Monitor Auto 2: immediately reset any currently OOB gauges ---
         elif state_var_name == "mtr_auto2":
             for idx, gauge in enumerate(gauges):
                 if gauge.oob:
-                    probability = random.randint(multiauto2Input.mtr_auto2[0], multiauto2Input.mtr_auto2[1])
-                    rand_num = random.randint(0, 100)
-                    if rand_num < probability:
-                        gauge.ResetLevel(idx)
+                    gauge.ResetLevel(idx)
 
 
         # --- Chat Auto 1: highlight chat box if there's an unanswered message ---
         elif state_var_name == "chat_auto1":
             if self.chat_box.latest_message.text() not in ("", "Waiting..."):
-                probability = random.randint(multiauto2Input.chat_auto1[0], multiauto2Input.chat_auto1[1])
-                rand_num = random.randint(0, 100)
-                if rand_num < probability:
-                    self.chat_box.left_group.setStyleSheet(self.chat_box.red_chat)
-                    self.chat_box.right_group.setStyleSheet(self.chat_box.history_red)
+                self.chat_box.left_group.setStyleSheet(self.chat_box.red_chat)
+                self.chat_box.right_group.setStyleSheet(self.chat_box.history_red)
 
         # --- Chat Auto 2: immediately fill in the answer if there's an unanswered message ---
         elif state_var_name == "chat_auto2":
             if chat_box[0] != "N/A" and chat_box[1] == "N/A":
-                probability = random.randint(multiauto2Input.chat_auto2[0], multiauto2Input.chat_auto2[1])
-                rand_num = random.randint(0, 100)
-                if rand_num < probability:
-                    correct = self.chat_box.compute_answer()
-                    if correct:
-                        self.chat_box.input_box.setText(correct)
+                correct = self.chat_box.compute_answer()
+                if correct:
+                    self.chat_box.input_box.setText(correct)
 
         # --- Nav Auto 1 / Nav Auto 2: re-evaluate path highlights if a UAV is selected ---
         if state_var_name == "nav_auto":
