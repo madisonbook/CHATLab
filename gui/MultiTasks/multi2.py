@@ -705,6 +705,7 @@ class GenerateLevel(QWidget):
 
         self.oob = False
         self.reset = False
+        self.idx = idx
         height = int(random.randint(multi2Input.gauge_mean[idx] - multi2Input.gauge_dist[idx] + 2, multi2Input.gauge_mean[idx] + multi2Input.gauge_dist[idx] - 2))
         #self.monitor_level = random.randint(multi2Input.gauge_mean[idx] - multi2Input.gauge_sd[idx], multi2Input.gauge_mean[idx] + multi2Input.gauge_sd[idx])
         self.monitor_level = height
@@ -793,7 +794,7 @@ class GenerateLevel(QWidget):
             global total_reset 
             total_reset = total_reset + 1
             self.oob = False
-            LogMultiTask("Monitor Reset")
+            LogMultiTask(f"Monitor {self.idx + 1} Reset")
 
         self.oob_time = None
         self.TimerDelay()
@@ -817,7 +818,7 @@ class GenerateLevel(QWidget):
             global total_oob
             total_oob = total_oob + 1
             self.oob_time = datetime.datetime.now()
-            LogMultiTask("Monitor OOB")
+            LogMultiTask(f"Monitor {self.idx + 1} OOB")
 
         self.TimerDelay()
 
